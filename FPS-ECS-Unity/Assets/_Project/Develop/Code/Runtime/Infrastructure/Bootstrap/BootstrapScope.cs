@@ -1,3 +1,5 @@
+using FpsEcs.Runtime.Infrastructure.Services.AssetManagement;
+using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Infrastructure.Services.Input;
 using FpsEcs.Runtime.Infrastructure.Services.SceneLoading;
 using UnityEngine;
@@ -18,6 +20,8 @@ namespace FpsEcs.Runtime.Infrastructure.Bootstrap
         {
             RegisterInputService(builder);
             builder.Register<ISceneLoader, SceneLoader>(Lifetime.Singleton);
+            builder.Register<IAssetProvider, AssetProvider>(Lifetime.Singleton);
+            builder.Register<IConfigsProvider, ConfigsProvider>(Lifetime.Singleton);
             
             builder.RegisterEntryPoint<BootstrapFlow>();
         }

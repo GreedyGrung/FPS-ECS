@@ -1,3 +1,4 @@
+using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Infrastructure.Services.SceneLoading;
 using FpsEcs.Runtime.Utils;
 using UnityEngine;
@@ -8,16 +9,19 @@ namespace FpsEcs.Runtime.Infrastructure.Bootstrap
     public class BootstrapFlow : IStartable
     {
         private readonly ISceneLoader _sceneLoader;
+        private readonly IConfigsProvider _configsProvider;
 
-        public BootstrapFlow(ISceneLoader sceneLoader)
+        public BootstrapFlow(ISceneLoader sceneLoader, IConfigsProvider configsProvider)
         {
             _sceneLoader = sceneLoader;
+            _configsProvider = configsProvider;
         }
         
         public void Start()
         {
             Debug.Log("start!");
 
+            _configsProvider.Load();
             _sceneLoader.Load(Constants.Scenes.Game);
         }
     }
