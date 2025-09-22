@@ -1,4 +1,5 @@
 using FpsEcs.Runtime.Infrastructure.Services.Input;
+using FpsEcs.Runtime.Infrastructure.Services.SceneLoading;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -16,6 +17,7 @@ namespace FpsEcs.Runtime.Infrastructure.Bootstrap
         protected override void Configure(IContainerBuilder builder)
         {
             RegisterInputService(builder);
+            builder.Register<ISceneLoader, SceneLoader>(Lifetime.Singleton);
             
             builder.RegisterEntryPoint<BootstrapFlow>();
         }
