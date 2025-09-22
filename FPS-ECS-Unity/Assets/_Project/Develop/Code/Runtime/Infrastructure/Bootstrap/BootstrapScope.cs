@@ -1,7 +1,9 @@
+using FpsEcs.Runtime.Infrastructure.Services.Input;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace FpsEcs
+namespace FpsEcs.Runtime.Infrastructure.Bootstrap
 {
     public class BootstrapScope : LifetimeScope
     {
@@ -13,7 +15,21 @@ namespace FpsEcs
 
         protected override void Configure(IContainerBuilder builder)
         {
+            RegisterInputService(builder);
+            
             builder.RegisterEntryPoint<BootstrapFlow>();
+        }
+
+        private void RegisterInputService(IContainerBuilder builder)
+        {
+            if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+            {
+                builder.Register<IInputService, MobileInputService>(Lifetime.Singleton);
+            }
+            else
+            {
+                builder.Register<IInputService, StandaloneInputService>(Lifetime.Singleton);
+            }
         }
     }
 }

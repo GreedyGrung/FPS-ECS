@@ -1,7 +1,7 @@
 using UnityEngine;
 using VContainer.Unity;
 
-namespace FpsEcs
+namespace FpsEcs.Runtime.Infrastructure.Bootstrap
 {
     public class BootstrapFlow : IStartable
     {
