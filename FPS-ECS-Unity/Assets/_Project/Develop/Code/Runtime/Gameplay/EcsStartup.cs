@@ -1,7 +1,7 @@
 using FpsEcs.Runtime.Gameplay.Input.Systems;
-using FpsEcs.Runtime.Gameplay.Player;
 using FpsEcs.Runtime.Gameplay.Player.Systems;
 using FpsEcs.Runtime.Infrastructure.Factories;
+using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Infrastructure.Services.Input;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
@@ -17,10 +17,16 @@ namespace FpsEcs.Runtime.Gameplay
         private IInputService _inputService;
         private IGameFactory _gameFactory;
         private LevelDataProvider _levelDataProvider;
+        private IConfigsProvider _configsProvider;
 
         [Inject]
-        private void Construct(IInputService inputService, IGameFactory gameFactory, LevelDataProvider levelDataProvider)
+        private void Construct(
+            IInputService inputService,
+            IGameFactory gameFactory,
+            LevelDataProvider levelDataProvider,
+            IConfigsProvider configsProvider)
         {
+            _configsProvider = configsProvider;
             _levelDataProvider = levelDataProvider;
             _gameFactory = gameFactory;
             _inputService = inputService;
@@ -43,6 +49,7 @@ namespace FpsEcs.Runtime.Gameplay
                 .Inject(_inputService)
                 .Inject(_gameFactory)
                 .Inject(_levelDataProvider)
+                .Inject(_configsProvider)
                 .Init();
         }
     

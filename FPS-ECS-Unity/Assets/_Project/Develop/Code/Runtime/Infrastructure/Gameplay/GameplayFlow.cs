@@ -1,6 +1,5 @@
 using FpsEcs.Runtime.Gameplay;
 using FpsEcs.Runtime.Infrastructure.Factories;
-using UnityEngine;
 using VContainer.Unity;
 
 namespace FpsEcs.Runtime.Infrastructure.Gameplay
@@ -19,7 +18,6 @@ namespace FpsEcs.Runtime.Infrastructure.Gameplay
         public async void Start()
         {
             await _gameFactory.Load();
-            Debug.LogError("flow!");
             
             _ecsStartup.Initialize();
         }

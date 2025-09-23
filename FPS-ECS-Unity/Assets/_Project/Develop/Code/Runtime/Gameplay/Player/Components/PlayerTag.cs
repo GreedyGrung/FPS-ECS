@@ -8,7 +8,6 @@ namespace FpsEcs.Runtime.Gameplay.Player.Components
     public struct MovementInfo
     {
         public float Speed;
-        public float Gravity;
     }
     
     public struct MovementRuntime

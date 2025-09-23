@@ -1,6 +1,7 @@
 using FpsEcs.Runtime.Gameplay.Common.Components;
 using FpsEcs.Runtime.Gameplay.Player.Components;
 using FpsEcs.Runtime.Infrastructure.Factories;
+using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using UnityEngine;
@@ -12,10 +13,12 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IGameFactory> _factory;
         private readonly EcsCustomInject<LevelDataProvider> _levelDataProvider;
+        private readonly EcsCustomInject<ConfigsProvider> _configsProvider;
         
         private IGameFactory Factory => _factory.Value;
         private EcsWorld World => _world.Value;
         private LevelDataProvider LevelDataProvider => _levelDataProvider.Value;
+        private ConfigsProvider ConfigsProvider => _configsProvider.Value;
         
         public void Init(IEcsSystems systems)
         {
@@ -30,6 +33,8 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
             
             var movementInfoPool = World.GetPool<MovementInfo>();
             movementInfoPool.Add(playerEntity);
+            ref var movementInfoComponent = ref movementInfoPool.Get(playerEntity);
+            movementInfoComponent.Speed = ConfigsProvider.GetPlayerConfig().Speed;
             
             var movementRuntimePool = World.GetPool<MovementRuntime>();
             movementRuntimePool.Add(playerEntity);
