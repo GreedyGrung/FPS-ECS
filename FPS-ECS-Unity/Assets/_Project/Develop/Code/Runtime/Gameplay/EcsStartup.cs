@@ -1,4 +1,7 @@
 using FpsEcs.Runtime.Gameplay.Input.Systems;
+using FpsEcs.Runtime.Gameplay.Player;
+using FpsEcs.Runtime.Gameplay.Player.Systems;
+using FpsEcs.Runtime.Infrastructure.Factories;
 using FpsEcs.Runtime.Infrastructure.Services.Input;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
@@ -12,25 +15,32 @@ namespace FpsEcs.Runtime.Gameplay
         private EcsWorld _world;
         private IEcsSystems _systems;
         private IInputService _inputService;
+        private IGameFactory _gameFactory;
 
         [Inject]
-        private void Construct(IInputService inputService)
+        private void Construct(IInputService inputService, IGameFactory gameFactory)
         {
+            _gameFactory = gameFactory;
             _inputService = inputService;
         }
         
-        private void Start() 
+        public void Initialize() 
         {
+            Debug.LogError("start!");
             _world = new EcsWorld();
             _systems = new EcsSystems(_world);
             _systems
                 .Add(new InputInitializationSystem())
                 .Add(new InputReadSystem())
+                .Add(new SpawnPlayerSystem())
+                .Add(new CameraLookSystem())
+                .Add(new MovePlayerSystem())
 #if UNITY_EDITOR
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem())
 #endif
                 .Inject(_inputService)
+                .Inject(_gameFactory)
                 .Init();
         }
     

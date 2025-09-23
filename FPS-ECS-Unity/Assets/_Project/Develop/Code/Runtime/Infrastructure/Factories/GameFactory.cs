@@ -1,0 +1,30 @@
+using Cysharp.Threading.Tasks;
+using FpsEcs.Runtime.Infrastructure.Services.AssetManagement;
+using FpsEcs.Runtime.Utils;
+using UnityEngine;
+
+namespace FpsEcs.Runtime.Infrastructure.Factories
+{
+    public class GameFactory : IGameFactory
+    {
+        private readonly IAssetProvider _assetProvider;
+        private GameObject _playerPrefab;
+
+        public GameFactory(IAssetProvider assetProvider)
+        {
+            _assetProvider = assetProvider;
+        }
+
+        public async UniTask Load()
+        {
+            _playerPrefab = await _assetProvider.Load<GameObject>(Constants.Assets.PlayerPrefabPath);
+        }
+        
+        public GameObject CreatePlayer(Vector3 position)
+        {
+            var gameObject = Object.Instantiate(_playerPrefab, position, Quaternion.identity);
+            
+            return gameObject;
+        }
+    }
+}

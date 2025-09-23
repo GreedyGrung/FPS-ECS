@@ -10,9 +10,16 @@ namespace FpsEcs.Runtime.Utils
 
         public static class Assets
         {
+            public const string PlayerPrefabPath = "Prefabs/Player";
+            
             public const string EnemiesConfigsPath = "Configs/Enemies";
             public const string WeaponsConfigsPath = "Configs/Weapons";
             public const string PlayerConfigPath = "Configs/PlayerConfig";
+        }
+
+        public static class Gameplay
+        {
+            public const float Gravity = 9.81f;
         }
     }
 }
