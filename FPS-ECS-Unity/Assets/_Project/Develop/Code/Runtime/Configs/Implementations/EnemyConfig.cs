@@ -1,6 +1,5 @@
 using System;
 using FpsEcs.Runtime.Configs.Interfaces;
-using FpsEcs.Runtime.Utils;
 using FpsEcs.Runtime.Utils.Enums;
 using UnityEngine;
 
@@ -15,7 +14,10 @@ namespace FpsEcs.Runtime.Configs.Implementations
         public float Health { get; set; }
         [field: SerializeField]
         public float Speed { get; set; }
-        [field: SerializeField]
-        public int Damage { get; set; }
+        
+        public override string ToString()
+        {
+            return string.Format($"Health: {Health}, Speed: {Speed}");
+        }
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using FpsEcs.Runtime.Configs.Interfaces;
-using FpsEcs.Runtime.Utils;
 using UnityEngine;
 
 namespace FpsEcs.Runtime.Configs.Implementations
