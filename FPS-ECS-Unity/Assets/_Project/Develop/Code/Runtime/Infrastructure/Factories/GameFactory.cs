@@ -20,9 +20,9 @@ namespace FpsEcs.Runtime.Infrastructure.Factories
             _playerPrefab = await _assetProvider.Load<GameObject>(Constants.Assets.PlayerPrefabPath);
         }
         
-        public GameObject CreatePlayer(Vector3 position)
+        public GameObject CreatePlayer(Vector3 position, Quaternion rotation)
         {
-            var gameObject = Object.Instantiate(_playerPrefab, position, Quaternion.identity);
+            var gameObject = Object.Instantiate(_playerPrefab, position, rotation);
             
             return gameObject;
         }

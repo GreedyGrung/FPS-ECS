@@ -16,17 +16,18 @@ namespace FpsEcs.Runtime.Gameplay
         private IEcsSystems _systems;
         private IInputService _inputService;
         private IGameFactory _gameFactory;
+        private LevelDataProvider _levelDataProvider;
 
         [Inject]
-        private void Construct(IInputService inputService, IGameFactory gameFactory)
+        private void Construct(IInputService inputService, IGameFactory gameFactory, LevelDataProvider levelDataProvider)
         {
+            _levelDataProvider = levelDataProvider;
             _gameFactory = gameFactory;
             _inputService = inputService;
         }
         
         public void Initialize() 
         {
-            Debug.LogError("start!");
             _world = new EcsWorld();
             _systems = new EcsSystems(_world);
             _systems
@@ -41,6 +42,7 @@ namespace FpsEcs.Runtime.Gameplay
 #endif
                 .Inject(_inputService)
                 .Inject(_gameFactory)
+                .Inject(_levelDataProvider)
                 .Init();
         }
     

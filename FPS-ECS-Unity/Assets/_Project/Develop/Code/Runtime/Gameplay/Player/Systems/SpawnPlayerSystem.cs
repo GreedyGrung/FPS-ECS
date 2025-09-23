@@ -11,13 +11,17 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
     {
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IGameFactory> _factory;
+        private readonly EcsCustomInject<LevelDataProvider> _levelDataProvider;
         
         private IGameFactory Factory => _factory.Value;
         private EcsWorld World => _world.Value;
+        private LevelDataProvider LevelDataProvider => _levelDataProvider.Value;
         
         public void Init(IEcsSystems systems)
         {
-            var playerObject = Factory.CreatePlayer(new Vector3(10, 10, 10));
+            var playerObject = Factory.CreatePlayer(
+                LevelDataProvider.PlayerSpawn.position, 
+                LevelDataProvider.PlayerSpawn.rotation);
             
             var playerEntity = World.NewEntity();
 
