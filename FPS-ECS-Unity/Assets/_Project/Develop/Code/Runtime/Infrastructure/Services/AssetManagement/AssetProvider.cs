@@ -11,5 +11,12 @@ namespace FpsEcs.Runtime.Infrastructure.Services.AssetManagement
             
             return Resources.Load<T>(address);
         }
+        
+        public async UniTask<T[]> LoadAll<T>(string address) where T : Object
+        {
+            await UniTask.Yield();
+            
+            return Resources.LoadAll<T>(address);
+        }
     }
 }

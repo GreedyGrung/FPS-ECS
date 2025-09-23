@@ -1,10 +1,16 @@
-using FpsEcs.Runtime.Configs;
+using System;
+using Cysharp.Threading.Tasks;
+using FpsEcs.Runtime.Configs.Implementations;
+using FpsEcs.Runtime.Utils;
+using FpsEcs.Runtime.Utils.Enums;
 
 namespace FpsEcs.Runtime.Infrastructure.Services.Configs
 {
-    public interface IConfigsProvider
+    public interface IConfigsProvider : IDisposable
     {
-        void Load();
-        T GetConfig<T>() where T : class, IConfig;
+        UniTask Load();
+        PlayerConfig GetPlayerConfig();
+        EnemyConfig GetEnemyConfig(EnemyId id);
+        WeaponConfig GetWeaponConfig(WeaponId id);
     }
 }

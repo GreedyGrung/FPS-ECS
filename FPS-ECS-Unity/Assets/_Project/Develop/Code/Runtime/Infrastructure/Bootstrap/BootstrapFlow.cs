@@ -17,12 +17,15 @@ namespace FpsEcs.Runtime.Infrastructure.Bootstrap
             _configsProvider = configsProvider;
         }
         
-        public void Start()
+        public async void Start()
         {
             Debug.Log("start!");
 
-            _configsProvider.Load();
+            await _configsProvider.Load();
             _sceneLoader.Load(Constants.Scenes.Game);
+
+            var config = _configsProvider.GetPlayerConfig();
+            Debug.Log($"config: {config}");
         }
     }
 }
