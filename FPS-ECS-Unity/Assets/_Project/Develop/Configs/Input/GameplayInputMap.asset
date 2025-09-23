@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f196caf3ae4f4b9ea70bf8ee87fff797, type: 3}
+  m_Name: GameplayInputMap
+  m_EditorClassIdentifier: 
+  _inputActions:
+  - {fileID: -944628639613478452, guid: ad7fd6406ee29464093815e84405b95a, type: 3}
+  _moveAction: {fileID: -6460492188032797954, guid: ad7fd6406ee29464093815e84405b95a,
+    type: 3}
+  _lookAction: {fileID: -6284641717897233519, guid: ad7fd6406ee29464093815e84405b95a,
+    type: 3}
+  _attackAction: {fileID: -5988577973188990936, guid: ad7fd6406ee29464093815e84405b95a,
+    type: 3}
+  _pauseAction: {fileID: -3841439500021803151, guid: ad7fd6406ee29464093815e84405b95a,
+    type: 3}

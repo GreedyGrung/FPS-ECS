@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "name": "PlayerControls",
+    "name": "GameplayInputMap",
     "maps": [
         {
             "name": "Gameplay",
@@ -10,6 +10,15 @@
                     "name": "Move",
                     "type": "Value",
                     "id": "bfbde572-3919-43a3-bbff-504992895f43",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Look",
+                    "type": "Value",
+                    "id": "e3a2cdfb-b3e0-4af9-b1aa-6579c3b4f30d",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -109,6 +118,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "19584c63-a458-4af6-baca-15191e7fda9f",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "ScaleVector2(x=0.3,y=0.3)",
+                    "groups": "",
+                    "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

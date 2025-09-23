@@ -1,6 +1,7 @@
 using FpsEcs.Runtime.Infrastructure.Services.AssetManagement;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Infrastructure.Services.Input;
+using FpsEcs.Runtime.Infrastructure.Services.Input.ScriptableObjects;
 using FpsEcs.Runtime.Infrastructure.Services.SceneLoading;
 using UnityEngine;
 using VContainer;
@@ -10,6 +11,8 @@ namespace FpsEcs.Runtime.Infrastructure.Bootstrap
 {
     public class BootstrapScope : LifetimeScope
     {
+        [SerializeField] private InputMapsProvider _inputMapsProvider;
+        
         protected override void Awake()
         {
             DontDestroyOnLoad(this);
@@ -18,10 +21,11 @@ namespace FpsEcs.Runtime.Infrastructure.Bootstrap
 
         protected override void Configure(IContainerBuilder builder)
         {
-            RegisterInputService(builder);
             builder.Register<ISceneLoader, SceneLoader>(Lifetime.Singleton);
             builder.Register<IAssetProvider, AssetProvider>(Lifetime.Singleton);
             builder.Register<IConfigsProvider, ConfigsProvider>(Lifetime.Singleton);
+            builder.RegisterInstance(_inputMapsProvider);
+            RegisterInputService(builder);
             
             builder.RegisterEntryPoint<BootstrapFlow>();
         }

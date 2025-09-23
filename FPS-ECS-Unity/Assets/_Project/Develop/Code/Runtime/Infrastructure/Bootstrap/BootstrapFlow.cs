@@ -12,7 +12,9 @@ namespace FpsEcs.Runtime.Infrastructure.Bootstrap
         private readonly ISceneLoader _sceneLoader;
         private readonly IConfigsProvider _configsProvider;
 
-        public BootstrapFlow(ISceneLoader sceneLoader, IConfigsProvider configsProvider)
+        public BootstrapFlow(
+            ISceneLoader sceneLoader,
+            IConfigsProvider configsProvider)
         {
             _sceneLoader = sceneLoader;
             _configsProvider = configsProvider;

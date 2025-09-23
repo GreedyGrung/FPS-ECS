@@ -170,6 +170,7 @@ MonoBehaviour:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
+  _inputMapsProvider: {fileID: 11400000, guid: 485884ebe72840542a3b7b77952b73de, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

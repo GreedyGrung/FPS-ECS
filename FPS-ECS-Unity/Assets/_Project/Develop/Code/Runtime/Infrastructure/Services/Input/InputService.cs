@@ -1,63 +1,41 @@
-using System;
-using UnityEngine;
+using FpsEcs.Runtime.Infrastructure.Services.Input.ScriptableObjects;
 using UnityEngine.InputSystem;
 
 namespace FpsEcs.Runtime.Infrastructure.Services.Input
 {
     public class StandaloneInputService : IInputService
     {
-        public event Action OnPauseInput;
-        
-        private readonly PlayerControls _playerControls;
+        private readonly GameplayInputMap _gameplayInputMap;
+        private readonly PauseInputMap _pauseInputMap;
 
-        public StandaloneInputService()
+        public StandaloneInputService(InputMapsProvider provider)
         {
-            _playerControls = new PlayerControls();
-            _playerControls.Enable();
+            _gameplayInputMap = provider.GameplayInputMap;
+            _pauseInputMap = provider.PauseInputMap;
+
+            SetGameplayInputEnabled(true);
+        }
+        
+        public InputAction MoveAction => _gameplayInputMap.MoveAction.action;
+        public InputAction LookAction => _gameplayInputMap.LookAction.action;
+        public InputAction AttackAction => _gameplayInputMap.AttackAction.action;
+        public InputAction PauseAction => _gameplayInputMap.PauseAction;
+
+        public void SetGameplayInputEnabled(bool enable)
+        {
+            _gameplayInputMap.EnableControls();
+            _pauseInputMap.DisableControls();
+        }
+
+        public void SetPauseInputEnabled(bool enable)
+        {
+            _gameplayInputMap.DisableControls();
+            _pauseInputMap.EnableControls();
+        }
+
+        public void Dispose()
+        {
             
-            Subscribe();
         }
-        
-        public int InputX { get; private set; }
-        public int InputY { get; private set; }
-        public bool AttackInput { get; private set; }
-        
-        public void Dispose() => Unsubscribe();
-
-        private void Subscribe()
-        {
-            _playerControls.Gameplay.Move.performed += Move;
-            _playerControls.Gameplay.Move.canceled += Move;
-
-            _playerControls.Gameplay.Attack.started += StartAttack;
-            _playerControls.Gameplay.Attack.canceled += CancelAttack;
-
-            _playerControls.Gameplay.Pause.performed += Pause;
-        }
-
-        private void Unsubscribe()
-        {
-            _playerControls.Gameplay.Move.performed -= Move;
-            _playerControls.Gameplay.Move.canceled -= Move;
-
-            _playerControls.Gameplay.Attack.started -= StartAttack;
-            _playerControls.Gameplay.Attack.canceled -= CancelAttack;
-
-            _playerControls.Gameplay.Pause.performed -= Pause;
-        }
-
-        private void Move(InputAction.CallbackContext context)
-        {
-            var rawInput = context.ReadValue<Vector2>();
-            
-            InputX = Mathf.RoundToInt(rawInput.x);
-            InputY = Mathf.RoundToInt(rawInput.y);
-        }
-
-        private void StartAttack(InputAction.CallbackContext context) => AttackInput = true;
-
-        private void CancelAttack(InputAction.CallbackContext context) => AttackInput = false;
-
-        private void Pause(InputAction.CallbackContext context) => OnPauseInput?.Invoke();
     }
 }

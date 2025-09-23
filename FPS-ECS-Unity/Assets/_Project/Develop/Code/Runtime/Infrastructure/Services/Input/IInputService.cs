@@ -1,15 +1,16 @@
 using System;
+using UnityEngine.InputSystem;
 
 namespace FpsEcs.Runtime.Infrastructure.Services.Input
 {
     public interface IInputService : IDisposable
     {
-        int InputX { get; }
+        InputAction MoveAction { get; }
+        InputAction LookAction { get; }
+        InputAction AttackAction { get; }
+        InputAction PauseAction { get; }
         
-        int InputY { get; }
-        
-        bool AttackInput { get; }
-        
-        event Action OnPauseInput;
+        void SetGameplayInputEnabled(bool enable);
+        void SetPauseInputEnabled(bool enable);
     }
 }

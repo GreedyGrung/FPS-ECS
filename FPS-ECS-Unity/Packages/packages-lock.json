@@ -7,6 +7,34 @@
       "dependencies": {},
       "hash": "98538ef7c7a22f4ec22101e72f7eec4ed831c724"
     },
+    "com.leopotam.ecslite": {
+      "version": "https://github.com/Leopotam/ecslite.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "153dfd4043e1471a01a201624dcbebb25436b638"
+    },
+    "com.leopotam.ecslite.di": {
+      "version": "https://github.com/Leopotam/ecslite-di.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "482b14e87c09cd1bf3f8f3dffc5c0099f00a693a"
+    },
+    "com.leopotam.ecslite.extendedsystems": {
+      "version": "https://github.com/Leopotam/ecslite-extendedsystems.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "3a63f09b8f8984f03eaf8a2f082cd4fb53d62ba4"
+    },
+    "com.leopotam.ecslite.unityeditor": {
+      "version": "https://github.com/Leopotam/ecslite-unityeditor.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "aecbac1b9ec48575f2c7f14f3e707eb1d6ad9180"
+    },
     "com.singularitygroup.hotreload": {
       "version": "file:com.singularitygroup.hotreload",
       "depth": 0,
