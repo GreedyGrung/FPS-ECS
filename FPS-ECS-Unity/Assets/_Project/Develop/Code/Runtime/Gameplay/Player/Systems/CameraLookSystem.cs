@@ -18,6 +18,7 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
 
         private EcsFilter _inputFilter;
         private EcsFilter _cameraFilter;
+        private EcsFilter _playerFilter;
 
         public void Init(IEcsSystems systems)
         {
@@ -29,6 +30,10 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
             _inputFilter = _world.Value
                 .Filter<PlayerInput>()
                 .End();
+
+            _playerFilter = _world.Value
+                .Filter<PlayerTag>()
+                .End();
         }
 
         public void Run(IEcsSystems systems)
@@ -38,29 +43,26 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
             foreach (var inputEntity in _inputFilter)
             {
                 ref var input = ref _inputPool.Value.Get(inputEntity);
-                
-                foreach (var cameraEntity in _cameraFilter)
+
+                foreach (var playerEntity in _playerFilter)
                 {
-                    ref var body  = ref _bodyPool.Value.Get(cameraEntity);
-                    ref var cam   = ref _camPool.Value.Get(cameraEntity);
-                    ref var cs    = ref _camStatePool.Value.Get(cameraEntity);
+                    ref var body = ref _bodyPool.Value.Get(playerEntity);
+                    
+                    foreach (var cameraEntity in _cameraFilter)
+                    {
+                        ref var camera = ref _camPool.Value.Get(cameraEntity);
+                        ref var cameraState = ref _camStatePool.Value.Get(cameraEntity);
 
-                    // аккумулируем углы (без умножения на dt — delta уже кадровая)
-                    cs.Yaw   += input.Look.x * cs.Sensitivity;
-                    cs.Pitch -= input.Look.y * cs.Sensitivity;
+                        cameraState.Yaw += input.Look.x * cameraState.Sensitivity;
+                        cameraState.Pitch -= input.Look.y * cameraState.Sensitivity;
+                        cameraState.Pitch = Mathf.Clamp(cameraState.Pitch, cameraState.MinPitch, cameraState.MaxPitch);
 
-                    cs.Pitch = Mathf.Clamp(cs.Pitch, cs.MinPitch, cs.MaxPitch);
+                        var bodyEuler = body.Value.localEulerAngles;
+                        bodyEuler.y = cameraState.Yaw;
+                        body.Value.localEulerAngles = bodyEuler;
 
-                    // применяем:
-                    // тело — только Y (yaw)
-                    var bodyEuler = body.Value.localEulerAngles;
-                    bodyEuler.y = cs.Yaw;
-                    body.Value.localEulerAngles = bodyEuler;
-
-                    // камера — только X (pitch)
-                    var camEuler = cam.Value.transform.localRotation;
-                    // используем отрицание через Quaternion.Euler, чтобы избежать геймплейных "360" артефактов
-                    cam.Value.transform.localRotation = Quaternion.Euler(cs.Pitch, 0f, 0f);
+                        camera.Value.transform.localRotation = Quaternion.Euler(cameraState.Pitch, 0f, 0f);
+                    }
                 }
             }
         }

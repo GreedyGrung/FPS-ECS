@@ -49,15 +49,16 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
             ref var characterController = ref characterControllerPool.Get(playerEntity);
             characterController.Value = playerObject.GetComponent<CharacterController>();
             
+            var cameraEntity = World.NewEntity();
+            
             var cameraPool = World.GetPool<CameraRef>();
-            cameraPool.Add(playerEntity);
-            ref var camera = ref cameraPool.Get(playerEntity);
+            cameraPool.Add(cameraEntity);
+            ref var camera = ref cameraPool.Get(cameraEntity);
             camera.Value = playerObject.GetComponentInChildren<Camera>();
             
             var cameraStatePool = World.GetPool<CameraState>();
-            cameraStatePool.Add(playerEntity);
-            
-            ref var cameraState = ref cameraStatePool.Get(playerEntity);
+            cameraStatePool.Add(cameraEntity);
+            ref var cameraState = ref cameraStatePool.Get(cameraEntity);
             cameraState.Sensitivity = 2;
             cameraState.MinPitch = -90;
             cameraState.MaxPitch = 90;
