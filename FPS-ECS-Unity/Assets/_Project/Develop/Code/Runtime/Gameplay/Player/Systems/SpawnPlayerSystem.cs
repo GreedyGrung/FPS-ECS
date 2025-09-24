@@ -1,4 +1,5 @@
-using FpsEcs.Runtime.Gameplay.Common.Components;
+using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
+using FpsEcs.Runtime.Gameplay.Helpers;
 using FpsEcs.Runtime.Gameplay.Player.Components;
 using FpsEcs.Runtime.Infrastructure.Factories;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
@@ -26,42 +27,29 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
                 LevelDataProvider.PlayerSpawn.position, 
                 LevelDataProvider.PlayerSpawn.rotation);
             
-            var playerEntity = World.NewEntity();
+            InitializePlayerEntity(playerObject);
+            CreateCameraEntity(playerObject);
+        }
 
-            var playerPool = World.GetPool<PlayerTag>();
-            playerPool.Add(playerEntity);
+        private void InitializePlayerEntity(GameObject playerObject)
+        {
+            var playerEntity = EntityFactory.CreateFrom(playerObject, World);
             
-            var movementInfoPool = World.GetPool<MovementInfo>();
-            movementInfoPool.Add(playerEntity);
-            ref var movementInfoComponent = ref movementInfoPool.Get(playerEntity);
-            movementInfoComponent.Speed = ConfigsProvider.GetPlayerConfig().Speed;
+            var movementPool = World.GetPool<Movement>();
+            movementPool.Add(playerEntity);
+            ref var movement = ref movementPool.Get(playerEntity);
+            movement.HorizontalSpeed = ConfigsProvider.GetPlayerConfig().Speed;
             
-            var movementRuntimePool = World.GetPool<MovementRuntime>();
-            movementRuntimePool.Add(playerEntity);
+            var animatorPool = World.GetPool<AnimatorRef>();
+            animatorPool.Add(playerEntity);
+            ref var animator = ref animatorPool.Get(playerEntity);
+            animator.Value = playerObject.GetComponentInChildren<Animator>();
+        }
 
-            var transformPool = World.GetPool<TransformRef>();
-            transformPool.Add(playerEntity);
-            ref var transformComponent = ref transformPool.Get(playerEntity);
-            transformComponent.Value = playerObject.transform;
-            
-            var characterControllerPool = World.GetPool<CharacterControllerRef>();
-            characterControllerPool.Add(playerEntity);
-            ref var characterController = ref characterControllerPool.Get(playerEntity);
-            characterController.Value = playerObject.GetComponent<CharacterController>();
-            
-            var cameraEntity = World.NewEntity();
-            
-            var cameraPool = World.GetPool<CameraRef>();
-            cameraPool.Add(cameraEntity);
-            ref var camera = ref cameraPool.Get(cameraEntity);
-            camera.Value = playerObject.GetComponentInChildren<Camera>();
-            
-            var cameraStatePool = World.GetPool<CameraState>();
-            cameraStatePool.Add(cameraEntity);
-            ref var cameraState = ref cameraStatePool.Get(cameraEntity);
-            cameraState.Sensitivity = 2;
-            cameraState.MinPitch = -90;
-            cameraState.MaxPitch = 90;
+        private void CreateCameraEntity(GameObject playerObject)
+        {
+            var cameraObject = playerObject.GetComponentInChildren<Camera>().gameObject;
+            EntityFactory.CreateFrom(cameraObject, World);
         }
     }
 }

@@ -1,4 +1,4 @@
-using FpsEcs.Runtime.Gameplay.Common.Components;
+using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
 using FpsEcs.Runtime.Gameplay.Input.Components;
 using FpsEcs.Runtime.Gameplay.Player.Components;
 using FpsEcs.Runtime.Utils;
@@ -14,9 +14,8 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
 
         private readonly EcsPoolInject<PlayerInput> _inputPool = default;
         private readonly EcsPoolInject<TransformRef> _bodyPool = default;
-        private readonly EcsPoolInject<CharacterControllerRef> _ccPool = default;
-        private readonly EcsPoolInject<MovementInfo> _paramsPool = default;
-        private readonly EcsPoolInject<MovementRuntime> _runtimePool = default;
+        private readonly EcsPoolInject<CharacterControllerRef> _characterControllerPool = default;
+        private readonly EcsPoolInject<Movement> _runtimePool = default;
 
         private EcsFilter _inputFilter;
         private EcsFilter _playerFilter;
@@ -26,8 +25,7 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
             _playerFilter = _world.Value
                 .Filter<TransformRef>()
                 .Inc<CharacterControllerRef>()
-                .Inc<MovementInfo>()
-                .Inc<MovementRuntime>()
+                .Inc<Movement>()
                 .End();
             
             _inputFilter = _world.Value
@@ -37,40 +35,45 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
 
         public void Run(IEcsSystems systems)
         {
-            float dt = Time.deltaTime;
+            float deltaTime = Time.deltaTime;
 
             foreach (var inputEntity in _inputFilter)
             {
-                ref var input  = ref _inputPool.Value.Get(inputEntity);
+                ref var input = ref _inputPool.Value.Get(inputEntity);
                 
-                foreach (var e in _playerFilter)
+                foreach (var playerEntity in _playerFilter)
                 {
-                    ref var body   = ref _bodyPool.Value.Get(e);
-                    ref var ccRef  = ref _ccPool.Value.Get(e);
-                    ref var mp     = ref _paramsPool.Value.Get(e);
-                    ref var mr     = ref _runtimePool.Value.Get(e);
+                    ref var body = ref _bodyPool.Value.Get(playerEntity);
+                    ref var movementRuntime = ref _runtimePool.Value.Get(playerEntity);
+                    var characterController = _characterControllerPool.Value.Get(playerEntity).Value;
 
-                    var cc = ccRef.Value;
+                    Vector3 forward = body.Value.forward; 
+                    forward.y = 0f;
+                    Vector3 right = body.Value.right; 
+                    right.y = 0f;
+                    forward.Normalize(); 
+                    right.Normalize();
 
-                    // Горизонтальный вектор в плоскости XZ, в локальных осях тела (учёт yaw)
-                    Vector3 fwd = body.Value.forward; fwd.y = 0f;
-                    Vector3 right = body.Value.right; right.y = 0f;
-                    fwd.Normalize(); right.Normalize();
+                    Vector3 movePlanar = forward * input.Move.y + right * input.Move.x;
+                    
+                    if (movePlanar.sqrMagnitude > 1f)
+                    {
+                        movePlanar.Normalize();
+                    }
 
-                    Vector3 movePlanar = (fwd * input.Move.y + right * input.Move.x);
-                    if (movePlanar.sqrMagnitude > 1f) movePlanar.Normalize();
-                    movePlanar *= mp.Speed;
+                    movePlanar *= movementRuntime.HorizontalSpeed;
 
-                    // Гравитация
-                    if (cc.isGrounded && mr.YVelocity < 0f)
-                        mr.YVelocity = -2f; // небольшое прижатие к земле
+                    if (characterController.isGrounded && movementRuntime.VerticalSpeed < 0f)
+                    {
+                        movementRuntime.VerticalSpeed = -2f;
+                    }
 
-                    mr.YVelocity += (-Mathf.Abs(Constants.Gameplay.Gravity)) * dt;
+                    movementRuntime.VerticalSpeed += -Mathf.Abs(Constants.Gameplay.Gravity) * deltaTime;
 
                     Vector3 velocity = movePlanar;
-                    velocity.y = mr.YVelocity;
-
-                    cc.Move(velocity * dt);
+                    velocity.y = movementRuntime.VerticalSpeed;
+                    
+                    characterController.Move(velocity * deltaTime);
                 }
             }
         }

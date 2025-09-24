@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace FpsEcs.Runtime.Gameplay.Player.Components
+namespace FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences
 {
     public struct CharacterControllerRef
     {

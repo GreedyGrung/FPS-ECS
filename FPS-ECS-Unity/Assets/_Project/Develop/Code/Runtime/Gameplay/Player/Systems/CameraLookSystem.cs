@@ -1,4 +1,5 @@
 using FpsEcs.Runtime.Gameplay.Common.Components;
+using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
 using FpsEcs.Runtime.Gameplay.Input.Components;
 using FpsEcs.Runtime.Gameplay.Player.Components;
 using Leopotam.EcsLite;
@@ -14,7 +15,8 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
         private readonly EcsPoolInject<PlayerInput> _inputPool = default;
         private readonly EcsPoolInject<TransformRef> _bodyPool = default;
         private readonly EcsPoolInject<CameraRef> _camPool = default;
-        private readonly EcsPoolInject<CameraState> _camStatePool = default;
+        private readonly EcsPoolInject<CameraState> _cameraStatePool = default;
+        private readonly EcsPoolInject<CameraSettings> _camSettingsPool = default;
 
         private EcsFilter _inputFilter;
         private EcsFilter _cameraFilter;
@@ -25,6 +27,7 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
             _cameraFilter = _world.Value
                 .Filter<CameraRef>()
                 .Inc<CameraState>()
+                .Inc<CameraSettings>()
                 .End();
 
             _inputFilter = _world.Value
@@ -51,11 +54,12 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
                     foreach (var cameraEntity in _cameraFilter)
                     {
                         ref var camera = ref _camPool.Value.Get(cameraEntity);
-                        ref var cameraState = ref _camStatePool.Value.Get(cameraEntity);
+                        ref var cameraState = ref _cameraStatePool.Value.Get(cameraEntity);
+                        ref var cameraSettings = ref _camSettingsPool.Value.Get(cameraEntity);
 
-                        cameraState.Yaw += input.Look.x * cameraState.Sensitivity;
-                        cameraState.Pitch -= input.Look.y * cameraState.Sensitivity;
-                        cameraState.Pitch = Mathf.Clamp(cameraState.Pitch, cameraState.MinPitch, cameraState.MaxPitch);
+                        cameraState.Yaw += input.Look.x * cameraSettings.Sensitivity;
+                        cameraState.Pitch -= input.Look.y * cameraSettings.Sensitivity;
+                        cameraState.Pitch = Mathf.Clamp(cameraState.Pitch, cameraSettings.MinPitch, cameraSettings.MaxPitch);
 
                         var bodyEuler = body.Value.localEulerAngles;
                         bodyEuler.y = cameraState.Yaw;

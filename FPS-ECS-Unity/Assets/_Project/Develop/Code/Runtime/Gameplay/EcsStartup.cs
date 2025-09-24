@@ -38,10 +38,12 @@ namespace FpsEcs.Runtime.Gameplay
             _systems = new EcsSystems(_world);
             _systems
                 .Add(new InputInitializationSystem())
+                .Add(new CameraInitializationSystem())
                 .Add(new InputReadSystem())
                 .Add(new SpawnPlayerSystem())
                 .Add(new CameraLookSystem())
                 .Add(new MovePlayerSystem())
+                .Add(new PlayerAnimationSystem())
 #if UNITY_EDITOR
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem())

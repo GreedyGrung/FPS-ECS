@@ -9,6 +9,7 @@ namespace FpsEcs.Runtime.Infrastructure.Factories
     {
         private readonly IAssetProvider _assetProvider;
         private GameObject _playerPrefab;
+        private GameObject _enemyPrefab;
 
         public GameFactory(IAssetProvider assetProvider)
         {
@@ -18,11 +19,19 @@ namespace FpsEcs.Runtime.Infrastructure.Factories
         public async UniTask Load()
         {
             _playerPrefab = await _assetProvider.Load<GameObject>(Constants.Assets.PlayerPrefabPath);
+            _enemyPrefab = await _assetProvider.Load<GameObject>(Constants.Assets.EnemiesPrefabPath);
         }
         
         public GameObject CreatePlayer(Vector3 position, Quaternion rotation)
         {
             var gameObject = Object.Instantiate(_playerPrefab, position, rotation);
+            
+            return gameObject;
+        }
+
+        public GameObject CreateEnemy(Vector3 position, Quaternion rotation)
+        {
+            var gameObject = Object.Instantiate(_enemyPrefab, position, rotation);
             
             return gameObject;
         }

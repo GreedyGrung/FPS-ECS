@@ -7,5 +7,6 @@ namespace FpsEcs.Runtime.Infrastructure.Factories
     {
         GameObject CreatePlayer(Vector3 position, Quaternion rotation);
         UniTask Load();
+        GameObject CreateEnemy(Vector3 position, Quaternion rotation);
     }
 }
