@@ -1,4 +1,5 @@
 using FpsEcs.Runtime.Gameplay.Enemies.Systems;
+using FpsEcs.Runtime.Gameplay.HealthFeature.Systems;
 using FpsEcs.Runtime.Gameplay.Input.Systems;
 using FpsEcs.Runtime.Gameplay.MovementLogic.Systems;
 using FpsEcs.Runtime.Gameplay.Player.Systems;
@@ -43,6 +44,8 @@ namespace FpsEcs.Runtime.Gameplay
             _systems
                 .Add(new InputInitializationSystem())
                 .Add(new CameraInitializationSystem())
+                .Add(new PlayerHealthInitializationSystem())
+                .Add(new EnemyHealthInitializationSystem())
                 .Add(new EnemiesSpawnSystem())
                 .Add(new MovementInitializationSystem())
                 .Add(new InputReadSystem())

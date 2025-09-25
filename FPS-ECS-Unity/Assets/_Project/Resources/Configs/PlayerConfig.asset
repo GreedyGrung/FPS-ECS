@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
   Config:
-    <Health>k__BackingField: 50
+    <Health>k__BackingField: 20
     <Speed>k__BackingField: 7
     <MinPitch>k__BackingField: -60
     <MaxPitch>k__BackingField: 60

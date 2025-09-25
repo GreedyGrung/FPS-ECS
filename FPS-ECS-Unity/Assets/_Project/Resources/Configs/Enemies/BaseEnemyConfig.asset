@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BaseEnemyConfig
   m_EditorClassIdentifier: 
   Config:
-    <Type>k__BackingField: 1
-    <Health>k__BackingField: 10
+    <Id>k__BackingField: 0
+    <MinHealth>k__BackingField: 1
+    <MaxHealth>k__BackingField: 10
     <Speed>k__BackingField: 5
-    <Damage>k__BackingField: 1

@@ -1,11 +1,10 @@
 using System;
-using FpsEcs.Runtime.Configs.Interfaces;
 using UnityEngine;
 
 namespace FpsEcs.Runtime.Configs.Implementations
 {
     [Serializable]
-    public class PlayerConfig : IEntityConfig
+    public class PlayerConfig
     {
         [field: SerializeField]
         public float Health { get; set; }
