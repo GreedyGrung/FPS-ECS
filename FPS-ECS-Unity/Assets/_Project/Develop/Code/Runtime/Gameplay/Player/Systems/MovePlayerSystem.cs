@@ -1,6 +1,7 @@
 using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
 using FpsEcs.Runtime.Gameplay.Input.Components;
 using FpsEcs.Runtime.Gameplay.MovementLogic.Components;
+using FpsEcs.Runtime.Gameplay.Player.Components;
 using FpsEcs.Runtime.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
@@ -26,6 +27,7 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
         {
             _playerFilter = World
                 .Filter<TransformRef>()
+                .Inc<PlayerTag>()
                 .Inc<CharacterControllerRef>()
                 .Inc<Movement>()
                 .End();

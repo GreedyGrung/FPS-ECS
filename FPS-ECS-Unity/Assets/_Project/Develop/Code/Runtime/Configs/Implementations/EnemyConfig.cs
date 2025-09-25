@@ -15,5 +15,11 @@ namespace FpsEcs.Runtime.Configs.Implementations
         public float MaxHealth { get; set; }
         [field: SerializeField]
         public float Speed { get; set; }
+        [field: SerializeField]
+        public float ObstacleCheckDistance { get; set; }
+        [field: SerializeField]
+        public float MinTurnAngle { get; set; }
+        [field: SerializeField]
+        public float MaxTurnAngle { get; set; }
     }
 }

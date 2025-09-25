@@ -12,5 +12,6 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Configs
         PlayerConfig GetPlayerConfig();
         EnemyConfig GetEnemyConfig(EnemyId id);
         WeaponConfig GetWeaponConfig(WeaponId id);
+        GameConfig GetGameConfig();
     }
 }

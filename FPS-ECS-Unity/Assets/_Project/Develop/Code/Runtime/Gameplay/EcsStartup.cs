@@ -47,6 +47,8 @@ namespace FpsEcs.Runtime.Gameplay
                 .Add(new PlayerHealthInitializationSystem())
                 .Add(new EnemyHealthInitializationSystem())
                 .Add(new EnemiesSpawnSystem())
+                .Add(new EnemiesInitializationSystem())
+                .Add(new EnemiesMoveSystem())
                 .Add(new MovementInitializationSystem())
                 .Add(new InputReadSystem())
                 .Add(new SpawnPlayerSystem())

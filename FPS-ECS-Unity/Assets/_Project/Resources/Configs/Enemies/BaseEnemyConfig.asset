@@ -16,4 +16,8 @@ MonoBehaviour:
     <Id>k__BackingField: 0
     <MinHealth>k__BackingField: 1
     <MaxHealth>k__BackingField: 10
-    <Speed>k__BackingField: 5
+    <Speed>k__BackingField: 3
+    <ObstacleCheckDistance>k__BackingField: 2
+    <MinTurnAngle>k__BackingField: 45
+    <MaxTurnAngle>k__BackingField: 135
+    <TurnCooldown>k__BackingField: 0.5

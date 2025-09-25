@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace FpsEcs.Runtime.Utils
 {
     public static class Constants
@@ -18,10 +20,19 @@ namespace FpsEcs.Runtime.Utils
             public const string PlayerConfigPath = "Configs/PlayerConfig";
             public const string GameConfigPath = "Configs/GameConfig";
         }
+        
+        public static class Layers
+        {
+            public const string Player = "Player";
+            public const string Obstacle = "Obstacle";
+            public const string Enemy = "Enemy";
+        }
 
         public static class Gameplay
         {
             public const float Gravity = 9.81f;
+            public static readonly LayerMask ObstacleLayerMask =
+                LayerMask.GetMask(Layers.Obstacle, Layers.Player, Layers.Enemy);
         }
     }
 }
