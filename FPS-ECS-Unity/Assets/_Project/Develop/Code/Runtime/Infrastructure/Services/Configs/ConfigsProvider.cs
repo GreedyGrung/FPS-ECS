@@ -12,6 +12,7 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Configs
     public class ConfigsProvider : IConfigsProvider
     {
         private PlayerConfig _playerConfig;
+        private GameConfig _gameConfig;
         private readonly Dictionary<EnemyId, EnemyConfig> _enemiesConfigs = new();
         private readonly Dictionary<WeaponId, WeaponConfig> _weaponsConfigs = new();
         private readonly IAssetProvider _assetProvider;
@@ -23,6 +24,7 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Configs
 
         public async UniTask Load()
         {
+            await LoadGameConfig();
             await LoadPlayerConfig();
             await LoadEnemiesConfigs();
             await LoadWeaponsConfigs();
@@ -31,6 +33,8 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Configs
         public PlayerConfig GetPlayerConfig()
             => _playerConfig ?? throw new InvalidOperationException("PlayerConfig not loaded!");
 
+        public GameConfig GetGameConfig()
+            => _gameConfig ?? throw new InvalidOperationException("GameConfig not loaded!");
         public EnemyConfig GetEnemyConfig(EnemyId id)
             => _enemiesConfigs.TryGetValue(id, out var cfg)
                 ? cfg
@@ -47,6 +51,12 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Configs
             _weaponsConfigs.Clear();
         }
 
+        private async UniTask LoadGameConfig()
+        {
+            var result = await _assetProvider.Load<GameConfigSO>(Constants.Assets.GameConfigPath);
+            _gameConfig = result.Config;
+        }
+        
         private async UniTask LoadPlayerConfig()
         {
             var result = await _assetProvider.Load<PlayerConfigSO>(Constants.Assets.PlayerConfigPath);

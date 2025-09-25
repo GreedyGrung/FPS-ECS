@@ -1,4 +1,4 @@
-using FpsEcs.Runtime.Gameplay.Helpers;
+using FpsEcs.Runtime.Gameplay.Common;
 using FpsEcs.Runtime.Gameplay.Input.Components;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
@@ -18,7 +18,7 @@ namespace FpsEcs.Runtime.Gameplay.Input.Systems
             var inputEntity = EntityFactory.Create(World);
             _inputPool.Value.Add(inputEntity);
 
-            Debug.Log("[ReadInputSystem] Initialized");
+            Debug.Log("[ReadInputSystem] Initialized " + inputEntity);
         }
     }
 }

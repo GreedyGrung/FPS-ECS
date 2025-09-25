@@ -1,5 +1,5 @@
+using FpsEcs.Runtime.Gameplay.Common;
 using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
-using FpsEcs.Runtime.Gameplay.Helpers;
 using FpsEcs.Runtime.Gameplay.Player.Components;
 using Leopotam.EcsLite;
 using UnityEngine;

@@ -1,5 +1,5 @@
+using FpsEcs.Runtime.Gameplay.Common;
 using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
-using FpsEcs.Runtime.Gameplay.Helpers;
 using FpsEcs.Runtime.Gameplay.Player.Components;
 using FpsEcs.Runtime.Infrastructure.Factories;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
@@ -13,19 +13,24 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
     {
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IGameFactory> _factory;
-        private readonly EcsCustomInject<LevelDataProvider> _levelDataProvider;
         private readonly EcsCustomInject<ConfigsProvider> _configsProvider;
+
+        private EcsFilter _playerSpawnFilter;
         
         private IGameFactory Factory => _factory.Value;
         private EcsWorld World => _world.Value;
-        private LevelDataProvider LevelDataProvider => _levelDataProvider.Value;
         private ConfigsProvider ConfigsProvider => _configsProvider.Value;
         
         public void Init(IEcsSystems systems)
         {
-            var playerObject = Factory.CreatePlayer(
-                LevelDataProvider.PlayerSpawn.position, 
-                LevelDataProvider.PlayerSpawn.rotation);
+            _playerSpawnFilter = World
+                .Filter<PlayerSpawn>()
+                .Inc<TransformRef>()
+                .End();
+
+            var entity = _playerSpawnFilter.GetRawEntities()[0];
+            var transform = World.GetPool<TransformRef>().Get(entity).Value;
+            var playerObject = Factory.CreatePlayer(transform.position, transform.rotation);
             
             InitializePlayerEntity(playerObject);
             CreateCameraEntity(playerObject);

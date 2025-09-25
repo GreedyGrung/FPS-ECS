@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace FpsEcs.Runtime.Gameplay.Player.Authorings
 {
-    public class PlayerAuthoring : MonoBehaviour, IAuthoring
+    public class PlayerSpawnAuthoring : MonoBehaviour, IAuthoring
     {
         public void Convert(EcsWorld world, int entity)
         {
-            var playerPool = world.GetPool<PlayerTag>();
-            playerPool.Add(entity);
+            var playerSpawnPool = world.GetPool<PlayerSpawn>();
+            playerSpawnPool.Add(entity);
         }
     }
 }

@@ -1,6 +1,8 @@
+using FpsEcs.Runtime.Gameplay.Enemies.Systems;
 using FpsEcs.Runtime.Gameplay.Input.Systems;
 using FpsEcs.Runtime.Gameplay.Player.Systems;
 using FpsEcs.Runtime.Infrastructure.Factories;
+using FpsEcs.Runtime.Infrastructure.Services.ActorsInitialization;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Infrastructure.Services.Input;
 using Leopotam.EcsLite;
@@ -16,18 +18,18 @@ namespace FpsEcs.Runtime.Gameplay
         private IEcsSystems _systems;
         private IInputService _inputService;
         private IGameFactory _gameFactory;
-        private LevelDataProvider _levelDataProvider;
         private IConfigsProvider _configsProvider;
+        private IActorsInitializationService _actorsInitializationService;
 
         [Inject]
         private void Construct(
             IInputService inputService,
             IGameFactory gameFactory,
-            LevelDataProvider levelDataProvider,
-            IConfigsProvider configsProvider)
+            IConfigsProvider configsProvider,
+            IActorsInitializationService actorsInitializationService)
         {
+            _actorsInitializationService = actorsInitializationService;
             _configsProvider = configsProvider;
-            _levelDataProvider = levelDataProvider;
             _gameFactory = gameFactory;
             _inputService = inputService;
         }
@@ -35,6 +37,7 @@ namespace FpsEcs.Runtime.Gameplay
         public void Initialize() 
         {
             _world = new EcsWorld();
+            _actorsInitializationService.Initialize(_world);
             _systems = new EcsSystems(_world);
             _systems
                 .Add(new InputInitializationSystem())
@@ -44,13 +47,13 @@ namespace FpsEcs.Runtime.Gameplay
                 .Add(new CameraLookSystem())
                 .Add(new MovePlayerSystem())
                 .Add(new PlayerAnimationSystem())
+                .Add(new EnemiesSpawnSystem())
 #if UNITY_EDITOR
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem())
 #endif
                 .Inject(_inputService)
                 .Inject(_gameFactory)
-                .Inject(_levelDataProvider)
                 .Inject(_configsProvider)
                 .Init();
         }

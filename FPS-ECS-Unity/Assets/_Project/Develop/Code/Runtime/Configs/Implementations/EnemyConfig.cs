@@ -14,10 +14,5 @@ namespace FpsEcs.Runtime.Configs.Implementations
         public float Health { get; set; }
         [field: SerializeField]
         public float Speed { get; set; }
-        
-        public override string ToString()
-        {
-            return string.Format($"Health: {Health}, Speed: {Speed}");
-        }
     }
 }

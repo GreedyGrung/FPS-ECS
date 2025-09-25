@@ -18,10 +18,5 @@ namespace FpsEcs.Runtime.Configs.Implementations
         public int MaxPitch { get; set; }
         [field: SerializeField]
         public float Sensitivity { get; set; }
-
-        public override string ToString()
-        {
-            return string.Format($"Health: {Health}, Speed: {Speed}");
-        }
     }
 }

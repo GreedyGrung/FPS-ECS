@@ -1,6 +1,6 @@
 using Leopotam.EcsLite;
 
-namespace FpsEcs.Runtime.Gameplay.Helpers
+namespace FpsEcs.Runtime.Gameplay.Common
 {
     public interface IAuthoring
     {

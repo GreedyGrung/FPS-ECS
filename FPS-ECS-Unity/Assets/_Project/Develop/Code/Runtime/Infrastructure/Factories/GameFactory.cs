@@ -19,7 +19,7 @@ namespace FpsEcs.Runtime.Infrastructure.Factories
         public async UniTask Load()
         {
             _playerPrefab = await _assetProvider.Load<GameObject>(Constants.Assets.PlayerPrefabPath);
-            _enemyPrefab = await _assetProvider.Load<GameObject>(Constants.Assets.EnemiesPrefabPath);
+            _enemyPrefab = await _assetProvider.Load<GameObject>(Constants.Assets.EnemyPrefabPath);
         }
         
         public GameObject CreatePlayer(Vector3 position, Quaternion rotation)

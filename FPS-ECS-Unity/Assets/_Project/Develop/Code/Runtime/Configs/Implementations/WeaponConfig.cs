@@ -14,10 +14,5 @@ namespace FpsEcs.Runtime.Configs.Implementations
         public float Damage { get; set; }
         [field: SerializeField]
         public float FireRate { get; set; }
-        
-        public override string ToString()
-        {
-            return string.Format($"Id: {Id}, Damage: {Damage}, FireRate: {FireRate}");
-        }
     }
 }
