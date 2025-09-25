@@ -1,5 +1,8 @@
 using System;
+using FpsEcs.Runtime.Gameplay.Common;
+using FpsEcs.Runtime.Gameplay.Enemies.Components;
 using FpsEcs.Runtime.Gameplay.HealthFeature.Components;
+using FpsEcs.Runtime.Gameplay.ProgressionFeature.Components;
 using FpsEcs.Runtime.Gameplay.Weapons.Components;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
@@ -38,10 +41,21 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
 
                 if (health.Value <= 0)
                 {
-                    World.GetPool<DeadTag>().Add(entity);
+                    HandleDeathLogic(entity);
                 }
                 
                 _damageEventPool.Del(entity);
+            }
+        }
+
+        private void HandleDeathLogic(int entity)
+        {
+            World.GetPool<DeadTag>().Add(entity);
+
+            if (World.GetPool<Enemy>().Has(entity))
+            {
+                var eventEntity = EntityFactory.Create(World);
+                World.GetPool<EnemyDiedEvent>().Add(eventEntity);
             }
         }
     }

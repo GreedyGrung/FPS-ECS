@@ -6,6 +6,19 @@ using Leopotam.EcsLite.Di;
 
 namespace FpsEcs.Runtime.Gameplay.Weapons.Systems
 {
+    public class WeaponSwaySystem : IEcsInitSystem, IEcsRunSystem
+    {
+        public void Init(IEcsSystems systems)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Run(IEcsSystems systems)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+    
     public class WeaponInitializationSystem : IEcsInitSystem, IEcsRunSystem
     {
         private readonly EcsWorldInject _world;
