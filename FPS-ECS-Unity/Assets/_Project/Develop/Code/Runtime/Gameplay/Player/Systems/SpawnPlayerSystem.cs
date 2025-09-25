@@ -1,6 +1,7 @@
 using FpsEcs.Runtime.Gameplay.Common;
 using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
 using FpsEcs.Runtime.Gameplay.Player.Components;
+using FpsEcs.Runtime.Gameplay.Weapons.Authorings;
 using FpsEcs.Runtime.Infrastructure.Factories;
 using FpsEcs.Runtime.Utils;
 using Leopotam.EcsLite;
@@ -32,6 +33,7 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
             
             InitializePlayerEntity(playerObject);
             CreateCameraEntity(playerObject);
+            CreateWeaponEntity(playerObject);
         }
 
         private void InitializePlayerEntity(GameObject playerObject)
@@ -48,6 +50,12 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
         {
             var cameraObject = playerObject.GetComponentInChildren<Camera>().gameObject;
             EntityFactory.CreateFrom(cameraObject, World);
+        }
+        
+        private void CreateWeaponEntity(GameObject playerObject)
+        {
+            var weaponObject = playerObject.GetComponentInChildren<WeaponAuthoring>().gameObject;
+            EntityFactory.CreateFrom(weaponObject, World);
         }
     }
 }

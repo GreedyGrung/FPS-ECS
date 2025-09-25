@@ -28,6 +28,7 @@ namespace FpsEcs.Runtime.Gameplay.Input.Systems
                 ref var input = ref _inputPool.Get(entity);
                 input.Move = _inputService.Value.MoveAction.ReadValue<Vector2>();
                 input.Look = _inputService.Value.LookAction.ReadValue<Vector2>();
+                input.AttackPressed = _inputService.Value.AttackAction.IsPressed();
             }
         }
     }

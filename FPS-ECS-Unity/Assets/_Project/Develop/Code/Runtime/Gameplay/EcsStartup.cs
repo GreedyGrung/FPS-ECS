@@ -3,6 +3,7 @@ using FpsEcs.Runtime.Gameplay.HealthFeature.Systems;
 using FpsEcs.Runtime.Gameplay.Input.Systems;
 using FpsEcs.Runtime.Gameplay.MovementLogic.Systems;
 using FpsEcs.Runtime.Gameplay.Player.Systems;
+using FpsEcs.Runtime.Gameplay.Weapons.Systems;
 using FpsEcs.Runtime.Infrastructure.Factories;
 using FpsEcs.Runtime.Infrastructure.Services.ActorsInitialization;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
@@ -45,6 +46,7 @@ namespace FpsEcs.Runtime.Gameplay
                 .Add(new InputInitializationSystem())
                 .Add(new CameraInitializationSystem())
                 .Add(new PlayerHealthInitializationSystem())
+                .Add(new WeaponInitializationSystem())
                 .Add(new EnemyHealthInitializationSystem())
                 .Add(new EnemiesSpawnSystem())
                 .Add(new EnemiesInitializationSystem())
@@ -54,6 +56,9 @@ namespace FpsEcs.Runtime.Gameplay
                 .Add(new SpawnPlayerSystem())
                 .Add(new CameraLookSystem())
                 .Add(new MovePlayerSystem())
+                .Add(new PlayerShootSystem())
+                .Add(new ApplyDamageSystem())
+                .Add(new DeathSystem())
 #if UNITY_EDITOR
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem())

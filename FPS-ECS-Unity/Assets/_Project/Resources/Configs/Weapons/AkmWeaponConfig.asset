@@ -16,3 +16,4 @@ MonoBehaviour:
     <Id>k__BackingField: 1
     <Damage>k__BackingField: 1
     <FireRate>k__BackingField: 10
+    <SpreadDegrees>k__BackingField: 1.5

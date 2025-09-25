@@ -31,8 +31,11 @@ namespace FpsEcs.Runtime.Utils
         public static class Gameplay
         {
             public const float Gravity = 9.81f;
+            public const float FireDistance = 50f;
             public static readonly LayerMask ObstacleLayerMask =
                 LayerMask.GetMask(Layers.Obstacle, Layers.Player, Layers.Enemy);
+            public static readonly LayerMask EnemyLayerMask =
+                LayerMask.GetMask(Layers.Enemy);
         }
     }
 }

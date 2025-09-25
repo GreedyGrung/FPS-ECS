@@ -14,5 +14,7 @@ namespace FpsEcs.Runtime.Configs.Implementations
         public float Damage { get; set; }
         [field: SerializeField]
         public float FireRate { get; set; }
+        [field: SerializeField]
+        public float SpreadDegrees { get; set; }
     }
 }
