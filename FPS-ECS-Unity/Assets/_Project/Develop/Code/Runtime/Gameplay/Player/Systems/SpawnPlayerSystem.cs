@@ -2,6 +2,7 @@ using FpsEcs.Runtime.Gameplay.Common;
 using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
 using FpsEcs.Runtime.Gameplay.Player.Components;
 using FpsEcs.Runtime.Gameplay.Weapons.Authorings;
+using FpsEcs.Runtime.Gameplay.Weapons.Components;
 using FpsEcs.Runtime.Infrastructure.Factories;
 using FpsEcs.Runtime.Utils;
 using Leopotam.EcsLite;
@@ -55,7 +56,8 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
         private void CreateWeaponEntity(GameObject playerObject)
         {
             var weaponObject = playerObject.GetComponentInChildren<WeaponAuthoring>().gameObject;
-            EntityFactory.CreateFrom(weaponObject, World);
+            var entity = EntityFactory.CreateFrom(weaponObject, World);
+            World.GetPool<WeaponInHandsTag>().Add(entity);
         }
     }
 }

@@ -17,3 +17,5 @@ MonoBehaviour:
     <Damage>k__BackingField: 1
     <FireRate>k__BackingField: 10
     <SpreadDegrees>k__BackingField: 1.5
+    <Clamp>k__BackingField: 0.09
+    <Smoothing>k__BackingField: 3

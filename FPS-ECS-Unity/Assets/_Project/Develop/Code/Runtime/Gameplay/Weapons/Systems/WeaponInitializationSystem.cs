@@ -6,25 +6,13 @@ using Leopotam.EcsLite.Di;
 
 namespace FpsEcs.Runtime.Gameplay.Weapons.Systems
 {
-    public class WeaponSwaySystem : IEcsInitSystem, IEcsRunSystem
-    {
-        public void Init(IEcsSystems systems)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Run(IEcsSystems systems)
-        {
-            throw new System.NotImplementedException();
-        }
-    }
-    
     public class WeaponInitializationSystem : IEcsInitSystem, IEcsRunSystem
     {
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IConfigsProvider> _configsProvider;
         private readonly EcsPoolInject<Weapon> _weaponPool;
         private readonly EcsPoolInject<WeaponInitializationNeededTag> _weaponInitPool;
+        private readonly EcsPoolInject<WeaponSway> _weaponSwayPool;
         
         private EcsFilter _weaponInitFilter;
         
@@ -36,6 +24,7 @@ namespace FpsEcs.Runtime.Gameplay.Weapons.Systems
             _weaponInitFilter = World
                 .Filter<WeaponInitializationNeededTag>()
                 .Inc<Weapon>()
+                .Inc<WeaponSway>()
                 .End();
         }
 
@@ -45,11 +34,15 @@ namespace FpsEcs.Runtime.Gameplay.Weapons.Systems
             {
                 ref var stats = ref _weaponPool.Value.Get(weapon);
                 var weaponConfig = ConfigsProvider.GetWeaponConfig(stats.Id);
+                ref var sway = ref _weaponSwayPool.Value.Get(weapon);
+                
                 stats.Damage = weaponConfig.Damage;
                 stats.FireRate = weaponConfig.FireRate;
                 stats.SpreadDegrees = weaponConfig.SpreadDegrees;
                 stats.MaxDistance = Constants.Gameplay.FireDistance;
                 stats.LayerMask = Constants.Gameplay.EnemyLayerMask;
+                sway.Clamp = weaponConfig.Clamp;
+                sway.Smoothing = weaponConfig.Smoothing;
 
                 World.GetPool<FireCooldown>().Add(weapon);
                 

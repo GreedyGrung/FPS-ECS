@@ -62,6 +62,7 @@ namespace FpsEcs.Runtime.Gameplay
                 .Add(new ApplyDamageSystem())
                 .Add(new EnemiesDeathObserverSystem())
                 .Add(new DeathSystem())
+                .Add(new WeaponSwaySystem())
 #if UNITY_EDITOR
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem())

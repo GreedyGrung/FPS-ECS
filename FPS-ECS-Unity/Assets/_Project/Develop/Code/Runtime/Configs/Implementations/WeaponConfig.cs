@@ -16,5 +16,10 @@ namespace FpsEcs.Runtime.Configs.Implementations
         public float FireRate { get; set; }
         [field: SerializeField]
         public float SpreadDegrees { get; set; }
+        [field: Header("Sway")]
+        [field: SerializeField]
+        public float Clamp { get; set; }
+        [field: SerializeField]
+        public float Smoothing { get; set; }
     }
 }
