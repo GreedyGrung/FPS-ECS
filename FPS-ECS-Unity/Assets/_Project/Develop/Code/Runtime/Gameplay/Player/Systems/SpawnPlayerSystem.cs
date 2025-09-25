@@ -2,6 +2,7 @@ using FpsEcs.Runtime.Gameplay.Common;
 using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
 using FpsEcs.Runtime.Gameplay.Player.Components;
 using FpsEcs.Runtime.Infrastructure.Factories;
+using FpsEcs.Runtime.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using UnityEngine;
@@ -25,7 +26,7 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
                 .Inc<TransformRef>()
                 .End();
 
-            var entity = _playerSpawnFilter.GetRawEntities()[0];
+            var entity = _playerSpawnFilter.First();
             var transform = World.GetPool<TransformRef>().Get(entity).Value;
             var playerObject = Factory.CreatePlayer(transform.position, transform.rotation);
             
