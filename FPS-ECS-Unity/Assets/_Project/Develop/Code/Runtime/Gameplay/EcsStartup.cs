@@ -1,5 +1,6 @@
 using FpsEcs.Runtime.Gameplay.Enemies.Systems;
 using FpsEcs.Runtime.Gameplay.Input.Systems;
+using FpsEcs.Runtime.Gameplay.MovementLogic.Systems;
 using FpsEcs.Runtime.Gameplay.Player.Systems;
 using FpsEcs.Runtime.Infrastructure.Factories;
 using FpsEcs.Runtime.Infrastructure.Services.ActorsInitialization;
@@ -42,12 +43,13 @@ namespace FpsEcs.Runtime.Gameplay
             _systems
                 .Add(new InputInitializationSystem())
                 .Add(new CameraInitializationSystem())
+                .Add(new EnemiesSpawnSystem())
+                .Add(new MovementInitializationSystem())
                 .Add(new InputReadSystem())
                 .Add(new SpawnPlayerSystem())
                 .Add(new CameraLookSystem())
                 .Add(new MovePlayerSystem())
                 .Add(new PlayerAnimationSystem())
-                .Add(new EnemiesSpawnSystem())
 #if UNITY_EDITOR
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem())

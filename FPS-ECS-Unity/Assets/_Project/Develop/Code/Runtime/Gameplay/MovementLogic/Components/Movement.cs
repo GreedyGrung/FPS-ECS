@@ -1,4 +1,4 @@
-namespace FpsEcs.Runtime.Gameplay.Player.Components
+namespace FpsEcs.Runtime.Gameplay.MovementLogic.Components
 {
     public struct Movement
     {

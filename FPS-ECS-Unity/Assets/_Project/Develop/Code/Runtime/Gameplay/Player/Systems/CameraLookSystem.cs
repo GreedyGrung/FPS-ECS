@@ -10,39 +10,39 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
 {
     public class CameraLookSystem : IEcsInitSystem, IEcsRunSystem
     {
-        private readonly EcsWorldInject _world = default;
+        private readonly EcsWorldInject _world;
 
-        private readonly EcsPoolInject<PlayerInput> _inputPool = default;
-        private readonly EcsPoolInject<TransformRef> _bodyPool = default;
-        private readonly EcsPoolInject<CameraRef> _camPool = default;
-        private readonly EcsPoolInject<CameraState> _cameraStatePool = default;
-        private readonly EcsPoolInject<CameraSettings> _camSettingsPool = default;
+        private readonly EcsPoolInject<PlayerInput> _inputPool;
+        private readonly EcsPoolInject<TransformRef> _bodyPool;
+        private readonly EcsPoolInject<CameraRef> _camPool;
+        private readonly EcsPoolInject<CameraState> _cameraStatePool;
+        private readonly EcsPoolInject<CameraSettings> _camSettingsPool;
 
         private EcsFilter _inputFilter;
         private EcsFilter _cameraFilter;
         private EcsFilter _playerFilter;
 
+        private EcsWorld World => _world.Value;
+        
         public void Init(IEcsSystems systems)
         {
-            _cameraFilter = _world.Value
+            _cameraFilter = World
                 .Filter<CameraRef>()
                 .Inc<CameraState>()
                 .Inc<CameraSettings>()
                 .End();
 
-            _inputFilter = _world.Value
+            _inputFilter = World
                 .Filter<PlayerInput>()
                 .End();
 
-            _playerFilter = _world.Value
+            _playerFilter = World
                 .Filter<PlayerTag>()
                 .End();
         }
 
         public void Run(IEcsSystems systems)
         {
-            float dt = Time.deltaTime;
-
             foreach (var inputEntity in _inputFilter)
             {
                 ref var input = ref _inputPool.Value.Get(inputEntity);
