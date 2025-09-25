@@ -17,6 +17,12 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Input
         public InputAction MoveAction { get; }
         public InputAction LookAction { get; }
         public InputAction AttackAction { get; }
+        public bool PauseActionThisFrame { get; }
+        public void SwitchInputMaps()
+        {
+            throw new NotImplementedException();
+        }
+
         public InputAction PauseAction { get; }
         public void SetGameplayInputEnabled(bool enable)
         {

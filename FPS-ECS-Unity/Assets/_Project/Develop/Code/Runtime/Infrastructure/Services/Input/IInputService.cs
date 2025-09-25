@@ -8,9 +8,7 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Input
         InputAction MoveAction { get; }
         InputAction LookAction { get; }
         InputAction AttackAction { get; }
-        InputAction PauseAction { get; }
-        
-        void SetGameplayInputEnabled(bool enable);
-        void SetPauseInputEnabled(bool enable);
+        bool PauseActionThisFrame { get; }
+        void SwitchInputMaps();
     }
 }

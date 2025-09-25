@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputActions:
   - {fileID: -944628639613478452, guid: 57f70a707e46eb84cbbb0158fd0a14a8, type: 3}
-  _pauseAction: {fileID: -3841439500021803151, guid: ad7fd6406ee29464093815e84405b95a,
+  _pauseAction: {fileID: -940068238637696954, guid: 57f70a707e46eb84cbbb0158fd0a14a8,
     type: 3}

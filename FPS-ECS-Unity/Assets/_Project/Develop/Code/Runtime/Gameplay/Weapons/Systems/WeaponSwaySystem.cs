@@ -1,7 +1,6 @@
 using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
 using FpsEcs.Runtime.Gameplay.Input.Components;
 using FpsEcs.Runtime.Gameplay.Weapons.Components;
-using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using UnityEngine;

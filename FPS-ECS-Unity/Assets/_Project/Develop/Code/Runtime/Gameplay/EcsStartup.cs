@@ -1,5 +1,6 @@
 using FpsEcs.Runtime.Gameplay.Enemies.Systems;
 using FpsEcs.Runtime.Gameplay.HealthFeature.Systems;
+using FpsEcs.Runtime.Gameplay.Input.Components;
 using FpsEcs.Runtime.Gameplay.Input.Systems;
 using FpsEcs.Runtime.Gameplay.MovementLogic.Systems;
 using FpsEcs.Runtime.Gameplay.Player.Systems;
@@ -11,6 +12,7 @@ using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Infrastructure.Services.Input;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
+using Leopotam.EcsLite.ExtendedSystems;
 using UnityEngine;
 using VContainer;
 
@@ -67,6 +69,7 @@ namespace FpsEcs.Runtime.Gameplay
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem())
 #endif
+                .DelHere<PauseEvent>()
                 .Inject(_inputService)
                 .Inject(_gameFactory)
                 .Inject(_configsProvider)

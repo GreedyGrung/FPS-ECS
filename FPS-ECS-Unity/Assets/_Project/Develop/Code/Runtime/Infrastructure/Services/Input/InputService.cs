@@ -1,4 +1,5 @@
 using FpsEcs.Runtime.Infrastructure.Services.Input.ScriptableObjects;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace FpsEcs.Runtime.Infrastructure.Services.Input
@@ -13,21 +14,38 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Input
             _gameplayInputMap = provider.GameplayInputMap;
             _pauseInputMap = provider.PauseInputMap;
 
-            SetGameplayInputEnabled(true);
+            EnableGameplayInputMap();
         }
         
         public InputAction MoveAction => _gameplayInputMap.MoveAction.action;
         public InputAction LookAction => _gameplayInputMap.LookAction.action;
         public InputAction AttackAction => _gameplayInputMap.AttackAction.action;
-        public InputAction PauseAction => _gameplayInputMap.PauseAction;
 
-        public void SetGameplayInputEnabled(bool enable)
+        public bool PauseActionThisFrame => 
+            _pauseInputMap.PauseAction.action.WasPressedThisFrame() ||
+            _gameplayInputMap.PauseAction.action.WasPressedThisFrame();
+
+        public void SwitchInputMaps()
+        {
+            if (_gameplayInputMap.IsEnabled)
+            {
+                Debug.LogError("pause");
+                EnablePauseInputMap();
+            }
+            else
+            {
+                Debug.LogError("gameplay");
+                EnableGameplayInputMap();
+            }
+        }
+        
+        private void EnableGameplayInputMap()
         {
             _gameplayInputMap.EnableControls();
             _pauseInputMap.DisableControls();
         }
 
-        public void SetPauseInputEnabled(bool enable)
+        private void EnablePauseInputMap()
         {
             _gameplayInputMap.DisableControls();
             _pauseInputMap.EnableControls();
