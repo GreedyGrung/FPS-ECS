@@ -54,7 +54,6 @@ namespace FpsEcs.Runtime.Gameplay
                 .Add(new SpawnPlayerSystem())
                 .Add(new CameraLookSystem())
                 .Add(new MovePlayerSystem())
-                .Add(new PlayerAnimationSystem())
 #if UNITY_EDITOR
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem())
