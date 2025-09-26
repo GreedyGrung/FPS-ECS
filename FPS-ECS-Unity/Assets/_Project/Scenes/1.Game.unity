@@ -843,7 +843,7 @@ GameObject:
   - component: {fileID: 111633424}
   - component: {fileID: 111633423}
   m_Layer: 0
-  m_Name: Light
+  m_Name: Additional Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29899,10 +29899,10 @@ SceneRoots:
   m_Roots:
   - {fileID: 1937900041}
   - {fileID: 735391052}
-  - {fileID: 832575519}
-  - {fileID: 612264368}
-  - {fileID: 469952983}
   - {fileID: 2004851762}
-  - {fileID: 670688013}
+  - {fileID: 612264368}
+  - {fileID: 832575519}
+  - {fileID: 469952983}
   - {fileID: 630251954}
   - {fileID: 111633425}
+  - {fileID: 670688013}
