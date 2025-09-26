@@ -41,7 +41,7 @@ namespace FpsEcs.Runtime.Gameplay.UI.Systems
                 {
                     var health = _healthPool.Get(player).Value;
                     var healthView = _healthViewPool.Get(healthViewEntity).Value;
-                    healthView.text = "Health: " + health;
+                    healthView.text = health.ToString();
                 }
             }
         }

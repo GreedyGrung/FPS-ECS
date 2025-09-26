@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Keys xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Key name="health:">
+		<Translates>
+			<en-us>Health:</en-us>
+		</Translates>
+	</Key>
+    <Key name="health">
+		<Translates>
+			<en-us>Health</en-us>
+		</Translates>
+	</Key>
+    <Key name="upgrade_points">
+		<Translates>
+			<en-us>Upgrade points:</en-us>
+		</Translates>
+	</Key>
+	<Key name="apply">
+		<Translates>
+			<en-us>Apply</en-us>
+		</Translates>
+	</Key>
+    <Key name="speed">
+		<Translates>
+			<en-us>Speed</en-us>
+		</Translates>
+	</Key>
+    <Key name="damage">
+		<Translates>
+			<en-us>Damage</en-us>
+		</Translates>
+	</Key>
+</Keys>

@@ -23,6 +23,7 @@ namespace FpsEcs.Runtime.Utils
             public const string UIRootPath = "UI/UIRoot";
             public const string HudPath = "UI/HUD";
             public const string UpgradesViewPath = "Meta/UpgradesView";
+            public const string LocalizationPath = "Localization/localization";
         }
         
         public static class Layers

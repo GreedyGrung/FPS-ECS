@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 3767814790747160961}
   - component: {fileID: 4901728479707088205}
   - component: {fileID: 672700831016591349}
+  - component: {fileID: 3153142594286080823}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -140,7 +141,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Apply
+  m_text: apply
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -209,6 +210,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3153142594286080823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924821305375571615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81bf0bd5f4214f5dbcbe0d153d73cd0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1406909594707874965
 GameObject:
   m_ObjectHideFlags: 0
@@ -709,6 +722,7 @@ GameObject:
   - component: {fileID: 8337686351251755105}
   - component: {fileID: 553507065381864930}
   - component: {fileID: 1468354779636303569}
+  - component: {fileID: 4257607733404375394}
   m_Layer: 5
   m_Name: Txt_AvailablePoints
   m_TagString: Untagged
@@ -763,7 +777,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Upgrade points:'
+  m_text: upgrade_points
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -832,6 +846,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &4257607733404375394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7613925437717469739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81bf0bd5f4214f5dbcbe0d153d73cd0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8500789836879435702
 GameObject:
   m_ObjectHideFlags: 0
@@ -1274,7 +1300,7 @@ PrefabInstance:
     - target: {fileID: 5871453192083729069, guid: f8feb1181db011c49bc62378f5eedb9b,
         type: 3}
       propertyPath: m_text
-      value: Damage
+      value: damage
       objectReference: {fileID: 0}
     - target: {fileID: 6444211673488437136, guid: f8feb1181db011c49bc62378f5eedb9b,
         type: 3}
@@ -1539,7 +1565,7 @@ PrefabInstance:
     - target: {fileID: 5871453192083729069, guid: f8feb1181db011c49bc62378f5eedb9b,
         type: 3}
       propertyPath: m_text
-      value: Health
+      value: health
       objectReference: {fileID: 0}
     - target: {fileID: 6444211673488437136, guid: f8feb1181db011c49bc62378f5eedb9b,
         type: 3}
@@ -1680,9 +1706,7 @@ PrefabInstance:
     - target: {fileID: 5871453192083729069, guid: f8feb1181db011c49bc62378f5eedb9b,
         type: 3}
       propertyPath: m_text
-      value: 'Speed
-
-'
+      value: speed
       objectReference: {fileID: 0}
     - target: {fileID: 6444211673488437136, guid: f8feb1181db011c49bc62378f5eedb9b,
         type: 3}
