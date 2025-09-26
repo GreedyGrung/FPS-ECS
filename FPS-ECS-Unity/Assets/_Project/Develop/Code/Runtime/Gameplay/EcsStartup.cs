@@ -5,11 +5,14 @@ using FpsEcs.Runtime.Gameplay.Input.Systems;
 using FpsEcs.Runtime.Gameplay.MovementLogic.Systems;
 using FpsEcs.Runtime.Gameplay.Player.Systems;
 using FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems;
+using FpsEcs.Runtime.Gameplay.UI.Systems;
 using FpsEcs.Runtime.Gameplay.Weapons.Systems;
 using FpsEcs.Runtime.Infrastructure.Factories;
 using FpsEcs.Runtime.Infrastructure.Services.ActorsInitialization;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Infrastructure.Services.Input;
+using FpsEcs.Runtime.Infrastructure.Services.Pause;
+using FpsEcs.Runtime.Infrastructure.Services.UI;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using Leopotam.EcsLite.ExtendedSystems;
@@ -26,18 +29,24 @@ namespace FpsEcs.Runtime.Gameplay
         private IGameFactory _gameFactory;
         private IConfigsProvider _configsProvider;
         private IActorsInitializationService _actorsInitializationService;
+        private IUIService _uiService;
+        private IPauseService _pauseService;
 
         [Inject]
         private void Construct(
             IInputService inputService,
             IGameFactory gameFactory,
             IConfigsProvider configsProvider,
-            IActorsInitializationService actorsInitializationService)
+            IActorsInitializationService actorsInitializationService,
+            IUIService uiService,
+            IPauseService pauseService)
         {
-            _actorsInitializationService = actorsInitializationService;
-            _configsProvider = configsProvider;
-            _gameFactory = gameFactory;
             _inputService = inputService;
+            _gameFactory = gameFactory;
+            _configsProvider = configsProvider;
+            _actorsInitializationService = actorsInitializationService;
+            _uiService = uiService;
+            _pauseService = pauseService;
         }
         
         public void Initialize() 
@@ -52,10 +61,11 @@ namespace FpsEcs.Runtime.Gameplay
                 .Add(new PlayerHealthInitializationSystem())
                 .Add(new WeaponInitializationSystem())
                 .Add(new EnemyHealthInitializationSystem())
-                .Add(new EnemiesSpawnSystem())
                 .Add(new EnemiesInitializationSystem())
-                .Add(new EnemiesMoveSystem())
                 .Add(new MovementInitializationSystem())
+                .Add(new UIInitializationSystem())
+                .Add(new EnemiesSpawnSystem())
+                .Add(new EnemiesMoveSystem())
                 .Add(new InputReadSystem())
                 .Add(new SpawnPlayerSystem())
                 .Add(new CameraLookSystem())
@@ -65,6 +75,7 @@ namespace FpsEcs.Runtime.Gameplay
                 .Add(new EnemiesDeathObserverSystem())
                 .Add(new DeathSystem())
                 .Add(new WeaponSwaySystem())
+                .Add(new UIViewsOpenCloseSystem())
 #if UNITY_EDITOR
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem())
@@ -73,6 +84,8 @@ namespace FpsEcs.Runtime.Gameplay
                 .Inject(_inputService)
                 .Inject(_gameFactory)
                 .Inject(_configsProvider)
+                .Inject(_uiService)
+                .Inject(_pauseService)
                 .Init();
         }
     

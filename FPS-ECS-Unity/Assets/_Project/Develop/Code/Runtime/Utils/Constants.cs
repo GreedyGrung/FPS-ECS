@@ -19,6 +19,9 @@ namespace FpsEcs.Runtime.Utils
             public const string WeaponsConfigsPath = "Configs/Weapons";
             public const string PlayerConfigPath = "Configs/PlayerConfig";
             public const string GameConfigPath = "Configs/GameConfig";
+            
+            public const string UIRootPath = "UI/UIRoot";
+            public const string UpgradesViewPath = "Meta/UpgradesView";
         }
         
         public static class Layers

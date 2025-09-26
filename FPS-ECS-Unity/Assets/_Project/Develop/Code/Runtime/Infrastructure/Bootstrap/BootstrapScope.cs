@@ -3,6 +3,7 @@ using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Infrastructure.Services.Input;
 using FpsEcs.Runtime.Infrastructure.Services.Input.ScriptableObjects;
 using FpsEcs.Runtime.Infrastructure.Services.SceneLoading;
+using FpsEcs.Runtime.Infrastructure.Services.UI;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -24,6 +25,7 @@ namespace FpsEcs.Runtime.Infrastructure.Bootstrap
             builder.Register<ISceneLoader, SceneLoader>(Lifetime.Singleton);
             builder.Register<IAssetProvider, AssetProvider>(Lifetime.Singleton);
             builder.Register<IConfigsProvider, ConfigsProvider>(Lifetime.Singleton);
+            builder.Register<IUIService, UIService>(Lifetime.Singleton);
             builder.RegisterInstance(_inputMapsProvider);
             RegisterInputService(builder);
             

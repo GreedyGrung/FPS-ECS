@@ -29,12 +29,10 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Input
         {
             if (_gameplayInputMap.IsEnabled)
             {
-                Debug.LogError("pause");
                 EnablePauseInputMap();
             }
             else
             {
-                Debug.LogError("gameplay");
                 EnableGameplayInputMap();
             }
         }
