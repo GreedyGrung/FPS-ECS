@@ -16,11 +16,17 @@ namespace FpsEcs.Runtime.Infrastructure.Factories
         private readonly IObjectResolver _resolver;
 
         private Transform _uiRoot;
+        private GameObject _hud;
 
         public UIFactory(IAssetProvider assetProvider, IObjectResolver resolver)
         {
             _assetProvider = assetProvider;
             _resolver = resolver;
+        }
+
+        public async UniTask Load()
+        {
+            _hud = await _assetProvider.Load<GameObject>(Constants.Assets.HudPath);
         }
         
         public async UniTask CreateUIRootAsync()
@@ -41,6 +47,11 @@ namespace FpsEcs.Runtime.Infrastructure.Factories
             dict.Add(UIPanelId.Upgrades, panel);
             
             return dict;
+        }
+
+        public GameObject CreateHud()
+        {
+            return Object.Instantiate(_hud, _uiRoot);
         }
 
         private async UniTask<UIPanelBase> CreateUpgradesPanel()

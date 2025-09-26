@@ -32,6 +32,7 @@ namespace FpsEcs.Runtime.Infrastructure.Gameplay
 
         private async UniTask InitializeGameUI()
         {
+            await _uiFactory.Load();
             await _uiFactory.CreateUIRootAsync();
             var views = await _uiFactory.CreateUIPanelsAsync();
             

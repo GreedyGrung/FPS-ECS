@@ -21,6 +21,7 @@ namespace FpsEcs.Runtime.Utils
             public const string GameConfigPath = "Configs/GameConfig";
             
             public const string UIRootPath = "UI/UIRoot";
+            public const string HudPath = "UI/HUD";
             public const string UpgradesViewPath = "Meta/UpgradesView";
         }
         

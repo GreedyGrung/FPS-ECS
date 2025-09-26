@@ -31,6 +31,7 @@ namespace FpsEcs.Runtime.Gameplay
         private IActorsInitializationService _actorsInitializationService;
         private IUIService _uiService;
         private IPauseService _pauseService;
+        private IUIFactory _uiFactory;
 
         [Inject]
         private void Construct(
@@ -39,8 +40,10 @@ namespace FpsEcs.Runtime.Gameplay
             IConfigsProvider configsProvider,
             IActorsInitializationService actorsInitializationService,
             IUIService uiService,
-            IPauseService pauseService)
+            IPauseService pauseService,
+            IUIFactory uiFactory)
         {
+            _uiFactory = uiFactory;
             _inputService = inputService;
             _gameFactory = gameFactory;
             _configsProvider = configsProvider;
@@ -76,6 +79,7 @@ namespace FpsEcs.Runtime.Gameplay
                 .Add(new DeathSystem())
                 .Add(new WeaponSwaySystem())
                 .Add(new UIViewsOpenCloseSystem())
+                .Add(new HudRedrawSystem())
 #if UNITY_EDITOR
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem())
@@ -86,6 +90,7 @@ namespace FpsEcs.Runtime.Gameplay
                 .Inject(_configsProvider)
                 .Inject(_uiService)
                 .Inject(_pauseService)
+                .Inject(_uiFactory)
                 .Init();
         }
     
