@@ -16,6 +16,7 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
         {
             var progressionEntity = EntityFactory.Create(World);
             World.GetPool<UpgradePoints>().Add(progressionEntity);
+            World.GetPool<StatsUpgradeLevels>().Add(progressionEntity);
         }
     }
 }

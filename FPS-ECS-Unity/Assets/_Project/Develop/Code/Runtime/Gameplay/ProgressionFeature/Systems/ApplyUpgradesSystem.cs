@@ -23,6 +23,7 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
         
         private EcsPool<Movement> _movementPool;
         private EcsPool<UpgradePoints> _upgradePointsPool;
+        private EcsPool<StatsUpgradeLevels> _upgradeLevelsPool;
         private EcsPool<ApplyUpgradesEvent> _applyUpgradesEventPool;
         private EcsPool<Weapon> _weaponPool;
         private EcsPool<Health> _healthPool;
@@ -45,6 +46,7 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
 
             _upgradePointsFilter = World
                 .Filter<UpgradePoints>()
+                .Inc<StatsUpgradeLevels>()
                 .End();
 
             _upgradeAppliedEventFilter = World
@@ -53,6 +55,7 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
             
             _movementPool = World.GetPool<Movement>();
             _upgradePointsPool = World.GetPool<UpgradePoints>();
+            _upgradeLevelsPool = World.GetPool<StatsUpgradeLevels>();
             _applyUpgradesEventPool = World.GetPool<ApplyUpgradesEvent>();
             _weaponPool = World.GetPool<Weapon>();
             _healthPool = World.GetPool<Health>();
@@ -67,20 +70,26 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
                 var healthBonus = upgrades.Health * GameConfig.DamageBonusPerUpgradeLevel;
                 var speedBonus = upgrades.Speed * GameConfig.DamageBonusPerUpgradeLevel;
                 var damageBonus = upgrades.Damage * GameConfig.DamageBonusPerUpgradeLevel;
-                var totalPoints = upgrades.Health + upgrades.Speed + upgrades.Damage;
                 
                 ApplyUpgradesToPlayer(healthBonus, speedBonus);
                 ApplyUpgradesToPlayerWeapon(damageBonus);
-                RemoveUpgradePoints(totalPoints);
+                HandleUpgradePointsLogic(upgrades);
             }
         }
 
-        private void RemoveUpgradePoints(int totalPoints)
+        private void HandleUpgradePointsLogic(ApplyUpgradesEvent upgrades)
         {
             foreach (var pointsEntity in _upgradePointsFilter)
             {
                 ref var points = ref _upgradePointsPool.Get(pointsEntity);
+                ref var levels = ref _upgradeLevelsPool.Get(pointsEntity);
+                
+                var totalPoints = upgrades.Health + upgrades.Speed + upgrades.Damage;
                 points.Value -= totalPoints;
+
+                levels.Health += upgrades.Health;
+                levels.Speed += upgrades.Speed;
+                levels.Damage += upgrades.Damage;
             }
         }
 

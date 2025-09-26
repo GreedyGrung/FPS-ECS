@@ -16,7 +16,7 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Upgrades
             _world = world;
         }
 
-        public void Apply(UpgradesPoints upgrades)
+        public void Apply(UpgradesData upgrades)
         {
             var entity = _world.NewEntity();
             ref var upgradeEvent = ref _world.GetPool<ApplyUpgradesEvent>().Add(entity);
@@ -24,6 +24,25 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Upgrades
             upgradeEvent.Health = upgrades.Health;
             upgradeEvent.Speed = upgrades.Speed;
             upgradeEvent.Damage = upgrades.Damage;
+        }
+
+        public UpgradesData GetUpgradesLevels()
+        {
+            if (_world == null)
+            {
+                return default;
+            }
+            
+            var entity = _world.Filter<StatsUpgradeLevels>().End().First();
+            var pool = _world.GetPool<StatsUpgradeLevels>();
+            var levels = pool.Get(entity);
+            
+            return new UpgradesData
+            {
+                Health = levels.Health,
+                Speed = levels.Speed,
+                Damage = levels.Damage
+            };
         }
         
         private int GetAvailablePoints()

@@ -11,12 +11,17 @@ namespace FpsEcs.Runtime.Meta.Upgrades
         
         [SerializeField] private Button _addPointButton;
         [SerializeField] private TextMeshProUGUI _pendingPoints;
+
+        private int _usedPoints;
         
         public int PendingPoints { get; private set; }
+        
+        private int PointsToShow => _usedPoints + PendingPoints;
 
-        public void Initialize(int availablePoints)
+        public void Initialize(int availablePoints, int level)
         {
-            _pendingPoints.text = PendingPoints.ToString();
+            _usedPoints = level;
+            _pendingPoints.text = PointsToShow.ToString();
             _addPointButton.onClick.AddListener(AddPoint);
 
             _addPointButton.interactable = availablePoints > 0;
@@ -36,7 +41,7 @@ namespace FpsEcs.Runtime.Meta.Upgrades
         private void AddPoint()
         {
             PendingPoints++;
-            _pendingPoints.text = PendingPoints.ToString();
+            _pendingPoints.text = PointsToShow.ToString();
             OnAddPointButtonClicked?.Invoke();
         }
     }

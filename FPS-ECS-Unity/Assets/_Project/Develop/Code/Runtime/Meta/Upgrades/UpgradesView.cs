@@ -56,10 +56,12 @@ namespace FpsEcs.Runtime.Meta.Upgrades
             base.OnEnabled();
             
             _availablePoints.text = _upgradesService.AvailablePoints.ToString();
+
+            var levels = _upgradesService.GetUpgradesLevels();
             
-            _healthStat.Initialize(_upgradesService.AvailablePoints);
-            _damageStat.Initialize(_upgradesService.AvailablePoints);
-            _speedStat.Initialize(_upgradesService.AvailablePoints);
+            _healthStat.Initialize(_upgradesService.AvailablePoints, levels.Health);
+            _damageStat.Initialize(_upgradesService.AvailablePoints, levels.Damage);
+            _speedStat.Initialize(_upgradesService.AvailablePoints, levels.Speed);
         }
 
         protected override void OnDisabled()
@@ -81,7 +83,7 @@ namespace FpsEcs.Runtime.Meta.Upgrades
 
         private void ApplyUpgrades()
         {
-            var upgrades = new UpgradesPoints
+            var upgrades = new UpgradesData
             {
                 Health = _healthStat.PendingPoints,
                 Speed = _speedStat.PendingPoints,

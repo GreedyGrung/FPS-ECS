@@ -1,6 +1,6 @@
 namespace FpsEcs.Runtime.Infrastructure.Services.Upgrades
 {
-    public struct UpgradesPoints
+    public struct UpgradesData
     {
         public int Health;
         public int Speed;
