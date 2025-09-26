@@ -20,7 +20,8 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
         private EcsPool<TransformRef> _transformPool;
         private EcsPool<Weapon> _weaponPool;
         private EcsPool<FireCooldown> _cooldownPool;
-        private EcsPool<DamageEvent> _damageEvents;
+        private EcsPool<DamageEvent> _damageEventsPool;
+        private EcsPool<FireEffect> _fireEffectPool;
         
         private EcsWorld World => _world.Value;
 
@@ -38,12 +39,15 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
             _weaponFilter = World
                 .Filter<Weapon>()
                 .Inc<FireCooldown>()
+                .Inc<FireEffect>()
                 .End();
 
             _inputPool = World.GetPool<PlayerInput>();
             _transformPool = World.GetPool<TransformRef>();
             _weaponPool = World.GetPool<Weapon>();
             _cooldownPool = World.GetPool<FireCooldown>();
+            _damageEventsPool = World.GetPool<DamageEvent>();
+            _fireEffectPool = World.GetPool<FireEffect>();
         }
 
         public void Run(IEcsSystems systems)
@@ -60,6 +64,7 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
                     {
                         ref var weapon = ref _weaponPool.Get(weaponEntity);
                         ref var cooldown = ref _cooldownPool.Get(weaponEntity);
+                        var fireEffect = _fireEffectPool.Get(weaponEntity).Value;
                         var now = Time.time;
                         
                         if (now < cooldown.NextTime || !input.AttackPressed)
@@ -78,10 +83,12 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
                             if (hit.collider.TryGetComponent(out Actor actor))
                             {
                                 var entity = actor.GetEntity();
-                                ref var damageEvent = ref World.GetPool<DamageEvent>().Add(entity);
+                                ref var damageEvent = ref _damageEventsPool.Add(entity);
                                 damageEvent.DamageAmount = weapon.Damage;
                             }
                         }
+                        
+                        fireEffect.Play();
                     }
                 }
             }
