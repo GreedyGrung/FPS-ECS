@@ -1,3 +1,4 @@
+using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Infrastructure.Services.Input;
 using FpsEcs.Runtime.Infrastructure.Services.Pause;
 using FpsEcs.Runtime.Infrastructure.Services.Upgrades;
@@ -20,10 +21,16 @@ namespace FpsEcs.Runtime.Meta.Upgrades
         [SerializeField] private StatView _healthStat;
         [SerializeField] private StatView _damageStat;
         [SerializeField] private StatView _speedStat;
+        private IConfigsProvider _configsProvider;
 
         [Inject]
-        private void Construct(IPauseService pauseService, IInputService inputService, IUpgradesService upgradesService)
+        private void Construct(
+            IPauseService pauseService,
+            IInputService inputService,
+            IUpgradesService upgradesService,
+            IConfigsProvider configsProvider)
         {
+            _configsProvider = configsProvider;
             _upgradesService = upgradesService;
             _inputService = inputService;
             _pauseService = pauseService;
@@ -62,6 +69,8 @@ namespace FpsEcs.Runtime.Meta.Upgrades
             _healthStat.Initialize(_upgradesService.AvailablePoints, levels.Health);
             _damageStat.Initialize(_upgradesService.AvailablePoints, levels.Damage);
             _speedStat.Initialize(_upgradesService.AvailablePoints, levels.Speed);
+            
+            CheckStatsLimits();
         }
 
         protected override void OnDisabled()
@@ -108,6 +117,28 @@ namespace FpsEcs.Runtime.Meta.Upgrades
             
             int remainingPoints = _upgradesService.AvailablePoints - totalPendingPoints;
             _availablePoints.text = remainingPoints.ToString();
+            
+            CheckStatsLimits();
+        }
+
+        private void CheckStatsLimits()
+        {
+            var levels = _upgradesService.GetUpgradesLevels();
+            var gameConfig = _configsProvider.GetGameConfig();
+
+            CheckLimitsForStat(_healthStat, levels.Health, gameConfig.HealthBonusLimit);
+            CheckLimitsForStat(_speedStat, levels.Speed, gameConfig.SpeedBonusLimit);
+            CheckLimitsForStat(_damageStat, levels.Damage, gameConfig.DamageBonusLimit);
+        }
+
+        private void CheckLimitsForStat(StatView stat, int level,  int limit)
+        {
+            var totalHealthBonus = level + stat.PendingPoints;
+
+            if (totalHealthBonus == limit)
+            {
+                stat.DisableButton();
+            }
         }
     }
 }

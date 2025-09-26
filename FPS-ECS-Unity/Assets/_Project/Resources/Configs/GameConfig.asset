@@ -16,5 +16,8 @@ MonoBehaviour:
     <EnemySpawnDuration>k__BackingField: 3
     <MaxEnemyCountOnLevel>k__BackingField: 5
     <HealthBonusPerUpgradeLevel>k__BackingField: 1
+    <HealthBonusLimit>k__BackingField: 20
     <SpeedBonusPerUpgradeLevel>k__BackingField: 0.5
+    <SpeedBonusLimit>k__BackingField: 10
     <DamageBonusPerUpgradeLevel>k__BackingField: 1
+    <DamageBonusLimit>k__BackingField: 10
