@@ -20,6 +20,7 @@ namespace FpsEcs.Runtime.Infrastructure.Gameplay
             builder.Register<IActorsInitializationService, ActorsInitializationService>(Lifetime.Singleton);
             builder.Register<IPauseService, PauseService>(Lifetime.Singleton);
             builder.Register<IUpgradesService, UpgradesService>(Lifetime.Singleton);
+            builder.Register<IEntityFactory, EntityFactory>(Lifetime.Singleton);
             builder.RegisterEntryPoint<GameplayFlow>().WithParameter(_startup);
         }
     }

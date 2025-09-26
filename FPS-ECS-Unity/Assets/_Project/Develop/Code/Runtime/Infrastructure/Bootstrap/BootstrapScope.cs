@@ -3,6 +3,7 @@ using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Infrastructure.Services.Input;
 using FpsEcs.Runtime.Infrastructure.Services.Input.ScriptableObjects;
 using FpsEcs.Runtime.Infrastructure.Services.Localization;
+using FpsEcs.Runtime.Infrastructure.Services.SaveLoad;
 using FpsEcs.Runtime.Infrastructure.Services.SceneLoading;
 using FpsEcs.Runtime.Infrastructure.Services.UI;
 using UnityEngine;
@@ -28,22 +29,11 @@ namespace FpsEcs.Runtime.Infrastructure.Bootstrap
             builder.Register<IConfigsProvider, ConfigsProvider>(Lifetime.Singleton);
             builder.Register<IUIService, UIService>(Lifetime.Singleton);
             builder.Register<ILocalizationService, MockLocalizationService>(Lifetime.Singleton);
+            builder.Register<ISaveLoadService, SaveLoadService>(Lifetime.Singleton);
             builder.RegisterInstance(_inputMapsProvider);
-            RegisterInputService(builder);
+            builder.Register<IInputService, InputService>(Lifetime.Singleton);
             
             builder.RegisterEntryPoint<BootstrapFlow>();
-        }
-
-        private void RegisterInputService(IContainerBuilder builder)
-        {
-            if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
-            {
-                builder.Register<IInputService, MobileInputService>(Lifetime.Singleton);
-            }
-            else
-            {
-                builder.Register<IInputService, StandaloneInputService>(Lifetime.Singleton);
-            }
         }
     }
 }

@@ -13,6 +13,7 @@ using FpsEcs.Runtime.Infrastructure.Services.ActorsInitialization;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Infrastructure.Services.Input;
 using FpsEcs.Runtime.Infrastructure.Services.Pause;
+using FpsEcs.Runtime.Infrastructure.Services.SaveLoad;
 using FpsEcs.Runtime.Infrastructure.Services.UI;
 using FpsEcs.Runtime.Infrastructure.Services.Upgrades;
 using Leopotam.EcsLite;
@@ -35,6 +36,8 @@ namespace FpsEcs.Runtime.Gameplay
         private IPauseService _pauseService;
         private IUIFactory _uiFactory;
         private IUpgradesService _upgradesService;
+        private ISaveLoadService _saveLoadService;
+        private IEntityFactory _entityFactory;
 
         [Inject]
         private void Construct(
@@ -45,7 +48,9 @@ namespace FpsEcs.Runtime.Gameplay
             IUIService uiService,
             IPauseService pauseService,
             IUIFactory uiFactory,
-            IUpgradesService upgradesService)
+            IUpgradesService upgradesService,
+            ISaveLoadService saveLoadService,
+            IEntityFactory entityFactory)
         {
             _uiFactory = uiFactory;
             _inputService = inputService;
@@ -55,6 +60,8 @@ namespace FpsEcs.Runtime.Gameplay
             _uiService = uiService;
             _pauseService = pauseService;
             _upgradesService = upgradesService;
+            _saveLoadService = saveLoadService;
+            _entityFactory = entityFactory;
         }
         
         public void Initialize() 
@@ -62,6 +69,7 @@ namespace FpsEcs.Runtime.Gameplay
             _world = new EcsWorld();
             _actorsInitializationService.Initialize(_world);
             _upgradesService.Initialize(_world);
+            _entityFactory.Initialize(_world);
             _systems = new EcsSystems(_world);
             _systems
                 .Add(new InputInitializationSystem())
@@ -88,18 +96,23 @@ namespace FpsEcs.Runtime.Gameplay
                 .Add(new UIViewsOpenCloseSystem())
                 .Add(new HudRedrawSystem())
                 .Add(new ApplyUpgradesSystem())
+                .Add(new SavePlayerProgressSystem())
+                .Add(new LoadPlayerProgressSystem())
 #if UNITY_EDITOR
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem())
 #endif
                 .DelHere<PauseEvent>()
                 .DelHere<ApplyUpgradesEvent>()
+                .DelHere<SaveProgressEvent>()
                 .Inject(_inputService)
                 .Inject(_gameFactory)
                 .Inject(_configsProvider)
                 .Inject(_uiService)
                 .Inject(_pauseService)
                 .Inject(_uiFactory)
+                .Inject(_saveLoadService)
+                .Inject(_entityFactory)
                 .Init();
         }
     

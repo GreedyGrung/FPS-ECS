@@ -1,15 +1,14 @@
 using FpsEcs.Runtime.Infrastructure.Services.Input.ScriptableObjects;
-using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace FpsEcs.Runtime.Infrastructure.Services.Input
 {
-    public class StandaloneInputService : IInputService
+    public class InputService : IInputService
     {
         private readonly GameplayInputMap _gameplayInputMap;
         private readonly PauseInputMap _pauseInputMap;
 
-        public StandaloneInputService(InputMapsProvider provider)
+        public InputService(InputMapsProvider provider)
         {
             _gameplayInputMap = provider.GameplayInputMap;
             _pauseInputMap = provider.PauseInputMap;

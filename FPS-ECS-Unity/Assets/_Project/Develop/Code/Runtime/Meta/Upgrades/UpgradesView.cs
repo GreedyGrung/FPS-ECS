@@ -1,3 +1,5 @@
+using FpsEcs.Runtime.Gameplay.ProgressionFeature.Components;
+using FpsEcs.Runtime.Infrastructure.Factories;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Infrastructure.Services.Input;
 using FpsEcs.Runtime.Infrastructure.Services.Pause;
@@ -15,21 +17,25 @@ namespace FpsEcs.Runtime.Meta.Upgrades
         private IPauseService _pauseService;
         private IInputService _inputService;
         private IUpgradesService _upgradesService;
+        private IConfigsProvider _configsProvider;
 
         [SerializeField] private TextMeshProUGUI _availablePoints;
         [SerializeField] private Button _applyButton;
         [SerializeField] private StatView _healthStat;
         [SerializeField] private StatView _damageStat;
         [SerializeField] private StatView _speedStat;
-        private IConfigsProvider _configsProvider;
+        [SerializeField] private Button _saveButton;
+        private IEntityFactory _entityFactory;
 
         [Inject]
         private void Construct(
             IPauseService pauseService,
             IInputService inputService,
             IUpgradesService upgradesService,
-            IConfigsProvider configsProvider)
+            IConfigsProvider configsProvider,
+            IEntityFactory entityFactory)
         {
+            _entityFactory = entityFactory;
             _configsProvider = configsProvider;
             _upgradesService = upgradesService;
             _inputService = inputService;
@@ -41,6 +47,7 @@ namespace FpsEcs.Runtime.Meta.Upgrades
             base.Subscribe();
             
             _applyButton.onClick.AddListener(ApplyUpgrades);
+            _saveButton.onClick.AddListener(SaveProgress);
             
             _healthStat.OnAddPointButtonClicked += CheckForRemainingPoints;
             _damageStat.OnAddPointButtonClicked += CheckForRemainingPoints;
@@ -102,6 +109,12 @@ namespace FpsEcs.Runtime.Meta.Upgrades
             _upgradesService.Apply(upgrades);
 
             Close();
+        }
+
+        private void SaveProgress()
+        {
+            var entity = _entityFactory.Create();
+            _entityFactory.World.GetPool<SaveProgressEvent>().Add(entity);
         }
 
         private void CheckForRemainingPoints()

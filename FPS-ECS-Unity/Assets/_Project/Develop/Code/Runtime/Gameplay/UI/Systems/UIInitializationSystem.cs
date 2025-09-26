@@ -11,13 +11,14 @@ namespace FpsEcs.Runtime.Gameplay.UI.Systems
     {
         private readonly EcsCustomInject<IUIService> _uiService;
         private readonly EcsCustomInject<IUIFactory> _uiFactory;
+        private readonly EcsCustomInject<IEntityFactory> _entityFactory;
         
         public void Init(IEcsSystems systems)
         {
             _uiService.Value.CloseAll();
 
             var hud = _uiFactory.Value.CreateHud();
-            EntityFactory.CreateFrom(hud, systems.GetWorld());
+            _entityFactory.Value.CreateFrom(hud);
         }
     }
 }

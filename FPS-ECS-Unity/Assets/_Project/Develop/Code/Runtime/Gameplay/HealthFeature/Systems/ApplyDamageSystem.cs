@@ -1,9 +1,8 @@
-using System;
-using FpsEcs.Runtime.Gameplay.Common;
 using FpsEcs.Runtime.Gameplay.Enemies.Components;
 using FpsEcs.Runtime.Gameplay.HealthFeature.Components;
 using FpsEcs.Runtime.Gameplay.ProgressionFeature.Components;
 using FpsEcs.Runtime.Gameplay.Weapons.Components;
+using FpsEcs.Runtime.Infrastructure.Factories;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 
@@ -12,6 +11,7 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
     public class ApplyDamageSystem : IEcsInitSystem, IEcsRunSystem
     {
         private readonly EcsWorldInject _world;
+        private readonly EcsCustomInject<IEntityFactory> _entityFactory;
         
         private EcsPool<DamageEvent> _damageEventPool;
         private EcsPool<Health> _healthPool;
@@ -54,7 +54,7 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
 
             if (World.GetPool<Enemy>().Has(entity))
             {
-                var eventEntity = EntityFactory.Create(World);
+                var eventEntity = _entityFactory.Value.Create();
                 World.GetPool<EnemyDiedEvent>().Add(eventEntity);
             }
         }

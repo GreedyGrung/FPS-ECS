@@ -1,5 +1,5 @@
-using FpsEcs.Runtime.Gameplay.Common;
 using FpsEcs.Runtime.Gameplay.Input.Components;
+using FpsEcs.Runtime.Infrastructure.Factories;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 
@@ -7,14 +7,12 @@ namespace FpsEcs.Runtime.Gameplay.Input.Systems
 {
     public class InputInitializationSystem : IEcsInitSystem
     {
-        private readonly EcsWorldInject _world;
         private readonly EcsPoolInject<PlayerInput> _inputPool;
-        
-        private EcsWorld World => _world.Value;
+        private readonly EcsCustomInject<IEntityFactory> _entityFactory;
 
         public void Init(IEcsSystems systems)
         {
-            var inputEntity = EntityFactory.Create(World);
+            var inputEntity = _entityFactory.Value.Create();
             _inputPool.Value.Add(inputEntity);
         }
     }

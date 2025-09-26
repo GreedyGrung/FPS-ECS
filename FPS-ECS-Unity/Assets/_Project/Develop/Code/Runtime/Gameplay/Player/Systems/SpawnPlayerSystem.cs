@@ -15,11 +15,13 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
     {
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IGameFactory> _factory;
+        private readonly EcsCustomInject<IEntityFactory> _entityFactory;
 
         private EcsFilter _playerSpawnFilter;
         
         private IGameFactory Factory => _factory.Value;
         private EcsWorld World => _world.Value;
+        private IEntityFactory EntityFactory => _entityFactory.Value;
         
         public void Init(IEcsSystems systems)
         {
@@ -39,7 +41,7 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
 
         private void InitializePlayerEntity(GameObject playerObject)
         {
-            var playerEntity = EntityFactory.CreateFrom(playerObject, World);
+            var playerEntity = EntityFactory.CreateFrom(playerObject);
             
             var animatorPool = World.GetPool<AnimatorRef>();
             animatorPool.Add(playerEntity);
@@ -50,13 +52,13 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
         private void CreateCameraEntity(GameObject playerObject)
         {
             var cameraObject = playerObject.GetComponentInChildren<Camera>().gameObject;
-            EntityFactory.CreateFrom(cameraObject, World);
+            EntityFactory.CreateFrom(cameraObject);
         }
         
         private void CreateWeaponEntity(GameObject playerObject)
         {
             var weaponObject = playerObject.GetComponentInChildren<WeaponAuthoring>().gameObject;
-            var entity = EntityFactory.CreateFrom(weaponObject, World);
+            var entity = EntityFactory.CreateFrom(weaponObject);
             World.GetPool<WeaponInHandsTag>().Add(entity);
         }
     }

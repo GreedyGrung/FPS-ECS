@@ -16,6 +16,7 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Systems
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IGameFactory> _factory;
         private readonly EcsCustomInject<IConfigsProvider> _configsProvider;
+        private readonly EcsCustomInject<IEntityFactory> _entityFactory;
 
         private EcsFilter _enemySpawnsFilter;
         private EcsFilter _enemySpawnerRootFilter;
@@ -24,10 +25,11 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Systems
         private IGameFactory Factory => _factory.Value;
         private EcsWorld World => _world.Value;
         private GameConfig GameConfig => _configsProvider.Value.GetGameConfig();
+        private IEntityFactory EntityFactory => _entityFactory.Value;
         
         public void Init(IEcsSystems systems)
         {
-            var enemySpawnerRoot = EntityFactory.Create(World);
+            var enemySpawnerRoot = EntityFactory.Create();
             World.GetPool<Timer>().Add(enemySpawnerRoot);
             World.GetPool<EnemySpawnerRoot>().Add(enemySpawnerRoot);
             
@@ -65,7 +67,7 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Systems
                     var enemySpawn = enemySpawners[Random.Range(0, _enemySpawnsFilter.GetEntitiesCount())];
                     var spawnPoint = World.GetPool<TransformRef>().Get(enemySpawn).Value;
                     var enemyObject = Factory.CreateEnemy(spawnPoint.position, spawnPoint.rotation);
-                    var enemy = EntityFactory.CreateFrom(enemyObject, World);
+                    var enemy = EntityFactory.CreateFrom(enemyObject);
                     World.GetPool<EnemyInitializationNeededTag>().Add(enemy);
 
                     timer.Value = 0;

@@ -42,5 +42,10 @@ namespace FpsEcs.Runtime.Utils
             public static readonly LayerMask EnemyAndObstacleLayerMask =
                 LayerMask.GetMask(Layers.Enemy, Layers.Obstacle);
         }
+
+        public static class Utils
+        {
+            public const string SaveKey = "save";
+        }
     }
 }
