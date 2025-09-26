@@ -1,0 +1,51 @@
+using UnityEngine;
+
+namespace FpsEcs.Runtime.Utils
+{
+    public static class Constants
+    {
+        public static class Scenes
+        {
+            public const string Bootstrap = "0.Bootstrap";
+            public const string Game = "1.Game";
+        }
+
+        public static class Assets
+        {
+            public const string PlayerPrefabPath = "Prefabs/Player";
+            public const string EnemyPrefabPath = "Prefabs/Enemy";
+            
+            public const string EnemiesConfigsPath = "Configs/Enemies";
+            public const string WeaponsConfigsPath = "Configs/Weapons";
+            public const string PlayerConfigPath = "Configs/PlayerConfig";
+            public const string GameConfigPath = "Configs/GameConfig";
+            
+            public const string UIRootPath = "UI/UIRoot";
+            public const string HudPath = "UI/HUD";
+            public const string UpgradesViewPath = "Meta/UpgradesView";
+            public const string LocalizationPath = "Localization/localization";
+        }
+        
+        public static class Layers
+        {
+            public const string Player = "Player";
+            public const string Obstacle = "Obstacle";
+            public const string Enemy = "Enemy";
+        }
+
+        public static class Gameplay
+        {
+            public const float Gravity = 9.81f;
+            public const float FireDistance = 50f;
+            public static readonly LayerMask ObstacleLayerMask =
+                LayerMask.GetMask(Layers.Obstacle, Layers.Player, Layers.Enemy);
+            public static readonly LayerMask EnemyAndObstacleLayerMask =
+                LayerMask.GetMask(Layers.Enemy, Layers.Obstacle);
+        }
+
+        public static class Utils
+        {
+            public const string SaveKey = "save";
+        }
+    }
+}
