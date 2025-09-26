@@ -7,6 +7,7 @@ using FpsEcs.Runtime.Utils;
 using FpsEcs.Runtime.Utils.Enums;
 using UnityEngine;
 using VContainer;
+using VContainer.Unity;
 
 namespace FpsEcs.Runtime.Infrastructure.Factories
 {
@@ -57,8 +58,7 @@ namespace FpsEcs.Runtime.Infrastructure.Factories
         private async UniTask<UIPanelBase> CreateUpgradesPanel()
         {
             var view = await _assetProvider.Load<UpgradesView>(Constants.Assets.UpgradesViewPath);
-            var viewPrefab = Object.Instantiate(view, _uiRoot);
-            _resolver.Inject(viewPrefab);
+            var viewPrefab = _resolver.Instantiate(view, _uiRoot);
             
             return viewPrefab.GetComponent<UIPanelBase>();
         }

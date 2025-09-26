@@ -4,6 +4,7 @@ using FpsEcs.Runtime.Gameplay.Input.Components;
 using FpsEcs.Runtime.Gameplay.Input.Systems;
 using FpsEcs.Runtime.Gameplay.MovementLogic.Systems;
 using FpsEcs.Runtime.Gameplay.Player.Systems;
+using FpsEcs.Runtime.Gameplay.ProgressionFeature.Components;
 using FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems;
 using FpsEcs.Runtime.Gameplay.UI.Systems;
 using FpsEcs.Runtime.Gameplay.Weapons.Systems;
@@ -13,6 +14,7 @@ using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Infrastructure.Services.Input;
 using FpsEcs.Runtime.Infrastructure.Services.Pause;
 using FpsEcs.Runtime.Infrastructure.Services.UI;
+using FpsEcs.Runtime.Infrastructure.Services.Upgrades;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using Leopotam.EcsLite.ExtendedSystems;
@@ -32,6 +34,7 @@ namespace FpsEcs.Runtime.Gameplay
         private IUIService _uiService;
         private IPauseService _pauseService;
         private IUIFactory _uiFactory;
+        private IUpgradesService _upgradesService;
 
         [Inject]
         private void Construct(
@@ -41,7 +44,8 @@ namespace FpsEcs.Runtime.Gameplay
             IActorsInitializationService actorsInitializationService,
             IUIService uiService,
             IPauseService pauseService,
-            IUIFactory uiFactory)
+            IUIFactory uiFactory,
+            IUpgradesService upgradesService)
         {
             _uiFactory = uiFactory;
             _inputService = inputService;
@@ -50,12 +54,14 @@ namespace FpsEcs.Runtime.Gameplay
             _actorsInitializationService = actorsInitializationService;
             _uiService = uiService;
             _pauseService = pauseService;
+            _upgradesService = upgradesService;
         }
         
         public void Initialize() 
         {
             _world = new EcsWorld();
             _actorsInitializationService.Initialize(_world);
+            _upgradesService.Initialize(_world);
             _systems = new EcsSystems(_world);
             _systems
                 .Add(new InputInitializationSystem())
@@ -80,11 +86,13 @@ namespace FpsEcs.Runtime.Gameplay
                 .Add(new WeaponSwaySystem())
                 .Add(new UIViewsOpenCloseSystem())
                 .Add(new HudRedrawSystem())
+                .Add(new ApplyUpgradesSystem())
 #if UNITY_EDITOR
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem())
 #endif
                 .DelHere<PauseEvent>()
+                .DelHere<ApplyUpgradesEvent>()
                 .Inject(_inputService)
                 .Inject(_gameFactory)
                 .Inject(_configsProvider)

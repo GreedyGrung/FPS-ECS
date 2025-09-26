@@ -1,3 +1,4 @@
+using System;
 using FpsEcs.Runtime.Gameplay.Common;
 using FpsEcs.Runtime.Gameplay.ProgressionFeature.Components;
 using Leopotam.EcsLite;

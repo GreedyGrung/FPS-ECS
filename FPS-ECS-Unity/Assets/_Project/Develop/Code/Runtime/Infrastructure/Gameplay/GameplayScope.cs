@@ -2,6 +2,7 @@ using FpsEcs.Runtime.Gameplay;
 using FpsEcs.Runtime.Infrastructure.Factories;
 using FpsEcs.Runtime.Infrastructure.Services.ActorsInitialization;
 using FpsEcs.Runtime.Infrastructure.Services.Pause;
+using FpsEcs.Runtime.Infrastructure.Services.Upgrades;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -18,6 +19,7 @@ namespace FpsEcs.Runtime.Infrastructure.Gameplay
             builder.Register<IUIFactory, UIFactory>(Lifetime.Singleton);
             builder.Register<IActorsInitializationService, ActorsInitializationService>(Lifetime.Singleton);
             builder.Register<IPauseService, PauseService>(Lifetime.Singleton);
+            builder.Register<IUpgradesService, UpgradesService>(Lifetime.Singleton);
             builder.RegisterEntryPoint<GameplayFlow>().WithParameter(_startup);
         }
     }

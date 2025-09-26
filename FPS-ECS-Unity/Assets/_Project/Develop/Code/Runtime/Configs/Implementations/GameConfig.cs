@@ -11,5 +11,12 @@ namespace FpsEcs.Runtime.Configs.Implementations
         public float EnemySpawnDuration { get; set; }
         [field: SerializeField]
         public int MaxEnemyCountOnLevel { get; set; }
+        [field: SerializeField]
+        public float HealthBonusPerUpgradeLevel { get; set; }
+        [field: SerializeField]
+        public float SpeedBonusPerUpgradeLevel { get; set; }
+        [field: SerializeField]
+        public float DamageBonusPerUpgradeLevel { get; set; }
+        
     }
 }

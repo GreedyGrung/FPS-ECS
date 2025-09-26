@@ -9,9 +9,21 @@ namespace FpsEcs.Runtime.UI
 
         private void Awake() => Initialize();
 
-        private void OnEnable() => Subscribe();
+        private void OnEnable()
+        {
+            OnEnabled();
+            Subscribe();
+        }
 
-        private void OnDisable() => Unsubscribe();
+        private void OnDisable()
+        {
+            OnDisabled();
+            Unsubscribe();
+        }
+
+        protected virtual void OnEnabled() { }
+        
+        protected virtual void OnDisabled() { }
 
         protected virtual void Initialize() { }
 
