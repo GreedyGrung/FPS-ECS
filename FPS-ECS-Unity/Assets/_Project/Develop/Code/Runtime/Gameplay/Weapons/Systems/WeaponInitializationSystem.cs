@@ -40,7 +40,7 @@ namespace FpsEcs.Runtime.Gameplay.Weapons.Systems
                 stats.FireRate = weaponConfig.FireRate;
                 stats.SpreadDegrees = weaponConfig.SpreadDegrees;
                 stats.MaxDistance = Constants.Gameplay.FireDistance;
-                stats.LayerMask = Constants.Gameplay.EnemyLayerMask;
+                stats.LayerMask = Constants.Gameplay.EnemyAndObstacleLayerMask;
                 sway.Clamp = weaponConfig.Clamp;
                 sway.Smoothing = weaponConfig.Smoothing;
 

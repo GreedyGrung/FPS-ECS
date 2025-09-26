@@ -39,8 +39,8 @@ namespace FpsEcs.Runtime.Utils
             public const float FireDistance = 50f;
             public static readonly LayerMask ObstacleLayerMask =
                 LayerMask.GetMask(Layers.Obstacle, Layers.Player, Layers.Enemy);
-            public static readonly LayerMask EnemyLayerMask =
-                LayerMask.GetMask(Layers.Enemy);
+            public static readonly LayerMask EnemyAndObstacleLayerMask =
+                LayerMask.GetMask(Layers.Enemy, Layers.Obstacle);
         }
     }
 }
