@@ -8,7 +8,7 @@ namespace FpsEcs.Runtime.Gameplay.Input.Systems
     public class InputInitializationSystem : IEcsInitSystem
     {
         private readonly EcsWorldInject _world;
-        private readonly EcsPoolInject<PlayerInput> _inputPool = default;
+        private readonly EcsPoolInject<PlayerInput> _inputPool;
         
         private EcsWorld World => _world.Value;
 

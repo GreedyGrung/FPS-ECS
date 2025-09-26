@@ -101,6 +101,28 @@
                 },
                 {
                     "name": "",
+                    "id": "2ec837b4-c372-40d4-badd-903d30cd5823",
+                    "path": "<Joystick>/stick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b0063293-8a10-434b-9b87-b4f1a9b6b6fe",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "ffca09ab-6b38-447a-8ec9-339d5d8a19e2",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
@@ -127,6 +149,17 @@
                     "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "ScaleVector2(x=0.3,y=0.3)",
+                    "groups": "",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ea55fb99-5f3b-432e-842b-11615408e0bb",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
                     "groups": "",
                     "action": "Look",
                     "isComposite": false,
