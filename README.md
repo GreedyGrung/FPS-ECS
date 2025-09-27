@@ -8,11 +8,12 @@ Stack: **LeoECS Lite**, **VContainer**, **UniTask**.
 
 ### Custom authoring logic
 
-Custom lightweight authoring layer automatically **converts scene GameObjects into ECS entities** at runtime:
+Custom lightweight authoring layer automatically **converts scene GameObjects into ECS entities** both right after the scene is loaded and at runtime:
 
-* Finds authored objects (`Actor`, markers/components).
-* Emits entities and attaches the corresponding ECS components.
-* Keeps MonoBehaviours thin (view/data carriers only).
+* Finds/creates authored objects (`Actor`).
+* Emits entities and attaches the corresponding ECS components by running `Convert` method from `IAuthoring` interface on each authoring component.
+* Attaches values to components from inspector or loading them from `IConfigsProvider` if needed.
+* Keeps MonoBehaviours thin (view/data carriers only). All gameplay logic is placed in systems.
 
 ## Key Features
 
