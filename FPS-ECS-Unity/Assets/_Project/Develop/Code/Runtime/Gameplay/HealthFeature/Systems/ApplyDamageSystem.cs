@@ -1,8 +1,6 @@
-using FpsEcs.Runtime.Gameplay.Enemies.Components;
 using FpsEcs.Runtime.Gameplay.HealthFeature.Components;
 using FpsEcs.Runtime.Gameplay.ProgressionFeature.Components;
 using FpsEcs.Runtime.Gameplay.Weapons.Components;
-using FpsEcs.Runtime.Infrastructure.Factories;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 
@@ -11,10 +9,11 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
     public class ApplyDamageSystem : IEcsInitSystem, IEcsRunSystem
     {
         private readonly EcsWorldInject _world;
-        private readonly EcsCustomInject<IEntityFactory> _entityFactory;
         
         private EcsPool<DamageEvent> _damageEventPool;
         private EcsPool<Health> _healthPool;
+        private EcsPool<DeadTag> _deadPool;
+        private EcsPool<DeathEvent> _deathEventPool;
         
         private EcsFilter _applyDamageFilter;
         
@@ -29,6 +28,8 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
             
             _damageEventPool = World.GetPool<DamageEvent>();
             _healthPool = World.GetPool<Health>();
+            _deadPool = World.GetPool<DeadTag>();
+            _deathEventPool = World.GetPool<DeathEvent>();
         }
 
         public void Run(IEcsSystems systems)
@@ -41,21 +42,11 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
 
                 if (health.Value <= 0)
                 {
-                    HandleDeathLogic(entity);
+                    _deadPool.Add(entity);
+                    _deathEventPool.Add(entity);
                 }
                 
                 _damageEventPool.Del(entity);
-            }
-        }
-
-        private void HandleDeathLogic(int entity)
-        {
-            World.GetPool<DeadTag>().Add(entity);
-
-            if (World.GetPool<Enemy>().Has(entity))
-            {
-                var eventEntity = _entityFactory.Value.Create();
-                World.GetPool<EnemyDiedEvent>().Add(eventEntity);
             }
         }
     }

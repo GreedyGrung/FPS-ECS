@@ -1,5 +1,6 @@
 using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
 using FpsEcs.Runtime.Gameplay.HealthFeature.Components;
+using FpsEcs.Runtime.Gameplay.ProgressionFeature.Components;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 
@@ -20,6 +21,7 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
             _deathFilter = World
                 .Filter<DeadTag>()
                 .Inc<TransformRef>()
+                .Exc<DeathEvent>()
                 .End();
             
             _deathPool = World.GetPool<TransformRef>();
