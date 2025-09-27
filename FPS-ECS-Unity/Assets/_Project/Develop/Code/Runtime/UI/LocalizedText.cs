@@ -7,6 +7,7 @@ using VContainer.Unity;
 
 namespace FpsEcs.Runtime.UI
 {
+    [RequireComponent(typeof(TextMeshProUGUI))]
     public class LocalizedText : MonoBehaviour
     {
         private TextMeshProUGUI _text;

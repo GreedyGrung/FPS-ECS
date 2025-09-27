@@ -66,7 +66,6 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
                 {
                     ref var health = ref World.GetPool<Health>().Get(player);
                     health.Value = progress.Health;
-                    Debug.LogError(health.Value);
                     
                     ref var movement = ref World.GetPool<Movement>().Get(player);
                     movement.HorizontalSpeed = progress.Speed;

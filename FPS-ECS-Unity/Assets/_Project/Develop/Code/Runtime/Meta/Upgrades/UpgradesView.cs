@@ -18,6 +18,7 @@ namespace FpsEcs.Runtime.Meta.Upgrades
         private IInputService _inputService;
         private IUpgradesService _upgradesService;
         private IConfigsProvider _configsProvider;
+        private IEntityFactory _entityFactory;
 
         [SerializeField] private TextMeshProUGUI _availablePoints;
         [SerializeField] private Button _applyButton;
@@ -25,7 +26,6 @@ namespace FpsEcs.Runtime.Meta.Upgrades
         [SerializeField] private StatView _damageStat;
         [SerializeField] private StatView _speedStat;
         [SerializeField] private Button _saveButton;
-        private IEntityFactory _entityFactory;
 
         [Inject]
         private void Construct(

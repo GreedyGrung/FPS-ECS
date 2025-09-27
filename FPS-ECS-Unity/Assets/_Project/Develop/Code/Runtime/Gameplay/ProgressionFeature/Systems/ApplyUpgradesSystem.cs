@@ -7,7 +7,6 @@ using FpsEcs.Runtime.Gameplay.Weapons.Components;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
-using UnityEngine;
 
 namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
 {
