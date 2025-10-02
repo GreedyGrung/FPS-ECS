@@ -15,6 +15,13 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<ISaveLoadService> _saveLoadService;
         
+        private readonly EcsPoolInject<ProgressLoadingNeededTag> _progressLoadingNeededPool;
+        private readonly EcsPoolInject<Health> _healthPool;
+        private readonly EcsPoolInject<Movement> _movementPool;
+        private readonly EcsPoolInject<Weapon> _weaponPool;
+        private readonly EcsPoolInject<StatsUpgradeLevels> _upgradeLevelPool;
+        private readonly EcsPoolInject<UpgradePoints> _upgradePointsPool;
+        
         private EcsFilter _saveProgressFilter;
         private EcsFilter _playerFilter;
         private EcsFilter _upgradesFilter;
@@ -54,22 +61,22 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
                 
                 foreach (var player in _playerFilter)
                 {
-                    progress.Health = World.GetPool<Health>().Get(player).Value;
-                    progress.Speed = World.GetPool<Movement>().Get(player).HorizontalSpeed;
+                    progress.Health = _healthPool.Value.Get(player).Value;
+                    progress.Speed = _movementPool.Value.Get(player).HorizontalSpeed;
                 }
 
                 foreach (var weapon in _playerWeaponFilter)
                 {
-                    progress.Damage = World.GetPool<Weapon>().Get(weapon).Damage;
+                    progress.Damage = _weaponPool.Value.Get(weapon).Damage;
                 }
 
                 foreach (var upgrades in _upgradesFilter)
                 {
-                    progress.AvailableUpgradePoints = World.GetPool<UpgradePoints>().Get(upgrades).Value;
-                    var statsPool = World.GetPool<StatsUpgradeLevels>();
-                    progress.HealthUpgradeLevel = statsPool.Get(upgrades).Health;
-                    progress.SpeedUpgradeLevel = statsPool.Get(upgrades).Speed;
-                    progress.DamageUpgradeLevel = statsPool.Get(upgrades).Damage;
+                    progress.AvailableUpgradePoints = _upgradePointsPool.Value.Get(upgrades).Value;
+                    var upgradeLevelPool = _upgradeLevelPool.Value;
+                    progress.HealthUpgradeLevel = upgradeLevelPool.Get(upgrades).Health;
+                    progress.SpeedUpgradeLevel = upgradeLevelPool.Get(upgrades).Speed;
+                    progress.DamageUpgradeLevel = upgradeLevelPool.Get(upgrades).Damage;
                 }
                 
                 SaveLoadService.SaveProgress(progress);

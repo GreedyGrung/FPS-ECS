@@ -10,13 +10,14 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IEntityFactory> _entityFactory;
         
-        private EcsWorld World => _world.Value;
+        private readonly EcsPoolInject<UpgradePoints> _upgradePointsPool;
+        private readonly EcsPoolInject<StatsUpgradeLevels> _upgradeLevelPool;
         
         public void Init(IEcsSystems systems)
         {
             var progressionEntity = _entityFactory.Value.Create();
-            World.GetPool<UpgradePoints>().Add(progressionEntity);
-            World.GetPool<StatsUpgradeLevels>().Add(progressionEntity);
+            _upgradePointsPool.Value.Add(progressionEntity);
+            _upgradeLevelPool.Value.Add(progressionEntity);
         }
     }
 }

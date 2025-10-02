@@ -1,5 +1,4 @@
 using FpsEcs.Runtime.Configs.Implementations;
-using FpsEcs.Runtime.Gameplay.Common;
 using FpsEcs.Runtime.Gameplay.Common.Components;
 using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
 using FpsEcs.Runtime.Gameplay.Enemies.Components;
@@ -17,6 +16,11 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Systems
         private readonly EcsCustomInject<IGameFactory> _factory;
         private readonly EcsCustomInject<IConfigsProvider> _configsProvider;
         private readonly EcsCustomInject<IEntityFactory> _entityFactory;
+        
+        private EcsPoolInject<Timer> _timerPool;
+        private EcsPoolInject<EnemySpawnerRoot> _enemySpawnerRoot;
+        private EcsPoolInject<TransformRef> _transformPool;
+        private EcsPoolInject<EnemyInitializationNeededTag> _enemyInitializationNeededPool;
 
         private EcsFilter _enemySpawnsFilter;
         private EcsFilter _enemySpawnerRootFilter;
@@ -30,8 +34,8 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Systems
         public void Init(IEcsSystems systems)
         {
             var enemySpawnerRoot = EntityFactory.Create();
-            World.GetPool<Timer>().Add(enemySpawnerRoot);
-            World.GetPool<EnemySpawnerRoot>().Add(enemySpawnerRoot);
+            _timerPool.Value.Add(enemySpawnerRoot);
+            _enemySpawnerRoot.Value.Add(enemySpawnerRoot);
             
             _enemySpawnsFilter = World
                 .Filter<TransformRef>()
@@ -52,7 +56,7 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Systems
         {
             foreach (var spawnerRoot in _enemySpawnerRootFilter)
             {
-                ref var timer = ref World.GetPool<Timer>().Get(spawnerRoot);
+                ref var timer = ref _timerPool.Value.Get(spawnerRoot);
                 timer.Value += Time.deltaTime;
 
                 if (timer.Value >= GameConfig.EnemySpawnDuration)
@@ -65,10 +69,11 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Systems
                     
                     var enemySpawners = _enemySpawnsFilter.GetRawEntities();
                     var enemySpawn = enemySpawners[Random.Range(0, _enemySpawnsFilter.GetEntitiesCount())];
-                    var spawnPoint = World.GetPool<TransformRef>().Get(enemySpawn).Value;
+                    var spawnPoint = _transformPool.Value.Get(enemySpawn).Value;
                     var enemyObject = Factory.CreateEnemy(spawnPoint.position, spawnPoint.rotation);
                     var enemy = EntityFactory.CreateFrom(enemyObject);
-                    World.GetPool<EnemyInitializationNeededTag>().Add(enemy);
+                    
+                    _enemyInitializationNeededPool.Value.Add(enemy);
 
                     timer.Value = 0;
                 }

@@ -1,6 +1,5 @@
 using FpsEcs.Runtime.Gameplay.Enemies.Components;
 using FpsEcs.Runtime.Gameplay.HealthFeature.Components;
-using FpsEcs.Runtime.Gameplay.Player.Components;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
@@ -12,6 +11,10 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
     {
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IConfigsProvider> _configsProvider;
+        
+        private readonly EcsPoolInject<Health> _healthPool;
+        private readonly EcsPoolInject<Enemy> _enemyPool;
+        private readonly EcsPoolInject<HealthInitializationNeededTag> _healthInitializationNeededPool;
         
         private EcsFilter _healthEnemiesInitFilter;
         
@@ -30,18 +33,18 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
         {
             foreach (var enemy in _healthEnemiesInitFilter)
             {
-                var healthPool = World.GetPool<Health>();
+                var healthPool = _healthPool.Value;
                 healthPool.Add(enemy);
                 
                 ref var health = ref healthPool.Get(enemy);
-                var id = World.GetPool<Enemy>().Get(enemy).Id;
+                var id = _enemyPool.Value.Get(enemy).Id;
                 
                 var floatHealth = Random.Range(
                     ConfigsProvider.GetEnemyConfig(id).MinHealth,
                     ConfigsProvider.GetEnemyConfig(id).MaxHealth);
                 health.Value = Mathf.RoundToInt(floatHealth);
                 
-                World.GetPool<HealthInitializationNeededTag>().Del(enemy);
+                _healthInitializationNeededPool.Value.Del(enemy);
             }
         }
     }

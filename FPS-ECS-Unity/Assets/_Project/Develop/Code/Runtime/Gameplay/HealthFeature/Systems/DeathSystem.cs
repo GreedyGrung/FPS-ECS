@@ -10,7 +10,7 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
     {
         private readonly EcsWorldInject _world;
         
-        private EcsPool<TransformRef> _deathPool;
+        private EcsPoolInject<TransformRef> _deathPool;
         
         private EcsFilter _deathFilter;
         
@@ -23,15 +23,13 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
                 .Inc<TransformRef>()
                 .Exc<DeathEvent>()
                 .End();
-            
-            _deathPool = World.GetPool<TransformRef>();
         }
 
         public void Run(IEcsSystems systems)
         {
             foreach (var entity in _deathFilter)
             {
-                UnityEngine.Object.Destroy(_deathPool.Get(entity).Value.transform.gameObject);
+                UnityEngine.Object.Destroy(_deathPool.Value.Get(entity).Value.transform.gameObject);
                 World.DelEntity(entity);
             }
         }

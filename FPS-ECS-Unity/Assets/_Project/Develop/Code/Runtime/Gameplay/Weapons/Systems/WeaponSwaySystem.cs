@@ -44,7 +44,7 @@ namespace FpsEcs.Runtime.Gameplay.Weapons.Systems
                 foreach (var weaponEntity in _weaponFilter)
                 {
                     var transform = _transformPool.Value.Get(weaponEntity).Value;
-                    var sway =  _weaponSwayPool.Value.Get(weaponEntity);
+                    var sway = _weaponSwayPool.Value.Get(weaponEntity);
 
                     if (_origin == Vector3.zero)
                     {

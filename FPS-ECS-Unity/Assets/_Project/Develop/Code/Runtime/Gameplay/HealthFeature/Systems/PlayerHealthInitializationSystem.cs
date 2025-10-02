@@ -1,4 +1,3 @@
-using System;
 using FpsEcs.Runtime.Gameplay.HealthFeature.Components;
 using FpsEcs.Runtime.Gameplay.Player.Components;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
@@ -11,6 +10,9 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
     {
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IConfigsProvider> _configsProvider;
+        
+        private readonly EcsPoolInject<Health> _healthPool;
+        private readonly EcsPoolInject<HealthInitializationNeededTag> _healthInitializationNeededPool;
         
         private EcsFilter _healthPlayerInitFilter;
         
@@ -29,12 +31,12 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
         {
             foreach (var player in _healthPlayerInitFilter)
             {
-                var healthPool = World.GetPool<Health>();
+                var healthPool = _healthPool.Value;
                 healthPool.Add(player);
                 ref var heath = ref healthPool.Get(player);
                 heath.Value = ConfigsProvider.GetPlayerConfig().Health;
                 
-                World.GetPool<HealthInitializationNeededTag>().Del(player);
+                _healthInitializationNeededPool.Value.Del(player);
             }
         }
     }

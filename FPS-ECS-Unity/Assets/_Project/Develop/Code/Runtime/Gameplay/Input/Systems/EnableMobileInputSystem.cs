@@ -8,6 +8,7 @@ namespace FpsEcs.Runtime.Gameplay.Input.Systems
     public class EnableMobileInputSystem : IEcsInitSystem, IEcsRunSystem
     {
         private readonly EcsWorldInject _world;
+        
         private readonly EcsPoolInject<MobileControls> _mobileControlsPool;
 
         private EcsFilter _mobileControlsFilter;

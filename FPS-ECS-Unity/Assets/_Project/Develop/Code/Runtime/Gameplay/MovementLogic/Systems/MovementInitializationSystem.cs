@@ -12,6 +12,9 @@ namespace FpsEcs.Runtime.Gameplay.MovementLogic.Systems
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IConfigsProvider> _configsProvider;
         
+        private readonly EcsPoolInject<Movement> _movementPool;
+        private readonly EcsPoolInject<MovementInitializationNeededTag> _movementInitializationNeededPool;
+        
         private EcsFilter _movementPlayerInitFilter;
         private EcsFilter _movementEnemiesInitFilter;
         
@@ -41,12 +44,12 @@ namespace FpsEcs.Runtime.Gameplay.MovementLogic.Systems
         {
             foreach (var player in _movementPlayerInitFilter)
             {
-                var movementPool = World.GetPool<Movement>();
+                var movementPool = _movementPool.Value;
                 movementPool.Add(player);
                 ref var movement = ref movementPool.Get(player);
                 movement.HorizontalSpeed = ConfigsProvider.GetPlayerConfig().Speed;
                 
-                World.GetPool<MovementInitializationNeededTag>().Del(player);
+                _movementInitializationNeededPool.Value.Del(player);
             }
         }
         
@@ -54,13 +57,13 @@ namespace FpsEcs.Runtime.Gameplay.MovementLogic.Systems
         {
             foreach (var enemy in _movementEnemiesInitFilter)
             {
-                var movementPool = World.GetPool<Movement>();
+                var movementPool = _movementPool.Value;
                 movementPool.Add(enemy);
                 ref var movement = ref movementPool.Get(enemy);
                 var id = World.GetPool<Enemy>().Get(enemy).Id;
                 movement.HorizontalSpeed = ConfigsProvider.GetEnemyConfig(id).Speed;
                 
-                World.GetPool<MovementInitializationNeededTag>().Del(enemy);
+                _movementInitializationNeededPool.Value.Del(enemy);
             }
         }
     }

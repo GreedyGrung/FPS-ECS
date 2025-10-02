@@ -10,9 +10,11 @@ namespace FpsEcs.Runtime.Gameplay.Weapons.Systems
     {
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IConfigsProvider> _configsProvider;
+        
         private readonly EcsPoolInject<Weapon> _weaponPool;
         private readonly EcsPoolInject<WeaponInitializationNeededTag> _weaponInitPool;
         private readonly EcsPoolInject<WeaponSway> _weaponSwayPool;
+        private readonly EcsPoolInject<FireCooldown> _fireCooldownPool;
         
         private EcsFilter _weaponInitFilter;
         
@@ -33,19 +35,19 @@ namespace FpsEcs.Runtime.Gameplay.Weapons.Systems
             foreach (var weapon in _weaponInitFilter)
             {
                 ref var stats = ref _weaponPool.Value.Get(weapon);
-                var weaponConfig = ConfigsProvider.GetWeaponConfig(stats.Id);
                 ref var sway = ref _weaponSwayPool.Value.Get(weapon);
+                var weaponConfig = ConfigsProvider.GetWeaponConfig(stats.Id);
                 
                 stats.Damage = weaponConfig.Damage;
                 stats.FireRate = weaponConfig.FireRate;
                 stats.SpreadDegrees = weaponConfig.SpreadDegrees;
                 stats.MaxDistance = Constants.Gameplay.FireDistance;
                 stats.LayerMask = Constants.Gameplay.EnemyAndObstacleLayerMask;
+                
                 sway.Clamp = weaponConfig.Clamp;
                 sway.Smoothing = weaponConfig.Smoothing;
 
-                World.GetPool<FireCooldown>().Add(weapon);
-                
+                _fireCooldownPool.Value.Add(weapon);
                 _weaponInitPool.Value.Del(weapon);
             }
         }

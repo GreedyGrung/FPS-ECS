@@ -8,12 +8,12 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
     public class EnemiesDeathObserverSystem : IEcsInitSystem, IEcsRunSystem
     {
         private readonly EcsWorldInject _world;
+        
+        private readonly EcsPoolInject<UpgradePoints> _upgradePointsPool;
+        private readonly EcsPoolInject<DeathEvent> _deathPool;
 
         private EcsFilter _enemyDeathFilter;
         private EcsFilter _upgradePointsFilter;
-        
-        private EcsPool<UpgradePoints> _upgradePointsPool;
-        private EcsPool<DeathEvent> _deathPool;
         
         private EcsWorld World => _world.Value;
         
@@ -27,9 +27,6 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
             _upgradePointsFilter = World
                 .Filter<UpgradePoints>()
                 .End();
-            
-            _upgradePointsPool = World.GetPool<UpgradePoints>();
-            _deathPool = World.GetPool<DeathEvent>();
         }
 
         public void Run(IEcsSystems systems)
@@ -38,10 +35,10 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
             {
                 foreach (var diedEnemy in _enemyDeathFilter)
                 {
-                    ref var points = ref _upgradePointsPool.Get(upgradePointsEntity).Value;
+                    ref var points = ref _upgradePointsPool.Value.Get(upgradePointsEntity).Value;
                     points++;
                     
-                    _deathPool.Del(diedEnemy);
+                    _deathPool.Value.Del(diedEnemy);
                 }
             }
         }

@@ -1,4 +1,3 @@
-using FpsEcs.Runtime.Gameplay.Common;
 using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
 using FpsEcs.Runtime.Gameplay.Player.Components;
 using FpsEcs.Runtime.Gameplay.Weapons.Authorings;

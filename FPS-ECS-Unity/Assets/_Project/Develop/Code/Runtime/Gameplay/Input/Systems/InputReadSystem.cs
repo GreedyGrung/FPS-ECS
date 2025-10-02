@@ -10,6 +10,8 @@ namespace FpsEcs.Runtime.Gameplay.Input.Systems
     {
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IInputService> _inputService;
+
+        private readonly EcsPoolInject<PauseEvent> _pausePool;
         
         private EcsFilter _filter;
         private EcsPool<PlayerInput> _inputPool;
@@ -36,7 +38,7 @@ namespace FpsEcs.Runtime.Gameplay.Input.Systems
 
                 if (_inputService.Value.PauseActionThisFrame)
                 {
-                    World.GetPool<PauseEvent>().Add(entity);
+                    _pausePool.Value.Add(entity);
                     _inputService.Value.SwitchInputMaps();
                 }
             }

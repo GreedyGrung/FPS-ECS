@@ -13,8 +13,9 @@ namespace FpsEcs.Runtime.Gameplay.UI.Systems
         private readonly EcsCustomInject<IPauseService> _pauseService;
         private readonly EcsCustomInject<IUIService> _uiService;
         
+        private readonly EcsPoolInject<PauseEvent> _pausePool;
+        
         private EcsFilter _pauseFilter;
-        private EcsPool<PauseEvent> _pausePool;
 
         private EcsWorld World => _world.Value;
         private IPauseService PauseService => _pauseService.Value;
@@ -25,8 +26,6 @@ namespace FpsEcs.Runtime.Gameplay.UI.Systems
             _pauseFilter = World
                 .Filter<PauseEvent>()
                 .End();
-
-            _pausePool = World.GetPool<PauseEvent>();
         }
 
         public void Run(IEcsSystems systems)
@@ -44,7 +43,7 @@ namespace FpsEcs.Runtime.Gameplay.UI.Systems
                     UIService.Close(UIPanelId.Upgrades);
                 }
                 
-                _pausePool.Del(pauseEntity);
+                _pausePool.Value.Del(pauseEntity);
             }
         }
     }

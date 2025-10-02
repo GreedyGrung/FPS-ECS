@@ -35,9 +35,11 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
                 _cameraStatePool.Value.Add(camera);
                 
                 ref var cameraState = ref _cameraSettingsPool.Value.Add(camera);
-                cameraState.MinPitch = ConfigsProvider.GetPlayerConfig().MinPitch;
-                cameraState.MaxPitch = ConfigsProvider.GetPlayerConfig().MaxPitch;
-                cameraState.Sensitivity = ConfigsProvider.GetPlayerConfig().Sensitivity;
+                var playerConfig = ConfigsProvider.GetPlayerConfig();
+                
+                cameraState.MinPitch = playerConfig.MinPitch;
+                cameraState.MaxPitch = playerConfig.MaxPitch;
+                cameraState.Sensitivity = playerConfig.Sensitivity;
                 
                 _cameraInitPool.Value.Del(camera);
             }

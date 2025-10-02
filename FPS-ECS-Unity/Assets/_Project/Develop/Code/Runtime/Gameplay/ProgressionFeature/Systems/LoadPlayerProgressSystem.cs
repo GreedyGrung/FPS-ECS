@@ -6,7 +6,6 @@ using FpsEcs.Runtime.Gameplay.Weapons.Components;
 using FpsEcs.Runtime.Infrastructure.Services.SaveLoad;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
-using UnityEngine;
 
 namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
 {
@@ -14,6 +13,13 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
     {
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<ISaveLoadService> _saveLoadService;
+        
+        private readonly EcsPoolInject<ProgressLoadingNeededTag> _progressLoadingNeededPool;
+        private readonly EcsPoolInject<Health> _healthPool;
+        private readonly EcsPoolInject<Movement> _movementPool;
+        private readonly EcsPoolInject<Weapon> _weaponPool;
+        private readonly EcsPoolInject<StatsUpgradeLevels> _upgradeLevelPool;
+        private readonly EcsPoolInject<UpgradePoints> _upgradePointsPool;
         
         private EcsFilter _progressLoadingNeededFilter;
         private EcsFilter _playerFilter;
@@ -25,7 +31,7 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
         
         public void Init(IEcsSystems systems)
         {
-            World.GetPool<ProgressLoadingNeededTag>().Add(World.NewEntity());
+            _progressLoadingNeededPool.Value.Add(World.NewEntity());
 
             _progressLoadingNeededFilter = World
                 .Filter<ProgressLoadingNeededTag>()
@@ -58,37 +64,37 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
 
                 if (progress == null)
                 {
-                    World.GetPool<ProgressLoadingNeededTag>().Del(loadingNeeded);
+                    _progressLoadingNeededPool.Value.Del(loadingNeeded);
                     return;
                 }
 
                 foreach (var player in _playerFilter)
                 {
-                    ref var health = ref World.GetPool<Health>().Get(player);
+                    ref var health = ref _healthPool.Value.Get(player);
                     health.Value = progress.Health;
                     
-                    ref var movement = ref World.GetPool<Movement>().Get(player);
+                    ref var movement = ref _movementPool.Value.Get(player);
                     movement.HorizontalSpeed = progress.Speed;
                 }
 
                 foreach (var weapon in _playerWeaponFilter)
                 {
-                    ref var stats = ref World.GetPool<Weapon>().Get(weapon);
+                    ref var stats = ref _weaponPool.Value.Get(weapon);
                     stats.Damage = progress.Damage;
                 }
 
                 foreach (var upgradesEntity in _upgradesFilter)
                 {
-                    ref var upgrades = ref World.GetPool<StatsUpgradeLevels>().Get(upgradesEntity);
+                    ref var upgrades = ref _upgradeLevelPool.Value.Get(upgradesEntity);
                     upgrades.Damage = progress.DamageUpgradeLevel;
                     upgrades.Health = progress.HealthUpgradeLevel;
                     upgrades.Speed = progress.SpeedUpgradeLevel;
                 
-                    ref var points = ref World.GetPool<UpgradePoints>().Get(upgradesEntity);
+                    ref var points = ref _upgradePointsPool.Value.Get(upgradesEntity);
                     points.Value = progress.AvailableUpgradePoints;
                 }
 
-                World.GetPool<ProgressLoadingNeededTag>().Del(loadingNeeded);
+                _progressLoadingNeededPool.Value.Del(loadingNeeded);
             }
         }
     }

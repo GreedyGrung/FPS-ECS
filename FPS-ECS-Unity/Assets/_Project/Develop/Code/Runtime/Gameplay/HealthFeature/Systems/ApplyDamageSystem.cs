@@ -10,10 +10,10 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
     {
         private readonly EcsWorldInject _world;
         
-        private EcsPool<DamageEvent> _damageEventPool;
-        private EcsPool<Health> _healthPool;
-        private EcsPool<DeadTag> _deadPool;
-        private EcsPool<DeathEvent> _deathEventPool;
+        private EcsPoolInject<DamageEvent> _damageEventPool;
+        private EcsPoolInject<Health> _healthPool;
+        private EcsPoolInject<DeadTag> _deadPool;
+        private EcsPoolInject<DeathEvent> _deathEventPool;
         
         private EcsFilter _applyDamageFilter;
         
@@ -25,28 +25,23 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
                 .Filter<DamageEvent>()
                 .Inc<Health>()
                 .End();
-            
-            _damageEventPool = World.GetPool<DamageEvent>();
-            _healthPool = World.GetPool<Health>();
-            _deadPool = World.GetPool<DeadTag>();
-            _deathEventPool = World.GetPool<DeathEvent>();
         }
 
         public void Run(IEcsSystems systems)
         {
             foreach (var entity in _applyDamageFilter)
             {
-                var damage = _damageEventPool.Get(entity).DamageAmount;
-                ref var health = ref _healthPool.Get(entity);
+                var damage = _damageEventPool.Value.Get(entity).DamageAmount;
+                ref var health = ref _healthPool.Value.Get(entity);
                 health.Value -= damage;
 
                 if (health.Value <= 0)
                 {
-                    _deadPool.Add(entity);
-                    _deathEventPool.Add(entity);
+                    _deadPool.Value.Add(entity);
+                    _deathEventPool.Value.Add(entity);
                 }
                 
-                _damageEventPool.Del(entity);
+                _damageEventPool.Value.Del(entity);
             }
         }
     }

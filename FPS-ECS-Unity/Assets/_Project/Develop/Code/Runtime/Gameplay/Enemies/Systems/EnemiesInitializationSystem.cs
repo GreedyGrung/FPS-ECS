@@ -1,4 +1,3 @@
-using System;
 using FpsEcs.Runtime.Gameplay.Enemies.Components;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Utils;
@@ -9,8 +8,12 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Systems
 {
     public class EnemiesInitializationSystem : IEcsInitSystem, IEcsRunSystem
     {
-        private EcsWorldInject _world;
+        private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IConfigsProvider> _configsProvider;
+
+        private readonly EcsPoolInject<Enemy> _enemyPool;
+        private readonly EcsPoolInject<ObstacleAvoidance> _obstacleAvoidancePool;
+        private readonly EcsPoolInject<EnemyInitializationNeededTag> _enemyInitializationNeededPool;
         
         private EcsFilter _enemiesInitFilter;
         
@@ -29,15 +32,16 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Systems
         {
             foreach (var enemy in _enemiesInitFilter)
             {
-                var id = World.GetPool<Enemy>().Get(enemy).Id;
+                var id = _enemyPool.Value.Get(enemy).Id;
                 var enemyConfig = ConfigsProvider.GetEnemyConfig(id);
-                ref var obstacleAvoidance = ref World.GetPool<ObstacleAvoidance>().Add(enemy);
+                ref var obstacleAvoidance = ref _obstacleAvoidancePool.Value.Add(enemy);
+                
                 obstacleAvoidance.CheckDistance = enemyConfig.ObstacleCheckDistance;
                 obstacleAvoidance.MinTurnAngle = enemyConfig.MinTurnAngle;
                 obstacleAvoidance.MaxTurnAngle = enemyConfig.MaxTurnAngle;
                 obstacleAvoidance.ObstacleMask = Constants.Gameplay.ObstacleLayerMask;
                 
-                World.GetPool<EnemyInitializationNeededTag>().Del(enemy);
+                _enemyInitializationNeededPool.Value.Del(enemy);
             }
         }
     }

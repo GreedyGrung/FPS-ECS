@@ -11,12 +11,13 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Configs
 {
     public class ConfigsProvider : IConfigsProvider
     {
+        private readonly Dictionary<WeaponId, WeaponConfig> _weaponsConfigs = new();
+        private readonly Dictionary<EnemyId, EnemyConfig> _enemiesConfigs = new();
+        
         private PlayerConfig _playerConfig;
         private GameConfig _gameConfig;
-        private readonly Dictionary<EnemyId, EnemyConfig> _enemiesConfigs = new();
-        private readonly Dictionary<WeaponId, WeaponConfig> _weaponsConfigs = new();
         private readonly IAssetProvider _assetProvider;
-
+        
         public ConfigsProvider(IAssetProvider assetProvider)
         {
             _assetProvider = assetProvider;
@@ -35,6 +36,7 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Configs
 
         public GameConfig GetGameConfig()
             => _gameConfig ?? throw new InvalidOperationException("GameConfig not loaded!");
+        
         public EnemyConfig GetEnemyConfig(EnemyId id)
             => _enemiesConfigs.TryGetValue(id, out var cfg)
                 ? cfg

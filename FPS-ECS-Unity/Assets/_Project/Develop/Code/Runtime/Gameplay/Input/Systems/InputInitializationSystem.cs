@@ -7,8 +7,9 @@ namespace FpsEcs.Runtime.Gameplay.Input.Systems
 {
     public class InputInitializationSystem : IEcsInitSystem
     {
-        private readonly EcsPoolInject<PlayerInput> _inputPool;
         private readonly EcsCustomInject<IEntityFactory> _entityFactory;
+        
+        private readonly EcsPoolInject<PlayerInput> _inputPool;
 
         public void Init(IEcsSystems systems)
         {

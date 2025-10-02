@@ -14,18 +14,18 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
     {
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IConfigsProvider> _configsProvider;
-
+        
+        private readonly EcsPoolInject<Movement> _movementPool;
+        private readonly EcsPoolInject<UpgradePoints> _upgradePointsPool;
+        private readonly EcsPoolInject<StatsUpgradeLevels> _upgradeLevelsPool;
+        private readonly EcsPoolInject<ApplyUpgradesEvent> _applyUpgradesEventPool;
+        private readonly EcsPoolInject<Weapon> _weaponPool;
+        private readonly EcsPoolInject<Health> _healthPool;
+        
         private EcsFilter _playerFilter;
         private EcsFilter _playerWeaponFilter;
         private EcsFilter _upgradePointsFilter;
         private EcsFilter _upgradeAppliedEventFilter;
-        
-        private EcsPool<Movement> _movementPool;
-        private EcsPool<UpgradePoints> _upgradePointsPool;
-        private EcsPool<StatsUpgradeLevels> _upgradeLevelsPool;
-        private EcsPool<ApplyUpgradesEvent> _applyUpgradesEventPool;
-        private EcsPool<Weapon> _weaponPool;
-        private EcsPool<Health> _healthPool;
         
         private EcsWorld World => _world.Value;
         private GameConfig GameConfig => _configsProvider.Value.GetGameConfig();
@@ -51,20 +51,13 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
             _upgradeAppliedEventFilter = World
                 .Filter<ApplyUpgradesEvent>()
                 .End();
-            
-            _movementPool = World.GetPool<Movement>();
-            _upgradePointsPool = World.GetPool<UpgradePoints>();
-            _upgradeLevelsPool = World.GetPool<StatsUpgradeLevels>();
-            _applyUpgradesEventPool = World.GetPool<ApplyUpgradesEvent>();
-            _weaponPool = World.GetPool<Weapon>();
-            _healthPool = World.GetPool<Health>();
         }
 
         public void Run(IEcsSystems systems)
         {
             foreach (var eventEntity in _upgradeAppliedEventFilter)
             {
-                var upgrades = _applyUpgradesEventPool.Get(eventEntity);
+                var upgrades = _applyUpgradesEventPool.Value.Get(eventEntity);
 
                 var healthBonus = upgrades.Health * GameConfig.DamageBonusPerUpgradeLevel;
                 var speedBonus = upgrades.Speed * GameConfig.DamageBonusPerUpgradeLevel;
@@ -80,8 +73,8 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
         {
             foreach (var pointsEntity in _upgradePointsFilter)
             {
-                ref var points = ref _upgradePointsPool.Get(pointsEntity);
-                ref var levels = ref _upgradeLevelsPool.Get(pointsEntity);
+                ref var points = ref _upgradePointsPool.Value.Get(pointsEntity);
+                ref var levels = ref _upgradeLevelsPool.Value.Get(pointsEntity);
                 
                 var totalPoints = upgrades.Health + upgrades.Speed + upgrades.Damage;
                 points.Value -= totalPoints;
@@ -96,7 +89,7 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
         {
             foreach (var weapon in _playerWeaponFilter)
             {
-                ref var stats = ref _weaponPool.Get(weapon);
+                ref var stats = ref _weaponPool.Value.Get(weapon);
                 stats.Damage += damageBonus;
             }
         }
@@ -105,8 +98,8 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
         {
             foreach (var player in _playerFilter)
             {
-                ref var health = ref _healthPool.Get(player);
-                ref var movement = ref _movementPool.Get(player);
+                ref var health = ref _healthPool.Value.Get(player);
+                ref var movement = ref _movementPool.Value.Get(player);
                     
                 health.Value += healthBonus;
                 movement.HorizontalSpeed += speedBonus;

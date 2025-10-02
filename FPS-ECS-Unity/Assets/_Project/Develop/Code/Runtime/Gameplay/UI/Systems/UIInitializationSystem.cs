@@ -1,5 +1,3 @@
-using System;
-using FpsEcs.Runtime.Gameplay.Common;
 using FpsEcs.Runtime.Infrastructure.Factories;
 using FpsEcs.Runtime.Infrastructure.Services.UI;
 using Leopotam.EcsLite;

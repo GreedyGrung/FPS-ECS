@@ -1,4 +1,3 @@
-using FpsEcs.Runtime.Gameplay.Common.Components;
 using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
 using FpsEcs.Runtime.Gameplay.Input.Components;
 using FpsEcs.Runtime.Gameplay.Player.Components;
