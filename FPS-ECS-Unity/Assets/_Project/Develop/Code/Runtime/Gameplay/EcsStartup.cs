@@ -1,13 +1,13 @@
-using FpsEcs.Runtime.Gameplay.Enemies.Systems;
-using FpsEcs.Runtime.Gameplay.HealthFeature.Systems;
+using FpsEcs.Runtime.Gameplay.Enemies;
+using FpsEcs.Runtime.Gameplay.HealthFeature;
+using FpsEcs.Runtime.Gameplay.Input;
 using FpsEcs.Runtime.Gameplay.Input.Components;
-using FpsEcs.Runtime.Gameplay.Input.Systems;
-using FpsEcs.Runtime.Gameplay.MovementLogic.Systems;
-using FpsEcs.Runtime.Gameplay.Player.Systems;
+using FpsEcs.Runtime.Gameplay.MovementLogic;
+using FpsEcs.Runtime.Gameplay.Player;
+using FpsEcs.Runtime.Gameplay.ProgressionFeature;
 using FpsEcs.Runtime.Gameplay.ProgressionFeature.Components;
-using FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems;
-using FpsEcs.Runtime.Gameplay.UI.Systems;
-using FpsEcs.Runtime.Gameplay.Weapons.Systems;
+using FpsEcs.Runtime.Gameplay.UI;
+using FpsEcs.Runtime.Gameplay.Weapons;
 using FpsEcs.Runtime.Infrastructure.Factories;
 using FpsEcs.Runtime.Infrastructure.Services.ActorsInitialization;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
@@ -16,6 +16,7 @@ using FpsEcs.Runtime.Infrastructure.Services.Pause;
 using FpsEcs.Runtime.Infrastructure.Services.SaveLoad;
 using FpsEcs.Runtime.Infrastructure.Services.UI;
 using FpsEcs.Runtime.Infrastructure.Services.Upgrades;
+using FpsEcs.Runtime.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using Leopotam.EcsLite.ExtendedSystems;
@@ -72,32 +73,14 @@ namespace FpsEcs.Runtime.Gameplay
             _entityFactory.Initialize(_world);
             _systems = new EcsSystems(_world);
             _systems
-                .Add(new InputInitializationSystem())
-                .Add(new CameraInitializationSystem())
-                .Add(new ProgressionInitializationSystem())
-                .Add(new PlayerHealthInitializationSystem())
-                .Add(new WeaponInitializationSystem())
-                .Add(new EnemyHealthInitializationSystem())
-                .Add(new EnemiesInitializationSystem())
-                .Add(new MovementInitializationSystem())
-                .Add(new UIInitializationSystem())
-                .Add(new EnableMobileInputSystem())
-                .Add(new EnemiesSpawnSystem())
-                .Add(new EnemiesMoveSystem())
-                .Add(new InputReadSystem())
-                .Add(new SpawnPlayerSystem())
-                .Add(new CameraLookSystem())
-                .Add(new MovePlayerSystem())
-                .Add(new PlayerShootSystem())
-                .Add(new ApplyDamageSystem())
-                .Add(new EnemiesDeathObserverSystem())
-                .Add(new DeathSystem())
-                .Add(new WeaponSwaySystem())
-                .Add(new UIViewsOpenCloseSystem())
-                .Add(new HudRedrawSystem())
-                .Add(new ApplyUpgradesSystem())
-                .Add(new SavePlayerProgressSystem())
-                .Add(new LoadPlayerProgressSystem())
+                .AddModule(new WeaponsModule())
+                .AddModule(new InputModule())
+                .AddModule(new HealthModule())
+                .AddModule(new MovementModule())
+                .AddModule(new PlayerModule())
+                .AddModule(new EnemiesModule())
+                .AddModule(new UIModule())
+                .AddModule(new ProgressionModule())
 #if UNITY_EDITOR
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
                 .Add (new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem())
