@@ -1,11 +1,10 @@
+using FpsEcs.Runtime.Gameplay.Common.Modules;
 using FpsEcs.Runtime.Gameplay.Enemies;
 using FpsEcs.Runtime.Gameplay.HealthFeature;
 using FpsEcs.Runtime.Gameplay.Input;
-using FpsEcs.Runtime.Gameplay.Input.Components;
 using FpsEcs.Runtime.Gameplay.MovementLogic;
 using FpsEcs.Runtime.Gameplay.Player;
 using FpsEcs.Runtime.Gameplay.ProgressionFeature;
-using FpsEcs.Runtime.Gameplay.ProgressionFeature.Components;
 using FpsEcs.Runtime.Gameplay.UI;
 using FpsEcs.Runtime.Gameplay.Weapons;
 using FpsEcs.Runtime.Infrastructure.Factories;
@@ -19,7 +18,6 @@ using FpsEcs.Runtime.Infrastructure.Services.Upgrades;
 using FpsEcs.Runtime.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
-using Leopotam.EcsLite.ExtendedSystems;
 using UnityEngine;
 using VContainer;
 
@@ -81,13 +79,8 @@ namespace FpsEcs.Runtime.Gameplay
                 .AddModule(new EnemiesModule())
                 .AddModule(new UIModule())
                 .AddModule(new ProgressionModule())
-#if UNITY_EDITOR
-                .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
-                .Add (new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem())
-#endif
-                .DelHere<PauseEvent>()
-                .DelHere<ApplyUpgradesEvent>()
-                .DelHere<SaveProgressEvent>()
+                .AddModule(new DebugModule())
+                .AddModule(new CleanupModule())
                 .Inject(_inputService)
                 .Inject(_gameFactory)
                 .Inject(_configsProvider)
