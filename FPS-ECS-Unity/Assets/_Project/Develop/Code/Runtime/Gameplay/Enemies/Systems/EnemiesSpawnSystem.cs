@@ -3,6 +3,7 @@ using FpsEcs.Runtime.Gameplay.Common.Components;
 using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
 using FpsEcs.Runtime.Gameplay.Enemies.Components;
 using FpsEcs.Runtime.Infrastructure.Factories;
+using FpsEcs.Runtime.Infrastructure.Factories.Entities;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
@@ -33,9 +34,9 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Systems
         
         public void Init(IEcsSystems systems)
         {
-            var enemySpawnerRoot = EntityFactory.Create();
-            _timerPool.Value.Add(enemySpawnerRoot);
-            _enemySpawnerRoot.Value.Add(enemySpawnerRoot);
+            EntityFactory.Create()
+                .With<Timer>()
+                .With<EnemySpawnerRoot>();
             
             _enemySpawnsFilter = World
                 .Filter<TransformRef>()

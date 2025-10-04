@@ -1,13 +1,12 @@
 using Leopotam.EcsLite;
 using UnityEngine;
 
-namespace FpsEcs.Runtime.Infrastructure.Factories
+namespace FpsEcs.Runtime.Infrastructure.Factories.Entities
 {
     public interface IEntityFactory
     {
         void Initialize(EcsWorld world);
-        int Create();
+        IEntityBuilder Create();
         int CreateFrom(GameObject gameObject);
-        EcsWorld World { get; }
     }
 }

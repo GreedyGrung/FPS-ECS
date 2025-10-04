@@ -1,5 +1,5 @@
 using FpsEcs.Runtime.Gameplay.ProgressionFeature.Components;
-using FpsEcs.Runtime.Infrastructure.Factories;
+using FpsEcs.Runtime.Infrastructure.Factories.Entities;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Infrastructure.Services.Input;
 using FpsEcs.Runtime.Infrastructure.Services.Pause;
@@ -111,11 +111,7 @@ namespace FpsEcs.Runtime.Meta.Upgrades
             Close();
         }
 
-        private void SaveProgress()
-        {
-            var entity = _entityFactory.Create();
-            _entityFactory.World.GetPool<SaveProgressEvent>().Add(entity);
-        }
+        private void SaveProgress() => _entityFactory.Create().With<SaveProgressEvent>();
 
         private void CheckForRemainingPoints()
         {
