@@ -33,9 +33,9 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Systems
         
         public void Init(IEcsSystems systems)
         {
-            var enemySpawnerRoot = EntityFactory.Create();
-            _timerPool.Value.Add(enemySpawnerRoot);
-            _enemySpawnerRoot.Value.Add(enemySpawnerRoot);
+            EntityFactory.Create()
+                .With<Timer>()
+                .With<EnemySpawnerRoot>();
             
             _enemySpawnsFilter = World
                 .Filter<TransformRef>()

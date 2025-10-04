@@ -113,8 +113,8 @@ namespace FpsEcs.Runtime.Meta.Upgrades
 
         private void SaveProgress()
         {
-            var entity = _entityFactory.Create();
-            _entityFactory.World.GetPool<SaveProgressEvent>().Add(entity);
+            _entityFactory.Create()
+                .With<SaveProgressEvent>();
         }
 
         private void CheckForRemainingPoints()

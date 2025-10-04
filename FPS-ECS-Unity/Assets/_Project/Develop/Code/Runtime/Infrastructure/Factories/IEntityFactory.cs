@@ -6,8 +6,14 @@ namespace FpsEcs.Runtime.Infrastructure.Factories
     public interface IEntityFactory
     {
         void Initialize(EcsWorld world);
-        int Create();
+        IEntityBuilder Create();
         int CreateFrom(GameObject gameObject);
-        EcsWorld World { get; }
+    }
+
+    public interface IEntityBuilder
+    {
+        IEntityBuilder With<T>() where T : struct;
+        IEntityBuilder With<T>(in T component) where T : struct;
+        int Build();
     }
 }
