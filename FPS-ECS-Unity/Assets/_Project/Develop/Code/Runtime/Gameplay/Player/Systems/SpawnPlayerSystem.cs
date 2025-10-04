@@ -3,6 +3,7 @@ using FpsEcs.Runtime.Gameplay.Player.Components;
 using FpsEcs.Runtime.Gameplay.Weapons.Authorings;
 using FpsEcs.Runtime.Gameplay.Weapons.Components;
 using FpsEcs.Runtime.Infrastructure.Factories;
+using FpsEcs.Runtime.Infrastructure.Factories.Entities;
 using FpsEcs.Runtime.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;

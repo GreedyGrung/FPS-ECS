@@ -1,4 +1,5 @@
 using FpsEcs.Runtime.Infrastructure.Factories;
+using FpsEcs.Runtime.Infrastructure.Factories.Entities;
 using FpsEcs.Runtime.Infrastructure.Services.UI;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;

@@ -3,6 +3,7 @@ using FpsEcs.Runtime.Gameplay.Common.Components;
 using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
 using FpsEcs.Runtime.Gameplay.Enemies.Components;
 using FpsEcs.Runtime.Infrastructure.Factories;
+using FpsEcs.Runtime.Infrastructure.Factories.Entities;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;

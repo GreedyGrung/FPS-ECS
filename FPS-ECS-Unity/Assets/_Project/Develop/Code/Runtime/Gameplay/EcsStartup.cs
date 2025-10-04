@@ -8,6 +8,7 @@ using FpsEcs.Runtime.Gameplay.ProgressionFeature;
 using FpsEcs.Runtime.Gameplay.UI;
 using FpsEcs.Runtime.Gameplay.Weapons;
 using FpsEcs.Runtime.Infrastructure.Factories;
+using FpsEcs.Runtime.Infrastructure.Factories.Entities;
 using FpsEcs.Runtime.Infrastructure.Services.ActorsInitialization;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Infrastructure.Services.Input;

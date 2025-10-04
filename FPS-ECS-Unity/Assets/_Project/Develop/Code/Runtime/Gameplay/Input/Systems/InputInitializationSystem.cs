@@ -1,5 +1,6 @@
 using FpsEcs.Runtime.Gameplay.Input.Components;
 using FpsEcs.Runtime.Infrastructure.Factories;
+using FpsEcs.Runtime.Infrastructure.Factories.Entities;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 

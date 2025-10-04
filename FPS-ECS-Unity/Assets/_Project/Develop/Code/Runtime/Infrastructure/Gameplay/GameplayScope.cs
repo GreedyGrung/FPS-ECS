@@ -1,5 +1,6 @@
 using FpsEcs.Runtime.Gameplay;
 using FpsEcs.Runtime.Infrastructure.Factories;
+using FpsEcs.Runtime.Infrastructure.Factories.Entities;
 using FpsEcs.Runtime.Infrastructure.Services.ActorsInitialization;
 using FpsEcs.Runtime.Infrastructure.Services.Pause;
 using FpsEcs.Runtime.Infrastructure.Services.Upgrades;
