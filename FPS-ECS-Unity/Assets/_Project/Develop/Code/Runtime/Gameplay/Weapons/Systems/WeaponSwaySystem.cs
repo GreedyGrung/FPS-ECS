@@ -18,6 +18,7 @@ namespace FpsEcs.Runtime.Gameplay.Weapons.Systems
         private EcsFilter _inputFilter;
         private EcsFilter _weaponFilter;
 
+        private bool _originIsSet;
         private Vector3 _origin;
         
         private EcsWorld World => _world.Value;
@@ -46,9 +47,10 @@ namespace FpsEcs.Runtime.Gameplay.Weapons.Systems
                     var transform = _transformPool.Value.Get(weaponEntity).Value;
                     var sway = _weaponSwayPool.Value.Get(weaponEntity);
 
-                    if (_origin == Vector3.zero)
+                    if (!_originIsSet)
                     {
                         _origin = transform.localPosition;
+                        _originIsSet = true;
                     }
                     
                     Vector2 clampedInput = input.Look;

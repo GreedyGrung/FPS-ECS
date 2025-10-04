@@ -39,8 +39,6 @@ namespace FpsEcs.Editor
                     Debug.LogError($"[DeleteProgress] Could not delete file: {path}\n{ex}");
                 }
             }
-
-            EditorUtility.DisplayDialog("Delete Progress", "Progress has been deleted.", "OK");
         }
     }
 }
