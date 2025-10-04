@@ -13,6 +13,8 @@ namespace FpsEcs.Runtime.Infrastructure.Services.SceneLoading
             {
                 onLoaded?.Invoke();
                 await UniTask.Yield();
+                
+                return;
             }
 
             AsyncOperation waitNextScene = SceneManager.LoadSceneAsync(nextScene);
