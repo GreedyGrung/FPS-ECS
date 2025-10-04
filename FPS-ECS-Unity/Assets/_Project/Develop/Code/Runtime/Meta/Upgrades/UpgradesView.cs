@@ -59,6 +59,7 @@ namespace FpsEcs.Runtime.Meta.Upgrades
             base.Unsubscribe();
             
             _applyButton.onClick.RemoveListener(ApplyUpgrades);
+            _saveButton.onClick.RemoveListener(SaveProgress);
             
             _healthStat.OnAddPointButtonClicked -= CheckForRemainingPoints;
             _damageStat.OnAddPointButtonClicked -= CheckForRemainingPoints;
