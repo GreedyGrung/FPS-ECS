@@ -59,8 +59,8 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
             {
                 var upgrades = _applyUpgradesEventPool.Value.Get(eventEntity);
 
-                var healthBonus = upgrades.Health * GameConfig.DamageBonusPerUpgradeLevel;
-                var speedBonus = upgrades.Speed * GameConfig.DamageBonusPerUpgradeLevel;
+                var healthBonus = upgrades.Health * GameConfig.HealthBonusPerUpgradeLevel;
+                var speedBonus = upgrades.Speed * GameConfig.SpeedBonusPerUpgradeLevel;
                 var damageBonus = upgrades.Damage * GameConfig.DamageBonusPerUpgradeLevel;
                 
                 ApplyUpgradesToPlayer(healthBonus, speedBonus);
