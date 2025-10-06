@@ -11,6 +11,6 @@ namespace FpsEcs.Runtime.Infrastructure.Factories
         UniTask CreateUIRootAsync();
         UniTask<Dictionary<UIPanelId, UIPanelBase>> CreateUIPanelsAsync();
         UniTask Load();
-        GameObject CreateHud();
+        int CreateHud();
     }
 }

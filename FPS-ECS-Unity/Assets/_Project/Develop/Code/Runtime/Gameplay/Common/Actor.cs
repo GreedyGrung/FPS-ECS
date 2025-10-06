@@ -23,6 +23,9 @@ namespace FpsEcs.Runtime.Gameplay.Common
             
             ref var transformComponent = ref world.GetPool<TransformRef>().Add(newEntity);
             transformComponent.Value = transform;
+            
+            ref var gameObjectComponent = ref world.GetPool<GameObjectRef>().Add(newEntity);
+            gameObjectComponent.Value = gameObject;
 
             if (gameObject.TryGetComponent(out CharacterController characterController))
             {

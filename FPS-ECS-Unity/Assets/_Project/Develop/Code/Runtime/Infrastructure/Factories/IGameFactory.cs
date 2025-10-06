@@ -5,8 +5,8 @@ namespace FpsEcs.Runtime.Infrastructure.Factories
 {
     public interface IGameFactory
     {
-        GameObject CreatePlayer(Vector3 position, Quaternion rotation);
         UniTask Load();
-        GameObject CreateEnemy(Vector3 position, Quaternion rotation);
+        int CreatePlayer(Vector3 position, Quaternion rotation);
+        int CreateEnemy(Vector3 position, Quaternion rotation);
     }
 }

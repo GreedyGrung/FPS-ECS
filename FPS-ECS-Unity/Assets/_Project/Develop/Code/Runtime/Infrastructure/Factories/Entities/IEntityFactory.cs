@@ -7,6 +7,6 @@ namespace FpsEcs.Runtime.Infrastructure.Factories.Entities
     {
         void Initialize(EcsWorld world);
         IEntityBuilder Create();
-        int CreateFrom(GameObject gameObject);
+        int Convert(GameObject gameObject);
     }
 }

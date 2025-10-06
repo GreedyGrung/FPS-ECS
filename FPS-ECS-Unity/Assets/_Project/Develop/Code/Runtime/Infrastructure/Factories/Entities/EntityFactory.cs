@@ -17,7 +17,7 @@ namespace FpsEcs.Runtime.Infrastructure.Factories.Entities
             return new EntityBuilder(_world, entity);
         }
 
-        public int CreateFrom(GameObject gameObject)
+        public int Convert(GameObject gameObject)
         {
             var actor = gameObject.GetComponent<Actor>();
             actor.Initialize(_world);

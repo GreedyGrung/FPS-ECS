@@ -32,17 +32,16 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
 
             var entity = _playerSpawnFilter.First();
             var transform = World.GetPool<TransformRef>().Get(entity).Value;
-            var playerObject = Factory.CreatePlayer(transform.position, transform.rotation);
+            var playerEntity = Factory.CreatePlayer(transform.position, transform.rotation);
+            var playerObject = World.GetPool<GameObjectRef>().Get(playerEntity).Value;
             
-            InitializePlayerEntity(playerObject);
+            InitializePlayerEntity(ref playerEntity, playerObject);
             CreateCameraEntity(playerObject);
             CreateWeaponEntity(playerObject);
         }
 
-        private void InitializePlayerEntity(GameObject playerObject)
+        private void InitializePlayerEntity(ref int playerEntity, GameObject playerObject)
         {
-            var playerEntity = EntityFactory.CreateFrom(playerObject);
-            
             var animatorPool = World.GetPool<AnimatorRef>();
             animatorPool.Add(playerEntity);
             ref var animator = ref animatorPool.Get(playerEntity);
@@ -52,13 +51,13 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
         private void CreateCameraEntity(GameObject playerObject)
         {
             var cameraObject = playerObject.GetComponentInChildren<Camera>().gameObject;
-            EntityFactory.CreateFrom(cameraObject);
+            EntityFactory.Convert(cameraObject);
         }
         
         private void CreateWeaponEntity(GameObject playerObject)
         {
             var weaponObject = playerObject.GetComponentInChildren<WeaponAuthoring>().gameObject;
-            var entity = EntityFactory.CreateFrom(weaponObject);
+            var entity = EntityFactory.Convert(weaponObject);
             World.GetPool<WeaponInHandsTag>().Add(entity);
         }
     }

@@ -71,8 +71,7 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Systems
                     var enemySpawners = _enemySpawnsFilter.GetRawEntities();
                     var enemySpawn = enemySpawners[Random.Range(0, _enemySpawnsFilter.GetEntitiesCount())];
                     var spawnPoint = _transformPool.Value.Get(enemySpawn).Value;
-                    var enemyObject = Factory.CreateEnemy(spawnPoint.position, spawnPoint.rotation);
-                    var enemy = EntityFactory.CreateFrom(enemyObject);
+                    var enemy = Factory.CreateEnemy(spawnPoint.position, spawnPoint.rotation);
                     
                     _enemyInitializationNeededPool.Value.Add(enemy);
 
