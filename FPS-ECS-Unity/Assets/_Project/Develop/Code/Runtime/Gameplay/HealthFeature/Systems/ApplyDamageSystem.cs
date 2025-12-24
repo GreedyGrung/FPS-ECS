@@ -1,6 +1,7 @@
 using FpsEcs.Runtime.Gameplay.HealthFeature.Components;
 using FpsEcs.Runtime.Gameplay.ProgressionFeature.Components;
 using FpsEcs.Runtime.Gameplay.Weapons.Components;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 
@@ -10,38 +11,30 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
     {
         private readonly EcsWorldInject _world;
         
-        private EcsPoolInject<DamageEvent> _damageEventPool;
-        private EcsPoolInject<Health> _healthPool;
-        private EcsPoolInject<DeadTag> _deadPool;
-        private EcsPoolInject<DeathEvent> _deathEventPool;
-        
         private EcsFilter _applyDamageFilter;
         
         private EcsWorld World => _world.Value;
         
         public void Init(IEcsSystems systems)
         {
-            _applyDamageFilter = World
-                .Filter<DamageEvent>()
-                .Inc<Health>()
-                .End();
+            _applyDamageFilter = World.Inc<Health, DamageEvent>().End();
         }
 
         public void Run(IEcsSystems systems)
         {
             foreach (var entity in _applyDamageFilter)
             {
-                var damage = _damageEventPool.Value.Get(entity).DamageAmount;
-                ref var health = ref _healthPool.Value.Get(entity);
+                var damage = entity.Get<DamageEvent>().DamageAmount;
+                ref var health = ref entity.Get<Health>();
                 health.Value -= damage;
 
                 if (health.Value <= 0)
                 {
-                    _deadPool.Value.Add(entity);
-                    _deathEventPool.Value.Add(entity);
+                    entity.Add<DeadTag>();
+                    entity.Add<DeathEvent>();
                 }
                 
-                _damageEventPool.Value.Del(entity);
+                entity.Del<DamageEvent>();
             }
         }
     }

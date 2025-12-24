@@ -8,18 +8,13 @@ namespace FpsEcs.Runtime.Infrastructure.Services.SaveLoad
 {
     public class SaveLoadService : ISaveLoadService
     {
-        private readonly string _path;
-        
-        public SaveLoadService()
-        {
-            _path = Path.Combine(Application.persistentDataPath, Constants.Utils.SaveKey);
-        }
+        private readonly string _path = Path.Combine(Application.persistentDataPath, Constants.Utils.SaveKey);
 
         public void SaveProgress(PlayerProgress playerProgress)
         {
             string json = playerProgress.ToJson();
             byte[] bytes = Encoding.UTF8.GetBytes(json);
-
+            
             WriteAtomic(_path, bytes);
         }
 

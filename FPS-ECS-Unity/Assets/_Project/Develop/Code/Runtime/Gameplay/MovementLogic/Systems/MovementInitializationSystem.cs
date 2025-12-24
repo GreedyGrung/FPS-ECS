@@ -2,6 +2,7 @@ using FpsEcs.Runtime.Gameplay.Enemies.Components;
 using FpsEcs.Runtime.Gameplay.MovementLogic.Components;
 using FpsEcs.Runtime.Gameplay.Player.Components;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 
@@ -12,9 +13,6 @@ namespace FpsEcs.Runtime.Gameplay.MovementLogic.Systems
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IConfigsProvider> _configsProvider;
         
-        private readonly EcsPoolInject<Movement> _movementPool;
-        private readonly EcsPoolInject<MovementInitializationNeededTag> _movementInitializationNeededPool;
-        
         private EcsFilter _movementPlayerInitFilter;
         private EcsFilter _movementEnemiesInitFilter;
         
@@ -23,15 +21,8 @@ namespace FpsEcs.Runtime.Gameplay.MovementLogic.Systems
         
         public void Init(IEcsSystems systems)
         {
-            _movementPlayerInitFilter = World
-                .Filter<MovementInitializationNeededTag>()
-                .Inc<PlayerTag>()
-                .End();
-            
-            _movementEnemiesInitFilter = World
-                .Filter<MovementInitializationNeededTag>()
-                .Inc<Enemy>()
-                .End();
+            _movementPlayerInitFilter = World.Inc<MovementInitializationNeededTag, PlayerTag>().End();
+            _movementEnemiesInitFilter = World.Inc<MovementInitializationNeededTag, Enemy>().End();
         }
 
         public void Run(IEcsSystems systems)
@@ -44,12 +35,9 @@ namespace FpsEcs.Runtime.Gameplay.MovementLogic.Systems
         {
             foreach (var player in _movementPlayerInitFilter)
             {
-                var movementPool = _movementPool.Value;
-                movementPool.Add(player);
-                ref var movement = ref movementPool.Get(player);
+                ref var movement = ref player.Add<Movement>();
                 movement.HorizontalSpeed = ConfigsProvider.GetPlayerConfig().Speed;
-                
-                _movementInitializationNeededPool.Value.Del(player);
+                player.Del<MovementInitializationNeededTag>();
             }
         }
         
@@ -57,13 +45,10 @@ namespace FpsEcs.Runtime.Gameplay.MovementLogic.Systems
         {
             foreach (var enemy in _movementEnemiesInitFilter)
             {
-                var movementPool = _movementPool.Value;
-                movementPool.Add(enemy);
-                ref var movement = ref movementPool.Get(enemy);
-                var id = World.GetPool<Enemy>().Get(enemy).Id;
+                ref var movement = ref enemy.Add<Movement>();
+                var id = enemy.Get<Enemy>().Id;
                 movement.HorizontalSpeed = ConfigsProvider.GetEnemyConfig(id).Speed;
-                
-                _movementInitializationNeededPool.Value.Del(enemy);
+                enemy.Del<MovementInitializationNeededTag>();
             }
         }
     }

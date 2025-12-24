@@ -1,5 +1,6 @@
-using FpsEcs.Runtime.Gameplay.Common;
 using FpsEcs.Runtime.Gameplay.Input.Components;
+using LeoEcsLite.QoL.Authoring;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using UnityEngine;
 
@@ -11,8 +12,7 @@ namespace FpsEcs.Runtime.Gameplay.Input.Authoring
         
         public void Convert(EcsWorld world, int entity)
         {
-            var pool = world.GetPool<MobileControls>();
-            ref var controls = ref pool.Add(entity);
+            ref var controls = ref entity.Add<MobileControls>();
             controls.Value = _mobileControls;
         }
     }

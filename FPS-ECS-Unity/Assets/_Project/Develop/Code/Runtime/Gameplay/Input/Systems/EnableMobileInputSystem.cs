@@ -1,4 +1,5 @@
 using FpsEcs.Runtime.Gameplay.Input.Components;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using UnityEngine;
@@ -9,24 +10,20 @@ namespace FpsEcs.Runtime.Gameplay.Input.Systems
     {
         private readonly EcsWorldInject _world;
         
-        private readonly EcsPoolInject<MobileControls> _mobileControlsPool;
-
         private EcsFilter _mobileControlsFilter;
         
         private EcsWorld World => _world.Value;
         
         public void Init(IEcsSystems systems)
         {
-            _mobileControlsFilter = World
-                .Filter<MobileControls>()
-                .End();
+            _mobileControlsFilter = World.Inc<MobileControls>().End();
         }
 
         public void Run(IEcsSystems systems)
         {
             foreach (var entity in _mobileControlsFilter)
             {
-                var controls = _mobileControlsPool.Value.Get(entity).Value;
+                var controls = entity.Get<MobileControls>().Value;
                 
                 if (controls.activeInHierarchy == false)
                 {

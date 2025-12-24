@@ -5,6 +5,7 @@ using FpsEcs.Runtime.Gameplay.Player.Components;
 using FpsEcs.Runtime.Gameplay.ProgressionFeature.Components;
 using FpsEcs.Runtime.Gameplay.Weapons.Components;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 
@@ -14,13 +15,6 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
     {
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IConfigsProvider> _configsProvider;
-        
-        private readonly EcsPoolInject<Movement> _movementPool;
-        private readonly EcsPoolInject<UpgradePoints> _upgradePointsPool;
-        private readonly EcsPoolInject<StatsUpgradeLevels> _upgradeLevelsPool;
-        private readonly EcsPoolInject<ApplyUpgradesEvent> _applyUpgradesEventPool;
-        private readonly EcsPoolInject<Weapon> _weaponPool;
-        private readonly EcsPoolInject<Health> _healthPool;
         
         private EcsFilter _playerFilter;
         private EcsFilter _playerWeaponFilter;
@@ -32,32 +26,17 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
         
         public void Init(IEcsSystems systems)
         {
-            _playerFilter = World
-                .Filter<PlayerTag>()
-                .Inc<Movement>()
-                .Inc<Health>()
-                .End();
-
-            _playerWeaponFilter = World
-                .Filter<Weapon>()
-                .Inc<WeaponInHandsTag>()
-                .End();
-
-            _upgradePointsFilter = World
-                .Filter<UpgradePoints>()
-                .Inc<StatsUpgradeLevels>()
-                .End();
-
-            _upgradeAppliedEventFilter = World
-                .Filter<ApplyUpgradesEvent>()
-                .End();
+            _playerFilter = World.Inc<PlayerTag, Movement, Health>().End();
+            _playerWeaponFilter = World.Inc<Weapon, WeaponInHandsTag>().End();
+            _upgradePointsFilter = World.Inc<UpgradePoints, StatsUpgradeLevels>().End();
+            _upgradeAppliedEventFilter = World.Inc<ApplyUpgradesEvent>().End();
         }
 
         public void Run(IEcsSystems systems)
         {
             foreach (var eventEntity in _upgradeAppliedEventFilter)
             {
-                var upgrades = _applyUpgradesEventPool.Value.Get(eventEntity);
+                var upgrades = eventEntity.Get<ApplyUpgradesEvent>();
 
                 var healthBonus = upgrades.Health * GameConfig.HealthBonusPerUpgradeLevel;
                 var speedBonus = upgrades.Speed * GameConfig.SpeedBonusPerUpgradeLevel;
@@ -73,8 +52,8 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
         {
             foreach (var pointsEntity in _upgradePointsFilter)
             {
-                ref var points = ref _upgradePointsPool.Value.Get(pointsEntity);
-                ref var levels = ref _upgradeLevelsPool.Value.Get(pointsEntity);
+                ref var points = ref pointsEntity.Get<UpgradePoints>();
+                ref var levels = ref pointsEntity.Get<StatsUpgradeLevels>();
                 
                 var totalPoints = upgrades.Health + upgrades.Speed + upgrades.Damage;
                 points.Value -= totalPoints;
@@ -89,7 +68,7 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
         {
             foreach (var weapon in _playerWeaponFilter)
             {
-                ref var stats = ref _weaponPool.Value.Get(weapon);
+                ref var stats = ref weapon.Get<Weapon>();
                 stats.Damage += damageBonus;
             }
         }
@@ -98,8 +77,8 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
         {
             foreach (var player in _playerFilter)
             {
-                ref var health = ref _healthPool.Value.Get(player);
-                ref var movement = ref _movementPool.Value.Get(player);
+                ref var health = ref player.Get<Health>();
+                ref var movement = ref player.Get<Movement>();
                     
                 health.Value += healthBonus;
                 movement.HorizontalSpeed += speedBonus;

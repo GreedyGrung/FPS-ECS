@@ -3,6 +3,7 @@ using FpsEcs.Runtime.Gameplay.Input.Components;
 using FpsEcs.Runtime.Gameplay.MovementLogic.Components;
 using FpsEcs.Runtime.Gameplay.Player.Components;
 using FpsEcs.Runtime.Utils;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using UnityEngine;
@@ -13,11 +14,6 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
     {
         private readonly EcsWorldInject _world;
 
-        private readonly EcsPoolInject<PlayerInput> _inputPool;
-        private readonly EcsPoolInject<TransformRef> _bodyPool;
-        private readonly EcsPoolInject<CharacterControllerRef> _characterControllerPool;
-        private readonly EcsPoolInject<Movement> _movementPool;
-
         private EcsFilter _inputFilter;
         private EcsFilter _playerFilter;
         
@@ -25,16 +21,8 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
 
         public void Init(IEcsSystems systems)
         {
-            _playerFilter = World
-                .Filter<TransformRef>()
-                .Inc<PlayerTag>()
-                .Inc<CharacterControllerRef>()
-                .Inc<Movement>()
-                .End();
-            
-            _inputFilter = World
-                .Filter<PlayerInput>()
-                .End();
+            _playerFilter = World.Inc<TransformRef, PlayerTag, CharacterControllerRef, Movement>().End();
+            _inputFilter = World.Inc<PlayerInput>().End();
         }
 
         public void Run(IEcsSystems systems)
@@ -43,13 +31,13 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
 
             foreach (var inputEntity in _inputFilter)
             {
-                ref var input = ref _inputPool.Value.Get(inputEntity);
+                ref var input = ref inputEntity.Get<PlayerInput>();
                 
                 foreach (var playerEntity in _playerFilter)
                 {
-                    ref var body = ref _bodyPool.Value.Get(playerEntity);
-                    ref var movementRuntime = ref _movementPool.Value.Get(playerEntity);
-                    var characterController = _characterControllerPool.Value.Get(playerEntity).Value;
+                    ref var body = ref playerEntity.Get<TransformRef>();
+                    ref var movementRuntime = ref playerEntity.Get<Movement>();
+                    var characterController = playerEntity.Get<CharacterControllerRef>().Value;
 
                     Vector3 forward = body.Value.forward; 
                     forward.y = 0f;

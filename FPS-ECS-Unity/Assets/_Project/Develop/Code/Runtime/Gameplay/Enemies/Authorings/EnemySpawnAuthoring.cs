@@ -1,6 +1,7 @@
-using FpsEcs.Runtime.Gameplay.Common;
 using FpsEcs.Runtime.Gameplay.Enemies.Components;
 using FpsEcs.Runtime.Utils.Enums;
+using LeoEcsLite.QoL.Authoring;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using UnityEngine;
 
@@ -12,9 +13,7 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Authorings
         
         public void Convert(EcsWorld world, int entity)
         {
-            var enemySpawnPool = world.GetPool<EnemySpawn>();
-            enemySpawnPool.Add(entity);
-            ref var enemySpawn = ref enemySpawnPool.Get(entity);
+            ref var enemySpawn = ref entity.Add<EnemySpawn>();
             enemySpawn.EnemyToSpawn = _enemyToSpawn;
         }
     }

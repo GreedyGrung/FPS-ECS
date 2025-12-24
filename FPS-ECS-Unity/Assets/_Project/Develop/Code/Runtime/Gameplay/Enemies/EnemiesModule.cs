@@ -1,5 +1,5 @@
-using FpsEcs.Runtime.Gameplay.Common.Modules;
 using FpsEcs.Runtime.Gameplay.Enemies.Systems;
+using LeoEcsLite.QoL.Modules;
 
 namespace FpsEcs.Runtime.Gameplay.Enemies
 {

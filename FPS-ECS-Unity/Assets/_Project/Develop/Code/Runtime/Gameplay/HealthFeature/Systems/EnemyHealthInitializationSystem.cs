@@ -1,6 +1,7 @@
 using FpsEcs.Runtime.Gameplay.Enemies.Components;
 using FpsEcs.Runtime.Gameplay.HealthFeature.Components;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using UnityEngine;
@@ -12,10 +13,6 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IConfigsProvider> _configsProvider;
         
-        private readonly EcsPoolInject<Health> _healthPool;
-        private readonly EcsPoolInject<Enemy> _enemyPool;
-        private readonly EcsPoolInject<HealthInitializationNeededTag> _healthInitializationNeededPool;
-        
         private EcsFilter _healthEnemiesInitFilter;
         
         private EcsWorld World => _world.Value;
@@ -23,28 +20,22 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
         
         public void Init(IEcsSystems systems)
         {
-            _healthEnemiesInitFilter = World
-                .Filter<HealthInitializationNeededTag>()
-                .Inc<Enemy>()
-                .End();
+            _healthEnemiesInitFilter = World.Inc<HealthInitializationNeededTag, Enemy>().End();
         }
 
         public void Run(IEcsSystems systems)
         {
             foreach (var enemy in _healthEnemiesInitFilter)
             {
-                var healthPool = _healthPool.Value;
-                healthPool.Add(enemy);
-                
-                ref var health = ref healthPool.Get(enemy);
-                var id = _enemyPool.Value.Get(enemy).Id;
+                ref var health = ref enemy.Add<Health>();
+                var id = enemy.Get<Enemy>().Id;
                 
                 var floatHealth = Random.Range(
                     ConfigsProvider.GetEnemyConfig(id).MinHealth,
                     ConfigsProvider.GetEnemyConfig(id).MaxHealth);
                 health.Value = Mathf.RoundToInt(floatHealth);
                 
-                _healthInitializationNeededPool.Value.Del(enemy);
+                enemy.Del<HealthInitializationNeededTag>();
             }
         }
     }

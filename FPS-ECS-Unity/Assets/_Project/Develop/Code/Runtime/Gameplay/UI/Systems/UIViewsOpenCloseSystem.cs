@@ -2,6 +2,7 @@ using FpsEcs.Runtime.Gameplay.Input.Components;
 using FpsEcs.Runtime.Infrastructure.Services.Pause;
 using FpsEcs.Runtime.Infrastructure.Services.UI;
 using FpsEcs.Runtime.Utils.Enums;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 
@@ -13,8 +14,6 @@ namespace FpsEcs.Runtime.Gameplay.UI.Systems
         private readonly EcsCustomInject<IPauseService> _pauseService;
         private readonly EcsCustomInject<IUIService> _uiService;
         
-        private readonly EcsPoolInject<PauseEvent> _pausePool;
-        
         private EcsFilter _pauseFilter;
 
         private EcsWorld World => _world.Value;
@@ -23,9 +22,7 @@ namespace FpsEcs.Runtime.Gameplay.UI.Systems
         
         public void Init(IEcsSystems systems)
         {
-            _pauseFilter = World
-                .Filter<PauseEvent>()
-                .End();
+            _pauseFilter = World.Inc<PauseEvent>().End();
         }
 
         public void Run(IEcsSystems systems)
@@ -43,7 +40,7 @@ namespace FpsEcs.Runtime.Gameplay.UI.Systems
                     UIService.Close(UIPanelId.Upgrades);
                 }
                 
-                _pausePool.Value.Del(pauseEntity);
+                pauseEntity.Del<PauseEvent>();
             }
         }
     }

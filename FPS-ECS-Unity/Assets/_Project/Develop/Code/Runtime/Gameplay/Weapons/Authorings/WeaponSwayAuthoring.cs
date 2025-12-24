@@ -1,5 +1,6 @@
-using FpsEcs.Runtime.Gameplay.Common;
 using FpsEcs.Runtime.Gameplay.Weapons.Components;
+using LeoEcsLite.QoL.Authoring;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace FpsEcs.Runtime.Gameplay.Weapons.Authorings
     {
         public void Convert(EcsWorld world, int entity)
         {
-            world.GetPool<WeaponSway>().Add(entity);
+            entity.Add<WeaponSway>();
         }
     }
 }

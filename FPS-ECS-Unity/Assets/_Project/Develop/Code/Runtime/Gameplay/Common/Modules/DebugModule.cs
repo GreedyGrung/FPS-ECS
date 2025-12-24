@@ -1,3 +1,5 @@
+using LeoEcsLite.QoL.Modules;
+
 namespace FpsEcs.Runtime.Gameplay.Common.Modules
 {
     public class DebugModule : IEcsModule

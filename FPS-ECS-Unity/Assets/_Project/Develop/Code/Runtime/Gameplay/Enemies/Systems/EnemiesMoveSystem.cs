@@ -3,6 +3,7 @@ using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
 using FpsEcs.Runtime.Gameplay.Enemies.Components;
 using FpsEcs.Runtime.Gameplay.MovementLogic.Components;
 using FpsEcs.Runtime.Utils;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using UnityEngine;
@@ -14,23 +15,13 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Systems
     {
         private EcsWorldInject _world;
         private EcsFilter _enemiesFilter;
-
-        private EcsPoolInject<Movement> _movementPool;
-        private EcsPoolInject<TransformRef> _transformPool;
-        private EcsPoolInject<CharacterControllerRef> _characterControllerPool;
-        private EcsPoolInject<ObstacleAvoidance> _obstacleAvoidancePool;
-        private EcsPoolInject<RaycastPoint> _raycastPointPool;
         
         private EcsWorld World => _world.Value;
         
         public void Init(IEcsSystems systems)
         {
             _enemiesFilter = World
-                .Filter<Movement>()
-                .Inc<TransformRef>()
-                .Inc<CharacterControllerRef>()
-                .Inc<ObstacleAvoidance>()
-                .Inc<RaycastPoint>()
+                .Inc<Movement, TransformRef, CharacterControllerRef, ObstacleAvoidance, RaycastPoint>()
                 .End();
         }
 
@@ -40,11 +31,11 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Systems
 
             foreach (var entity in _enemiesFilter)
             {
-                ref var movement = ref _movementPool.Value.Get(entity);
-                ref var transform = ref _transformPool.Value.Get(entity).Value;
-                ref var characterController = ref _characterControllerPool.Value.Get(entity).Value;
-                ref var av = ref _obstacleAvoidancePool.Value.Get(entity);
-                var raycastPoint = _raycastPointPool.Value.Get(entity).Value.position;
+                ref var movement = ref entity.Get<Movement>();
+                ref var transform = ref entity.Get<TransformRef>().Value;
+                ref var characterController = ref entity.Get<CharacterControllerRef>().Value;
+                ref var av = ref entity.Get<ObstacleAvoidance>();
+                var raycastPoint = entity.Get<RaycastPoint>().Value.position;
 
                 Vector3 horizontal = transform.forward * movement.HorizontalSpeed;
 

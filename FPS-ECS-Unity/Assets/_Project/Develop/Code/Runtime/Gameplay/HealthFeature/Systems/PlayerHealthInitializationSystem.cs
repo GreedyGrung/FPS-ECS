@@ -1,6 +1,7 @@
 using FpsEcs.Runtime.Gameplay.HealthFeature.Components;
 using FpsEcs.Runtime.Gameplay.Player.Components;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 
@@ -11,9 +12,6 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IConfigsProvider> _configsProvider;
         
-        private readonly EcsPoolInject<Health> _healthPool;
-        private readonly EcsPoolInject<HealthInitializationNeededTag> _healthInitializationNeededPool;
-        
         private EcsFilter _healthPlayerInitFilter;
         
         private EcsWorld World => _world.Value;
@@ -21,22 +19,17 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
         
         public void Init(IEcsSystems systems)
         {
-            _healthPlayerInitFilter = World
-                .Filter<HealthInitializationNeededTag>()
-                .Inc<PlayerTag>()
-                .End();
+            _healthPlayerInitFilter = World.Inc<HealthInitializationNeededTag, PlayerTag>().End();
         }
 
         public void Run(IEcsSystems systems)
         {
             foreach (var player in _healthPlayerInitFilter)
             {
-                var healthPool = _healthPool.Value;
-                healthPool.Add(player);
-                ref var heath = ref healthPool.Get(player);
+                ref var heath = ref player.Add<Health>();
                 heath.Value = ConfigsProvider.GetPlayerConfig().Health;
                 
-                _healthInitializationNeededPool.Value.Del(player);
+                player.Del<HealthInitializationNeededTag>();
             }
         }
     }

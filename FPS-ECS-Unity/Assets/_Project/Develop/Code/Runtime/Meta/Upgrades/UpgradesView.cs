@@ -1,10 +1,10 @@
 using FpsEcs.Runtime.Gameplay.ProgressionFeature.Components;
-using FpsEcs.Runtime.Infrastructure.Factories.Entities;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Infrastructure.Services.Input;
 using FpsEcs.Runtime.Infrastructure.Services.Pause;
 using FpsEcs.Runtime.Infrastructure.Services.Upgrades;
 using FpsEcs.Runtime.UI;
+using LeoEcsLite.QoL.Factory;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

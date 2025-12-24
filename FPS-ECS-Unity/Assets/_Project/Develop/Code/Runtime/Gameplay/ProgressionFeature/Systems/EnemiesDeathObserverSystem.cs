@@ -1,5 +1,6 @@
 using FpsEcs.Runtime.Gameplay.Enemies.Components;
 using FpsEcs.Runtime.Gameplay.ProgressionFeature.Components;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 
@@ -8,9 +9,6 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
     public class EnemiesDeathObserverSystem : IEcsInitSystem, IEcsRunSystem
     {
         private readonly EcsWorldInject _world;
-        
-        private readonly EcsPoolInject<UpgradePoints> _upgradePointsPool;
-        private readonly EcsPoolInject<DeathEvent> _deathPool;
 
         private EcsFilter _enemyDeathFilter;
         private EcsFilter _upgradePointsFilter;
@@ -19,14 +17,8 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
         
         public void Init(IEcsSystems systems)
         {
-            _enemyDeathFilter = World
-                .Filter<DeathEvent>()
-                .Inc<Enemy>()
-                .End();
-
-            _upgradePointsFilter = World
-                .Filter<UpgradePoints>()
-                .End();
+            _enemyDeathFilter = World.Inc<DeathEvent, Enemy>().End();
+            _upgradePointsFilter = World.Inc<UpgradePoints>().End();
         }
 
         public void Run(IEcsSystems systems)
@@ -35,10 +27,10 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
             {
                 foreach (var diedEnemy in _enemyDeathFilter)
                 {
-                    ref var points = ref _upgradePointsPool.Value.Get(upgradePointsEntity).Value;
+                    ref var points = ref upgradePointsEntity.Get<UpgradePoints>().Value;
                     points++;
                     
-                    _deathPool.Value.Del(diedEnemy);
+                    diedEnemy.Del<DeathEvent>();
                 }
             }
         }

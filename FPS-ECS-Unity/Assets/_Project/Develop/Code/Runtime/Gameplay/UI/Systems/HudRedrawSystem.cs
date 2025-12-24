@@ -1,6 +1,7 @@
 using FpsEcs.Runtime.Gameplay.HealthFeature.Components;
 using FpsEcs.Runtime.Gameplay.Player.Components;
 using FpsEcs.Runtime.Gameplay.UI.Components;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 
@@ -10,9 +11,6 @@ namespace FpsEcs.Runtime.Gameplay.UI.Systems
     {
         private readonly EcsWorldInject _world;
         
-        private readonly EcsPoolInject<HealthViewComponent> _healthViewPool;
-        private readonly EcsPoolInject<Health> _healthPool;
-        
         private EcsFilter _playerFilter;
         private EcsFilter _healthViewFilter;
         
@@ -20,14 +18,8 @@ namespace FpsEcs.Runtime.Gameplay.UI.Systems
         
         public void Init(IEcsSystems systems)
         {
-            _playerFilter = World
-                .Filter<PlayerTag>()
-                .Inc<Health>()
-                .End();
-
-            _healthViewFilter = World
-                .Filter<HealthViewComponent>()
-                .End();
+            _playerFilter = World.Inc<PlayerTag, Health>().End();
+            _healthViewFilter = World.Inc<HealthViewComponent>().End();
         }
 
         public void Run(IEcsSystems systems)
@@ -36,8 +28,8 @@ namespace FpsEcs.Runtime.Gameplay.UI.Systems
             {
                 foreach (var healthViewEntity in _healthViewFilter)
                 {
-                    var health = _healthPool.Value.Get(player).Value;
-                    var healthView = _healthViewPool.Value.Get(healthViewEntity).Value;
+                    var health = player.Get<Health>().Value;
+                    var healthView = healthViewEntity.Get<HealthViewComponent>().Value;
                     healthView.text = health.ToString();
                 }
             }

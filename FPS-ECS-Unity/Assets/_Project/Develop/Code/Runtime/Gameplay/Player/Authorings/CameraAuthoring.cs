@@ -1,6 +1,7 @@
-using FpsEcs.Runtime.Gameplay.Common;
 using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
 using FpsEcs.Runtime.Gameplay.Player.Components;
+using LeoEcsLite.QoL.Authoring;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using UnityEngine;
 
@@ -10,14 +11,10 @@ namespace FpsEcs.Runtime.Gameplay.Player.Authorings
     {
         public void Convert(EcsWorld world, int entity)
         {
-            var cameraPool = world.GetPool<CameraRef>();
-            cameraPool.Add(entity);
-
-            ref var camera = ref cameraPool.Get(entity);
+            ref var camera = ref entity.Add<CameraRef>();
             camera.Value = GetComponent<Camera>();
-            
-            var cameraInitPool = world.GetPool<CameraInitializationNeededTag>();
-            cameraInitPool.Add(entity);
+
+            entity.Add<CameraInitializationNeededTag>();
         }
     }
 }

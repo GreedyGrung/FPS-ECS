@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using FpsEcs.Runtime.Infrastructure.Factories.Entities;
 using FpsEcs.Runtime.Infrastructure.Services.AssetManagement;
 using FpsEcs.Runtime.Meta.Upgrades;
 using FpsEcs.Runtime.UI;
 using FpsEcs.Runtime.Utils;
 using FpsEcs.Runtime.Utils.Enums;
+using LeoEcsLite.QoL.Factory;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;

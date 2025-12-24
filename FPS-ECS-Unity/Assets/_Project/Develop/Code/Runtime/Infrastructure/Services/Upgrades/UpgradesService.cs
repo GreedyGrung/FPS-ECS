@@ -1,5 +1,6 @@
 using FpsEcs.Runtime.Gameplay.ProgressionFeature.Components;
 using FpsEcs.Runtime.Utils;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 
 namespace FpsEcs.Runtime.Infrastructure.Services.Upgrades

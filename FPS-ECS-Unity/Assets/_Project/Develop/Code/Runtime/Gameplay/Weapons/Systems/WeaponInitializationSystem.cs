@@ -1,6 +1,7 @@
 using FpsEcs.Runtime.Gameplay.Weapons.Components;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Utils;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 
@@ -11,11 +12,6 @@ namespace FpsEcs.Runtime.Gameplay.Weapons.Systems
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IConfigsProvider> _configsProvider;
         
-        private readonly EcsPoolInject<Weapon> _weaponPool;
-        private readonly EcsPoolInject<WeaponInitializationNeededTag> _weaponInitPool;
-        private readonly EcsPoolInject<WeaponSway> _weaponSwayPool;
-        private readonly EcsPoolInject<FireCooldown> _fireCooldownPool;
-        
         private EcsFilter _weaponInitFilter;
         
         private EcsWorld World => _world.Value;
@@ -23,19 +19,15 @@ namespace FpsEcs.Runtime.Gameplay.Weapons.Systems
         
         public void Init(IEcsSystems systems)
         {
-            _weaponInitFilter = World
-                .Filter<WeaponInitializationNeededTag>()
-                .Inc<Weapon>()
-                .Inc<WeaponSway>()
-                .End();
+            _weaponInitFilter = World.Inc<WeaponInitializationNeededTag, Weapon, WeaponSway>().End();
         }
 
         public void Run(IEcsSystems systems)
         {
             foreach (var weapon in _weaponInitFilter)
             {
-                ref var stats = ref _weaponPool.Value.Get(weapon);
-                ref var sway = ref _weaponSwayPool.Value.Get(weapon);
+                ref var stats = ref weapon.Get<Weapon>();
+                ref var sway = ref weapon.Get<WeaponSway>();
                 var weaponConfig = ConfigsProvider.GetWeaponConfig(stats.Id);
                 
                 stats.Damage = weaponConfig.Damage;
@@ -47,8 +39,8 @@ namespace FpsEcs.Runtime.Gameplay.Weapons.Systems
                 sway.Clamp = weaponConfig.Clamp;
                 sway.Smoothing = weaponConfig.Smoothing;
 
-                _fireCooldownPool.Value.Add(weapon);
-                _weaponInitPool.Value.Del(weapon);
+                weapon.Add<FireCooldown>();
+                weapon.Del<WeaponInitializationNeededTag>();
             }
         }
     }

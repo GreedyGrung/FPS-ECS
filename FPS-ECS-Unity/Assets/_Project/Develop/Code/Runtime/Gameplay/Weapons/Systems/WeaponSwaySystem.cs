@@ -1,6 +1,7 @@
 using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
 using FpsEcs.Runtime.Gameplay.Input.Components;
 using FpsEcs.Runtime.Gameplay.Weapons.Components;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using UnityEngine;
@@ -10,10 +11,6 @@ namespace FpsEcs.Runtime.Gameplay.Weapons.Systems
     public class WeaponSwaySystem : IEcsInitSystem, IEcsRunSystem
     {
         private readonly EcsWorldInject _world;
-
-        private readonly EcsPoolInject<PlayerInput> _inputPool;
-        private readonly EcsPoolInject<TransformRef> _transformPool;
-        private readonly EcsPoolInject<WeaponSway> _weaponSwayPool;
 
         private EcsFilter _inputFilter;
         private EcsFilter _weaponFilter;
@@ -25,27 +22,20 @@ namespace FpsEcs.Runtime.Gameplay.Weapons.Systems
         
         public void Init(IEcsSystems systems)
         {
-            _inputFilter = World
-                .Filter<PlayerInput>()
-                .End();
-
-            _weaponFilter = World
-                .Filter<WeaponSway>()
-                .Inc<WeaponInHandsTag>()
-                .Inc<TransformRef>()
-                .End();
+            _inputFilter = World.Inc<PlayerInput>().End();
+            _weaponFilter = World.Inc<WeaponSway, WeaponInHandsTag, TransformRef>().End();
         }
 
         public void Run(IEcsSystems systems)
         {
             foreach (var inputEntity in _inputFilter)
             {
-                var input = _inputPool.Value.Get(inputEntity);
+                var input = inputEntity.Get<PlayerInput>();
 
                 foreach (var weaponEntity in _weaponFilter)
                 {
-                    var transform = _transformPool.Value.Get(weaponEntity).Value;
-                    var sway = _weaponSwayPool.Value.Get(weaponEntity);
+                    var transform = weaponEntity.Get<TransformRef>().Value;
+                    var sway = weaponEntity.Get<WeaponSway>();
 
                     if (!_originIsSet)
                     {

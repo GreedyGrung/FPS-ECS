@@ -1,8 +1,8 @@
-using FpsEcs.Runtime.Gameplay.Common;
+using LeoEcsLite.QoL.Authoring;
 using Leopotam.EcsLite;
 using UnityEngine;
 
-namespace FpsEcs.Runtime.Infrastructure.Factories.Entities
+namespace LeoEcsLite.QoL.Factory
 {
     public class EntityFactory : IEntityFactory
     {
@@ -19,7 +19,7 @@ namespace FpsEcs.Runtime.Infrastructure.Factories.Entities
 
         public int Convert(GameObject gameObject)
         {
-            var actor = gameObject.GetComponent<Actor>();
+            var actor = gameObject.GetComponent<ActorBase>();
             actor.Initialize(_world);
 
             return actor.GetEntity();

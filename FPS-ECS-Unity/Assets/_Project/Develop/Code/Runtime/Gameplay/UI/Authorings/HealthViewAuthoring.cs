@@ -1,5 +1,6 @@
-using FpsEcs.Runtime.Gameplay.Common;
 using FpsEcs.Runtime.Gameplay.UI.Components;
+using LeoEcsLite.QoL.Authoring;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using TMPro;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace FpsEcs.Runtime.Gameplay.UI.Authorings
         
         public void Convert(EcsWorld world, int entity)
         {
-            ref var health = ref world.GetPool<HealthViewComponent>().Add(entity);
+            ref var health = ref entity.Add<HealthViewComponent>();
             health.Value = _healthText;
         }
     }

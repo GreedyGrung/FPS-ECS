@@ -1,0 +1,17 @@
+{
+    "name": "LeoEcsLite.QoL",
+    "rootNamespace": "LeoEcsLite.QoL",
+    "references": [
+        "Leopotam.EcsLite",
+        "Leopotam.EcsLite.ExtendedSystems"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

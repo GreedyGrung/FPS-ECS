@@ -8,7 +8,6 @@ using FpsEcs.Runtime.Gameplay.ProgressionFeature;
 using FpsEcs.Runtime.Gameplay.UI;
 using FpsEcs.Runtime.Gameplay.Weapons;
 using FpsEcs.Runtime.Infrastructure.Factories;
-using FpsEcs.Runtime.Infrastructure.Factories.Entities;
 using FpsEcs.Runtime.Infrastructure.Services.ActorsInitialization;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Infrastructure.Services.Input;
@@ -16,7 +15,8 @@ using FpsEcs.Runtime.Infrastructure.Services.Pause;
 using FpsEcs.Runtime.Infrastructure.Services.SaveLoad;
 using FpsEcs.Runtime.Infrastructure.Services.UI;
 using FpsEcs.Runtime.Infrastructure.Services.Upgrades;
-using FpsEcs.Runtime.Utils;
+using LeoEcsLite.QoL.Factory;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using UnityEngine;
@@ -67,6 +67,7 @@ namespace FpsEcs.Runtime.Gameplay
         public void Initialize() 
         {
             _world = new EcsWorld();
+            EcsUtils.Initialize(_world);
             _actorsInitializationService.Initialize(_world);
             _upgradesService.Initialize(_world);
             _entityFactory.Initialize(_world);
@@ -111,6 +112,8 @@ namespace FpsEcs.Runtime.Gameplay
                 _world.Destroy();
                 _world = null;
             }
+            
+            EcsUtils.Dispose();
         }
     }
 }

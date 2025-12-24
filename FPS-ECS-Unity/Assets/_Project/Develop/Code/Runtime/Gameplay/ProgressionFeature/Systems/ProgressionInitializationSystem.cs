@@ -1,6 +1,5 @@
 using FpsEcs.Runtime.Gameplay.ProgressionFeature.Components;
-using FpsEcs.Runtime.Infrastructure.Factories;
-using FpsEcs.Runtime.Infrastructure.Factories.Entities;
+using LeoEcsLite.QoL.Factory;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 

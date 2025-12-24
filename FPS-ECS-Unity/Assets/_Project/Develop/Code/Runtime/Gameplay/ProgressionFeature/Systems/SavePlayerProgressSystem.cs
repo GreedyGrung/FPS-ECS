@@ -5,6 +5,7 @@ using FpsEcs.Runtime.Gameplay.ProgressionFeature.Components;
 using FpsEcs.Runtime.Gameplay.Weapons.Components;
 using FpsEcs.Runtime.Infrastructure.Services.SaveLoad;
 using FpsEcs.Runtime.Infrastructure.Services.SaveLoad.Data;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 
@@ -14,13 +15,6 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
     {
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<ISaveLoadService> _saveLoadService;
-        
-        private readonly EcsPoolInject<ProgressLoadingNeededTag> _progressLoadingNeededPool;
-        private readonly EcsPoolInject<Health> _healthPool;
-        private readonly EcsPoolInject<Movement> _movementPool;
-        private readonly EcsPoolInject<Weapon> _weaponPool;
-        private readonly EcsPoolInject<StatsUpgradeLevels> _upgradeLevelPool;
-        private readonly EcsPoolInject<UpgradePoints> _upgradePointsPool;
         
         private EcsFilter _saveProgressFilter;
         private EcsFilter _playerFilter;
@@ -32,25 +26,10 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
         
         public void Init(IEcsSystems systems)
         {
-            _saveProgressFilter = World
-                .Filter<SaveProgressEvent>()
-                .End();
-
-            _playerFilter = World
-                .Filter<PlayerTag>()
-                .Inc<Health>()
-                .Inc<Movement>()
-                .End();
-
-            _upgradesFilter = World
-                .Filter<UpgradePoints>()
-                .Inc<StatsUpgradeLevels>()
-                .End();
-
-            _playerWeaponFilter = World
-                .Filter<Weapon>()
-                .Inc<WeaponInHandsTag>()
-                .End();
+            _saveProgressFilter = World.Inc<SaveProgressEvent>().End();
+            _playerFilter = World.Inc<PlayerTag, Health, Movement>().End();
+            _upgradesFilter = World.Inc<UpgradePoints, StatsUpgradeLevels>().End();
+            _playerWeaponFilter = World.Inc<Weapon, WeaponInHandsTag>().End();
         }
 
         public void Run(IEcsSystems systems)
@@ -61,22 +40,23 @@ namespace FpsEcs.Runtime.Gameplay.ProgressionFeature.Systems
                 
                 foreach (var player in _playerFilter)
                 {
-                    progress.Health = _healthPool.Value.Get(player).Value;
-                    progress.Speed = _movementPool.Value.Get(player).HorizontalSpeed;
+                    progress.Health = player.Get<Health>().Value;
+                    progress.Speed = player.Get<Movement>().HorizontalSpeed;
                 }
 
                 foreach (var weapon in _playerWeaponFilter)
                 {
-                    progress.Damage = _weaponPool.Value.Get(weapon).Damage;
+                    progress.Damage = weapon.Get<Weapon>().Damage;
                 }
 
-                foreach (var upgrades in _upgradesFilter)
+                foreach (var upgradesEntity in _upgradesFilter)
                 {
-                    progress.AvailableUpgradePoints = _upgradePointsPool.Value.Get(upgrades).Value;
-                    var upgradeLevelPool = _upgradeLevelPool.Value;
-                    progress.HealthUpgradeLevel = upgradeLevelPool.Get(upgrades).Health;
-                    progress.SpeedUpgradeLevel = upgradeLevelPool.Get(upgrades).Speed;
-                    progress.DamageUpgradeLevel = upgradeLevelPool.Get(upgrades).Damage;
+                    var appliedUpgrades = upgradesEntity.Get<StatsUpgradeLevels>();
+                    
+                    progress.AvailableUpgradePoints = upgradesEntity.Get<UpgradePoints>().Value;
+                    progress.HealthUpgradeLevel = appliedUpgrades.Health;
+                    progress.SpeedUpgradeLevel = appliedUpgrades.Speed;
+                    progress.DamageUpgradeLevel = appliedUpgrades.Damage;
                 }
                 
                 SaveLoadService.SaveProgress(progress);

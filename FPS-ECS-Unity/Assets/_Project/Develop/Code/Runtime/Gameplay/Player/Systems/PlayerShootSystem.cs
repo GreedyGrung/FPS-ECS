@@ -2,6 +2,7 @@ using FpsEcs.Runtime.Gameplay.Common;
 using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
 using FpsEcs.Runtime.Gameplay.Input.Components;
 using FpsEcs.Runtime.Gameplay.Weapons.Components;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using UnityEngine;
@@ -12,13 +13,6 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
     {
         private readonly EcsWorldInject _world;
         
-        private readonly EcsPoolInject<PlayerInput> _inputPool;
-        private readonly EcsPoolInject<TransformRef> _transformPool;
-        private readonly EcsPoolInject<Weapon> _weaponPool;
-        private readonly EcsPoolInject<FireCooldown> _cooldownPool;
-        private readonly EcsPoolInject<DamageEvent> _damageEventsPool;
-        private readonly EcsPoolInject<FireEffect> _fireEffectPool;
-        
         private EcsFilter _inputFilter;
         private EcsFilter _cameraFilter;
         private EcsFilter _weaponFilter;
@@ -27,37 +21,26 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
 
         public void Init(IEcsSystems systems)
         {
-            _inputFilter = World
-                .Filter<PlayerInput>()
-                .End();
-
-            _cameraFilter = World
-                .Filter<CameraRef>()
-                .Inc<TransformRef>()
-                .End();
-            
-            _weaponFilter = World
-                .Filter<Weapon>()
-                .Inc<FireCooldown>()
-                .Inc<FireEffect>()
-                .End();
+            _inputFilter = World.Inc<PlayerInput>().End();
+            _cameraFilter = World.Inc<CameraRef, TransformRef>().End();
+            _weaponFilter = World.Inc<Weapon, FireCooldown, FireEffect>().End();
         }
 
         public void Run(IEcsSystems systems)
         {
             foreach (var inputEntity in _inputFilter)
             {
-                ref var input = ref _inputPool.Value.Get(inputEntity);
+                ref var input = ref inputEntity.Get<PlayerInput>();
 
                 foreach (var cameraEntity in _cameraFilter)
                 {
-                    var transform = _transformPool.Value.Get(cameraEntity).Value;
+                    var transform = cameraEntity.Get<TransformRef>().Value;
                     
                     foreach (var weaponEntity in _weaponFilter)
                     {
-                        ref var weapon = ref _weaponPool.Value.Get(weaponEntity);
-                        ref var cooldown = ref _cooldownPool.Value.Get(weaponEntity);
-                        var fireEffect = _fireEffectPool.Value.Get(weaponEntity).Value;
+                        ref var weapon = ref weaponEntity.Get<Weapon>();
+                        ref var cooldown = ref weaponEntity.Get<FireCooldown>();
+                        var fireEffect = weaponEntity.Get<FireEffect>().Value;
                         var now = Time.time;
                         
                         if (now < cooldown.NextTime || !input.AttackPressed)
@@ -76,7 +59,7 @@ namespace FpsEcs.Runtime.Gameplay.Player.Systems
                             if (hit.collider.TryGetComponent(out Actor actor))
                             {
                                 var entity = actor.GetEntity();
-                                ref var damageEvent = ref _damageEventsPool.Value.Add(entity);
+                                ref var damageEvent = ref entity.Add<DamageEvent>();
                                 damageEvent.DamageAmount = weapon.Damage;
                             }
                         }

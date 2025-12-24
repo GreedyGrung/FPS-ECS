@@ -1,6 +1,7 @@
 using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
 using FpsEcs.Runtime.Gameplay.HealthFeature.Components;
 using FpsEcs.Runtime.Gameplay.ProgressionFeature.Components;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 
@@ -10,26 +11,20 @@ namespace FpsEcs.Runtime.Gameplay.HealthFeature.Systems
     {
         private readonly EcsWorldInject _world;
         
-        private EcsPoolInject<TransformRef> _deathPool;
-        
         private EcsFilter _deathFilter;
         
         private EcsWorld World => _world.Value;
         
         public void Init(IEcsSystems systems)
         {
-            _deathFilter = World
-                .Filter<DeadTag>()
-                .Inc<TransformRef>()
-                .Exc<DeathEvent>()
-                .End();
+            _deathFilter = World.Inc<DeadTag, GameObjectRef>().Exc<DeathEvent>().End();
         }
 
         public void Run(IEcsSystems systems)
         {
             foreach (var entity in _deathFilter)
             {
-                UnityEngine.Object.Destroy(_deathPool.Value.Get(entity).Value.transform.gameObject);
+                UnityEngine.Object.Destroy(entity.Get<GameObjectRef>().Value);
                 World.DelEntity(entity);
             }
         }

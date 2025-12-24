@@ -1,7 +1,7 @@
 using Leopotam.EcsLite;
 using UnityEngine;
 
-namespace FpsEcs.Runtime.Infrastructure.Factories.Entities
+namespace LeoEcsLite.QoL.Factory
 {
     public interface IEntityFactory
     {

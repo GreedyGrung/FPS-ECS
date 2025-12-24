@@ -1,4 +1,4 @@
-namespace FpsEcs.Runtime.Gameplay.Common.Modules
+namespace LeoEcsLite.QoL.Modules
 {
     public interface IEcsModule
     {

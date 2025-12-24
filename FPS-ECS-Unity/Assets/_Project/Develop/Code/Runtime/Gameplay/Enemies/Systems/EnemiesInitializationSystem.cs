@@ -1,6 +1,7 @@
 using FpsEcs.Runtime.Gameplay.Enemies.Components;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Utils;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 
@@ -10,10 +11,6 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Systems
     {
         private readonly EcsWorldInject _world;
         private readonly EcsCustomInject<IConfigsProvider> _configsProvider;
-
-        private readonly EcsPoolInject<Enemy> _enemyPool;
-        private readonly EcsPoolInject<ObstacleAvoidance> _obstacleAvoidancePool;
-        private readonly EcsPoolInject<EnemyInitializationNeededTag> _enemyInitializationNeededPool;
         
         private EcsFilter _enemiesInitFilter;
         
@@ -22,26 +19,23 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Systems
         
         public void Init(IEcsSystems systems)
         {
-            _enemiesInitFilter = World
-                .Filter<EnemyInitializationNeededTag>()
-                .Inc<Enemy>()
-                .End();
+            _enemiesInitFilter = World.Inc<EnemyInitializationNeededTag, Enemy>().End();
         }
 
         public void Run(IEcsSystems systems)
         {
             foreach (var enemy in _enemiesInitFilter)
             {
-                var id = _enemyPool.Value.Get(enemy).Id;
+                var id = enemy.Get<Enemy>().Id;
                 var enemyConfig = ConfigsProvider.GetEnemyConfig(id);
-                ref var obstacleAvoidance = ref _obstacleAvoidancePool.Value.Add(enemy);
+                ref var obstacleAvoidance = ref enemy.Add<ObstacleAvoidance>();
                 
                 obstacleAvoidance.CheckDistance = enemyConfig.ObstacleCheckDistance;
                 obstacleAvoidance.MinTurnAngle = enemyConfig.MinTurnAngle;
                 obstacleAvoidance.MaxTurnAngle = enemyConfig.MaxTurnAngle;
                 obstacleAvoidance.ObstacleMask = Constants.Gameplay.ObstacleLayerMask;
                 
-                _enemyInitializationNeededPool.Value.Del(enemy);
+                enemy.Del<EnemyInitializationNeededTag>();
             }
         }
     }

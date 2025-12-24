@@ -1,6 +1,6 @@
 using Leopotam.EcsLite;
 
-namespace FpsEcs.Runtime.Infrastructure.Factories.Entities
+namespace LeoEcsLite.QoL.Factory
 {
     public class EntityBuilder : IEntityBuilder
     {
@@ -19,5 +19,7 @@ namespace FpsEcs.Runtime.Infrastructure.Factories.Entities
             
             return this;
         }
+        
+        public int Build() => _entity;
     }
 }

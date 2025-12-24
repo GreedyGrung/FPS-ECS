@@ -1,59 +1,27 @@
 using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
+using LeoEcsLite.QoL.Authoring;
+using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
 using UnityEngine;
 
 namespace FpsEcs.Runtime.Gameplay.Common
 {
-    public class Actor : MonoBehaviour
+    public class Actor : ActorBase
     {
-        private EcsWorld _world;
-        private EcsPackedEntity _entity;
-        
-        private bool _isInitialized;
-        
-        public void Initialize(EcsWorld world)
+        protected override void AddDefaultComponents(EcsWorld world, int entity)
         {
-            if (_isInitialized)
-            {
-                return;
-            }
+            base.AddDefaultComponents(world, entity);
             
-            _world = world;
-            var newEntity = _world.NewEntity();
-            
-            ref var transformComponent = ref world.GetPool<TransformRef>().Add(newEntity);
+            ref var transformComponent = ref entity.Add<TransformRef>();
             transformComponent.Value = transform;
             
-            ref var gameObjectComponent = ref world.GetPool<GameObjectRef>().Add(newEntity);
+            ref var gameObjectComponent = ref entity.Add<GameObjectRef>();
             gameObjectComponent.Value = gameObject;
 
             if (gameObject.TryGetComponent(out CharacterController characterController))
             {
-                ref var characterControllerComponent = ref world.GetPool<CharacterControllerRef>().Add(newEntity);
+                ref var characterControllerComponent = ref entity.Add<CharacterControllerRef>();
                 characterControllerComponent.Value = characterController;
-            }
-            
-            ApplyAuthorings(newEntity);
-            
-            _entity = _world.PackEntity(newEntity);
-            _isInitialized = true;
-        }
-
-        public int GetEntity()
-        {
-            _entity.Unpack(_world, out var entity);
-            
-            return entity;
-        }
-        
-        private void ApplyAuthorings(int entity)
-        {
-            foreach (var a in GetComponents<MonoBehaviour>())
-            {
-                if (a is IAuthoring auth && a.isActiveAndEnabled)
-                {
-                    auth.Convert(_world, entity);
-                }
             }
         }
     }

@@ -1,7 +1,8 @@
 using Cysharp.Threading.Tasks;
-using FpsEcs.Runtime.Infrastructure.Factories.Entities;
 using FpsEcs.Runtime.Infrastructure.Services.AssetManagement;
+using FpsEcs.Runtime.Infrastructure.Services.Pools;
 using FpsEcs.Runtime.Utils;
+using LeoEcsLite.QoL.Factory;
 using UnityEngine;
 
 namespace FpsEcs.Runtime.Infrastructure.Factories
@@ -31,6 +32,11 @@ namespace FpsEcs.Runtime.Infrastructure.Factories
 
         public int CreateEnemy(Vector3 position, Quaternion rotation) 
             => CreateEntity(_enemyPrefab, position, rotation);
+        
+        public T CreatePoolableObject<T>(Transform parent, bool activeByDefault) where T : IPoolableObject
+        {
+            return default;
+        }
 
         private int CreateEntity(GameObject prefab, Vector3 position, Quaternion rotation)
         {
