@@ -97,5 +97,7 @@ namespace LeoEcsLite.QoL.Utils
             where T6 : struct
             where T7 : struct =>
             mask.Exc<T1>().Exc<T2>().Exc<T3>().Exc<T4>().Exc<T5>().Exc<T6>().Exc<T7>();
+        
+        public static int First(this EcsFilter filter) => filter.GetRawEntities()[0];
     }
 }

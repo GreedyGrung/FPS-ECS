@@ -31,10 +31,8 @@ namespace LeoEcsLite.QoL.Utils
             {
                 return ref entity.Get<T>();
             }
-            else
-            {
-                return ref entity.Add<T>();
-            }
+
+            return ref entity.Add<T>();
         }
         
         public static ref T GetOrAdd<T>(this int entity, EcsWorld world) where T : struct
@@ -43,10 +41,8 @@ namespace LeoEcsLite.QoL.Utils
             {
                 return ref entity.Get<T>(world);
             }
-            else
-            {
-                return ref entity.Add<T>(world);
-            }
+
+            return ref entity.Add<T>(world);
         }
 
         public static bool Has<T>(this int entity) where T : struct => _world.GetPool<T>().Has(entity);
@@ -89,9 +85,7 @@ namespace LeoEcsLite.QoL.Utils
             packedEntity.Unpack(world, out var entity);
 
             return entity;
-        } 
-        
-        public static int First(this EcsFilter filter) => filter.GetRawEntities()[0];
+        }
 
         public static void Dispose() => _world = null;
     }
