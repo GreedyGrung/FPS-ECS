@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using FpsEcs.Runtime.Configs.Implementations;
+using FpsEcs.Runtime.Configs.ScriptableObjects;
 using FpsEcs.Runtime.Utils.Enums;
 
 namespace FpsEcs.Runtime.Infrastructure.Services.Configs
@@ -12,5 +13,6 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Configs
         EnemyConfig GetEnemyConfig(EnemyId id);
         WeaponConfig GetWeaponConfig(WeaponId id);
         GameConfig GetGameConfig();
+        PoolsConfig GetPoolsConfig();
     }
 }

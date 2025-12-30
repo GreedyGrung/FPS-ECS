@@ -13,11 +13,12 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Configs
     {
         private readonly Dictionary<WeaponId, WeaponConfig> _weaponsConfigs = new();
         private readonly Dictionary<EnemyId, EnemyConfig> _enemiesConfigs = new();
-        
+        private readonly IAssetProvider _assetProvider;
+
+        private PoolsConfig _poolsConfig;
         private PlayerConfig _playerConfig;
         private GameConfig _gameConfig;
-        private readonly IAssetProvider _assetProvider;
-        
+
         public ConfigsProvider(IAssetProvider assetProvider)
         {
             _assetProvider = assetProvider;
@@ -25,6 +26,7 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Configs
 
         public async UniTask Load()
         {
+            await LoadPoolsConfig();
             await LoadGameConfig();
             await LoadPlayerConfig();
             await LoadEnemiesConfigs();
@@ -46,11 +48,20 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Configs
             => _weaponsConfigs.TryGetValue(id, out var cfg)
                 ? cfg
                 : throw new KeyNotFoundException($"WeaponConfig for {id} not found.");
+        
+        public PoolsConfig GetPoolsConfig()
+            => _poolsConfig ?? throw new InvalidOperationException("PoolsConfig not loaded!");
 
         public void Dispose()
         {
             _enemiesConfigs.Clear();
             _weaponsConfigs.Clear();
+        }
+        
+        private async UniTask LoadPoolsConfig()
+        {
+            var result = await _assetProvider.Load<PoolsConfig>(Constants.Assets.PoolsConfigPath);
+            _poolsConfig = result;
         }
 
         private async UniTask LoadGameConfig()

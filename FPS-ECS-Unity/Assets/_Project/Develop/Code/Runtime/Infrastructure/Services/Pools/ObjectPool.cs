@@ -4,19 +4,21 @@ using UnityEngine;
 
 namespace FpsEcs.Runtime.Infrastructure.Services.Pools
 {
-    public class ObjectPool<T> where T : IPoolableObject
+    public class ObjectPool
     {
         private readonly Transform _container;
         private readonly bool _autoExpand;
         private readonly IGameFactory _gameFactory;
-        private readonly Stack<T> _pool;
+        private readonly GameObject _prefab;
+        private readonly Stack<GameObject> _pool;
 
-        public ObjectPool(int size, Transform container, bool autoExpand, IGameFactory gameFactory)
+        public ObjectPool(GameObject prefab, int size, Transform container, bool autoExpand, IGameFactory gameFactory)
         {
             _pool = new();
             _container = container;
             _autoExpand = autoExpand;
             _gameFactory = gameFactory;
+            _prefab = prefab;
 
             for (int i = 0; i < size; i++)
             {
@@ -24,12 +26,10 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Pools
             }
         }
 
-        public T Take()
+        public GameObject Take()
         {
-            if (_pool.TryPop(out T item))
+            if (_pool.TryPop(out var item))
             {
-                item.OnSpawned();
-
                 if (_pool.Count == 0 && _autoExpand)
                 {
                     CreateItem();
@@ -41,15 +41,14 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Pools
             throw new System.Exception("The pool is empty!");
         }
 
-        public void Return(T item)
+        public void Return(GameObject item)
         {
-            item.OnDespawned();
             _pool.Push(item);
         }
 
         private void CreateItem(bool isActiveByDefault = false)
         {
-            var item = _gameFactory.CreatePoolableObject<T>(_container, isActiveByDefault);
+            var item = _gameFactory.CreatePoolableObject(_prefab, _container, isActiveByDefault);
             _pool.Push(item);
         }
     }

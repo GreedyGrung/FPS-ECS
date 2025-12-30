@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using FpsEcs.Runtime.Configs.ScriptableObjects;
 using FpsEcs.Runtime.Infrastructure.Services.AssetManagement;
 using FpsEcs.Runtime.Infrastructure.Services.Pools;
 using FpsEcs.Runtime.Utils;
@@ -33,9 +34,17 @@ namespace FpsEcs.Runtime.Infrastructure.Factories
         public int CreateEnemy(Vector3 position, Quaternion rotation) 
             => CreateEntity(_enemyPrefab, position, rotation);
         
-        public T CreatePoolableObject<T>(Transform parent, bool activeByDefault) where T : IPoolableObject
+        public GameObject CreateEmptyObjectWithName(string name) => new(name);
+        
+        public ObjectPool CreatePool(Transform parentTransform, PoolConfig poolConfig) 
+            => new(poolConfig.Prefab, poolConfig.InitialSize, parentTransform, poolConfig.IsAutoExpandable, this);
+
+        public GameObject CreatePoolableObject(GameObject prefab, Transform parent, bool activeByDefault)
         {
-            return default;
+            var gameObject = Object.Instantiate(prefab, parent);
+            gameObject.SetActive(activeByDefault);
+
+            return gameObject;
         }
 
         private int CreateEntity(GameObject prefab, Vector3 position, Quaternion rotation)
