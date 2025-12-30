@@ -49,6 +49,16 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Pools
                 return item;
             }
 
+            if (_autoExpand)
+            {
+                CreateItem();
+
+                var newItem = _pool.Pop();
+                newItem.SetActive(true);
+
+                return newItem;
+            }
+
             throw new System.Exception("The pool is empty!");
         }
 
