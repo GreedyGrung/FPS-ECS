@@ -29,6 +29,14 @@ namespace LeoEcsLite.QoL.Authoring
 
         public int GetEntity() => _packedEntity.Unpack();
 
+        public virtual void Dispose()
+        {
+            _world = null;
+            _packedEntity = default;
+
+            _isInitialized = false;
+        }
+
         protected virtual void AddDefaultComponents(EcsWorld world, int entity) { }
         
         private void ApplyAuthorings(int entity)
