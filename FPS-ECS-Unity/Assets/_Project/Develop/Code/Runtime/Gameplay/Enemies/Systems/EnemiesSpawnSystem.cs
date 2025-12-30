@@ -4,6 +4,8 @@ using FpsEcs.Runtime.Gameplay.Common.Components.UnityComponentsReferences;
 using FpsEcs.Runtime.Gameplay.Enemies.Components;
 using FpsEcs.Runtime.Infrastructure.Factories;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
+using FpsEcs.Runtime.Infrastructure.Services.Pools;
+using FpsEcs.Runtime.Utils.Enums;
 using LeoEcsLite.QoL.Factory;
 using LeoEcsLite.QoL.Utils;
 using Leopotam.EcsLite;
@@ -15,18 +17,18 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Systems
     public class EnemiesSpawnSystem : IEcsInitSystem, IEcsRunSystem
     {
         private readonly EcsWorldInject _world;
-        private readonly EcsCustomInject<IGameFactory> _factory;
         private readonly EcsCustomInject<IConfigsProvider> _configsProvider;
         private readonly EcsCustomInject<IEntityFactory> _entityFactory;
+        private readonly EcsCustomInject<IPoolsService> _poolsService;
         
         private EcsFilter _enemySpawnsFilter;
         private EcsFilter _enemySpawnerRootFilter;
         private EcsFilter _enemiesFilter;
 
-        private IGameFactory Factory => _factory.Value;
         private EcsWorld World => _world.Value;
         private GameConfig GameConfig => _configsProvider.Value.GetGameConfig();
         private IEntityFactory EntityFactory => _entityFactory.Value;
+        private IPoolsService PoolService => _poolsService.Value;
         
         public void Init(IEcsSystems systems)
         {
@@ -55,7 +57,9 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Systems
                     var enemySpawners = _enemySpawnsFilter.GetRawEntities();
                     var enemySpawn = enemySpawners[Random.Range(0, _enemySpawnsFilter.GetEntitiesCount())];
                     var spawnPoint = enemySpawn.Get<TransformRef>().Value;
-                    var enemy = Factory.CreateEnemy(spawnPoint.position, spawnPoint.rotation);
+                    var enemyObject = PoolService.GetFromPool(PoolId.Enemy);
+                    enemyObject.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+                    var enemy = EntityFactory.Convert(enemyObject);
 
                     enemy.Add<EnemyInitializationNeededTag>();
 

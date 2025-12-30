@@ -8,7 +8,7 @@ namespace FpsEcs.Runtime.Infrastructure.Services.ActorsInitialization
     {
         public void Initialize(EcsWorld world)
         {
-            var actors = Object.FindObjectsByType<Actor>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var actors = Object.FindObjectsByType<Actor>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
 
             foreach (var actor in actors)
             {

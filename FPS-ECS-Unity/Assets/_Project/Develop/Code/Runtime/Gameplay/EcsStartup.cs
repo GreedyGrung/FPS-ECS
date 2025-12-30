@@ -12,6 +12,7 @@ using FpsEcs.Runtime.Infrastructure.Services.ActorsInitialization;
 using FpsEcs.Runtime.Infrastructure.Services.Configs;
 using FpsEcs.Runtime.Infrastructure.Services.Input;
 using FpsEcs.Runtime.Infrastructure.Services.Pause;
+using FpsEcs.Runtime.Infrastructure.Services.Pools;
 using FpsEcs.Runtime.Infrastructure.Services.SaveLoad;
 using FpsEcs.Runtime.Infrastructure.Services.UI;
 using FpsEcs.Runtime.Infrastructure.Services.Upgrades;
@@ -38,6 +39,7 @@ namespace FpsEcs.Runtime.Gameplay
         private IUpgradesService _upgradesService;
         private ISaveLoadService _saveLoadService;
         private IEntityFactory _entityFactory;
+        private IPoolsService _poolsService;
 
         [Inject]
         private void Construct(
@@ -50,8 +52,10 @@ namespace FpsEcs.Runtime.Gameplay
             IUIFactory uiFactory,
             IUpgradesService upgradesService,
             ISaveLoadService saveLoadService,
-            IEntityFactory entityFactory)
+            IEntityFactory entityFactory,
+            IPoolsService poolsService)
         {
+            _poolsService = poolsService;
             _uiFactory = uiFactory;
             _inputService = inputService;
             _gameFactory = gameFactory;
@@ -91,6 +95,7 @@ namespace FpsEcs.Runtime.Gameplay
                 .Inject(_uiFactory)
                 .Inject(_saveLoadService)
                 .Inject(_entityFactory)
+                .Inject(_poolsService)
                 .Init();
         }
     

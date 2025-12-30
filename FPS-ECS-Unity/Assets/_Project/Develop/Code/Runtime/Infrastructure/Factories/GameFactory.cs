@@ -1,8 +1,10 @@
 using Cysharp.Threading.Tasks;
 using FpsEcs.Runtime.Configs.ScriptableObjects;
+using FpsEcs.Runtime.Gameplay.Common;
 using FpsEcs.Runtime.Infrastructure.Services.AssetManagement;
 using FpsEcs.Runtime.Infrastructure.Services.Pools;
 using FpsEcs.Runtime.Utils;
+using FpsEcs.Runtime.Utils.Enums;
 using LeoEcsLite.QoL.Factory;
 using UnityEngine;
 
@@ -36,12 +38,18 @@ namespace FpsEcs.Runtime.Infrastructure.Factories
         
         public GameObject CreateEmptyObjectWithName(string name) => new(name);
         
-        public ObjectPool CreatePool(Transform parentTransform, PoolConfig poolConfig) 
-            => new(poolConfig.Prefab, poolConfig.InitialSize, parentTransform, poolConfig.IsAutoExpandable, this);
+        public ObjectPool CreatePool(Transform parentTransform, PoolConfig poolConfig) =>
+            new(poolConfig.Prefab,
+                poolConfig.InitialSize,
+                parentTransform, 
+                poolConfig.IsAutoExpandable, 
+                this,
+                poolConfig.Type);
 
-        public GameObject CreatePoolableObject(GameObject prefab, Transform parent, bool activeByDefault)
+        public GameObject CreatePoolableObject(GameObject prefab, Transform parent, PoolId poolId, bool activeByDefault)
         {
             var gameObject = Object.Instantiate(prefab, parent);
+            gameObject.GetComponent<Actor>().SetIsPoolable(poolId);
             gameObject.SetActive(activeByDefault);
 
             return gameObject;

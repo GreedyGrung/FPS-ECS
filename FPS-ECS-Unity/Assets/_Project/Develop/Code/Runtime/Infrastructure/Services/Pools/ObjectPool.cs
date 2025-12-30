@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using FpsEcs.Runtime.Infrastructure.Factories;
+using FpsEcs.Runtime.Utils.Enums;
 using UnityEngine;
 
 namespace FpsEcs.Runtime.Infrastructure.Services.Pools
@@ -10,14 +11,22 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Pools
         private readonly bool _autoExpand;
         private readonly IGameFactory _gameFactory;
         private readonly GameObject _prefab;
+        private readonly PoolId _poolId;
         private readonly Stack<GameObject> _pool;
 
-        public ObjectPool(GameObject prefab, int size, Transform container, bool autoExpand, IGameFactory gameFactory)
+        public ObjectPool(
+            GameObject prefab,
+            int size,
+            Transform container,
+            bool autoExpand,
+            IGameFactory gameFactory,
+            PoolId poolId)
         {
             _pool = new();
             _container = container;
             _autoExpand = autoExpand;
             _gameFactory = gameFactory;
+            _poolId = poolId;
             _prefab = prefab;
 
             for (int i = 0; i < size; i++)
@@ -34,6 +43,8 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Pools
                 {
                     CreateItem();
                 }
+                
+                item.SetActive(true);
 
                 return item;
             }
@@ -43,12 +54,13 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Pools
 
         public void Return(GameObject item)
         {
+            item.SetActive(false);
             _pool.Push(item);
         }
 
         private void CreateItem(bool isActiveByDefault = false)
         {
-            var item = _gameFactory.CreatePoolableObject(_prefab, _container, isActiveByDefault);
+            var item = _gameFactory.CreatePoolableObject(_prefab, _container, _poolId, isActiveByDefault);
             _pool.Push(item);
         }
     }
