@@ -29,7 +29,7 @@ namespace FpsEcs.Runtime.Gameplay.Enemies.Systems
         {
             int enemyCount = 0;
             
-            foreach (var enemy in _enemyFilter)
+            foreach (var _ in _enemyFilter)
             {
                 enemyCount++;
             }
