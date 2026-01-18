@@ -49,7 +49,7 @@ namespace FpsEcs.Runtime.Infrastructure.Factories
         public GameObject CreatePoolableObject(GameObject prefab, Transform parent, PoolId poolId, bool activeByDefault)
         {
             var gameObject = Object.Instantiate(prefab, parent);
-            gameObject.GetComponent<Actor>().SetIsPoolable(poolId);
+            gameObject.GetComponent<Actor>().MarkPoolable(poolId);
             gameObject.SetActive(activeByDefault);
 
             return gameObject;

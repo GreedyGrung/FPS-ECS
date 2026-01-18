@@ -10,13 +10,12 @@ namespace FpsEcs.Runtime.Gameplay.Common
 {
     public class Actor : ActorBase
     {
-        public bool IsPoolable { get; private set; }
-        
+        private bool _isPoolable;
         private PoolId _poolId;
         
-        public void SetIsPoolable(PoolId poolId)
+        public void MarkPoolable(PoolId poolId)
         {
-            IsPoolable = true;
+            _isPoolable = true;
             _poolId = poolId;
         }
 
@@ -33,7 +32,7 @@ namespace FpsEcs.Runtime.Gameplay.Common
             ref var actorComponent = ref entity.Add<ActorRef>();
             actorComponent.Value = this;
 
-            if (IsPoolable)
+            if (_isPoolable)
             {
                 ref var poolableComponent = ref entity.Add<PoolableObject>();
                 poolableComponent.PoolId = _poolId;
