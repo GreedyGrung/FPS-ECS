@@ -30,11 +30,11 @@ namespace FpsEcs.Runtime.Infrastructure.Factories
             _enemyPrefab = await _assetProvider.Load<GameObject>(Constants.Assets.EnemyPrefabPath);
         }
 
-        public int CreatePlayer(Vector3 position, Quaternion rotation) 
-            => CreateEntity(_playerPrefab, position, rotation);
+        public int CreatePlayer(Vector3 position, Quaternion rotation) => 
+            CreateEntity(_playerPrefab, position, rotation);
 
-        public int CreateEnemy(Vector3 position, Quaternion rotation) 
-            => CreateEntity(_enemyPrefab, position, rotation);
+        public int CreateEnemy(Vector3 position, Quaternion rotation) => 
+            CreateEntity(_enemyPrefab, position, rotation);
         
         public GameObject CreateEmptyObjectWithName(string name) => new(name);
         

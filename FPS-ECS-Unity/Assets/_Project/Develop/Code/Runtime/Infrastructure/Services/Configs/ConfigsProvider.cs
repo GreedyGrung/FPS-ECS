@@ -33,24 +33,24 @@ namespace FpsEcs.Runtime.Infrastructure.Services.Configs
             await LoadWeaponsConfigs();
         }
 
-        public PlayerConfig GetPlayerConfig()
-            => _playerConfig ?? throw new InvalidOperationException("PlayerConfig not loaded!");
+        public PlayerConfig GetPlayerConfig() => 
+            _playerConfig ?? throw new InvalidOperationException("PlayerConfig not loaded!");
 
-        public GameConfig GetGameConfig()
-            => _gameConfig ?? throw new InvalidOperationException("GameConfig not loaded!");
+        public GameConfig GetGameConfig() => 
+            _gameConfig ?? throw new InvalidOperationException("GameConfig not loaded!");
         
-        public EnemyConfig GetEnemyConfig(EnemyId id)
-            => _enemiesConfigs.TryGetValue(id, out var cfg)
+        public EnemyConfig GetEnemyConfig(EnemyId id) => 
+            _enemiesConfigs.TryGetValue(id, out var cfg) 
                 ? cfg
                 : throw new KeyNotFoundException($"EnemyConfig for {id} not found.");
 
-        public WeaponConfig GetWeaponConfig(WeaponId id)
-            => _weaponsConfigs.TryGetValue(id, out var cfg)
+        public WeaponConfig GetWeaponConfig(WeaponId id) => 
+            _weaponsConfigs.TryGetValue(id, out var cfg)
                 ? cfg
                 : throw new KeyNotFoundException($"WeaponConfig for {id} not found.");
         
-        public PoolsConfig GetPoolsConfig()
-            => _poolsConfig ?? throw new InvalidOperationException("PoolsConfig not loaded!");
+        public PoolsConfig GetPoolsConfig() => 
+            _poolsConfig ?? throw new InvalidOperationException("PoolsConfig not loaded!");
 
         public void Dispose()
         {
