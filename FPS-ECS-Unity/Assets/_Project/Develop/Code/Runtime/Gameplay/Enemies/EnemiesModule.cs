@@ -10,7 +10,8 @@ namespace FpsEcs.Runtime.Gameplay.Enemies
             builder.AddRange(
                 new EnemiesSpawnSystem(),
                 new EnemiesInitializationSystem(),
-                new EnemiesMoveSystem());
+                new EnemiesMoveSystem(),
+                new EnemyCounterUpdateSystem());
         }
     }
 }

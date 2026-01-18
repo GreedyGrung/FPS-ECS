@@ -10,7 +10,8 @@ namespace FpsEcs.Runtime.Gameplay.UI
             builder.AddRange(
                 new UIInitializationSystem(),
                 new HudRedrawSystem(),
-                new UIViewsOpenCloseSystem());
+                new UIViewsOpenCloseSystem(),
+                new EnemyCounterDisplaySystem());
         }
     }
 }
